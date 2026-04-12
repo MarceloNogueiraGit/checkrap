@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Checklist de Entrega ou Devolução </title>
+  <title>Checklist de Frota</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
 </head>
@@ -46,8 +46,16 @@
         <input type="text" id="id-placa-cavalo" placeholder="ABC-1234" style="text-transform:uppercase"/>
       </div>
       <div class="id-field">
-        <label>Placa Semirreboque</label>
-        <input type="text" id="id-placa-semi" placeholder="ABC-1234" style="text-transform:uppercase"/>
+        <label>Placa Semi 1</label>
+        <input type="text" id="id-placa-semi1" placeholder="ABC-1234" style="text-transform:uppercase"/>
+      </div>
+      <div class="id-field">
+        <label>Placa Semi 2</label>
+        <input type="text" id="id-placa-semi2" placeholder="ABC-1234" style="text-transform:uppercase"/>
+      </div>
+      <div class="id-field">
+        <label>Placa Semi 3</label>
+        <input type="text" id="id-placa-semi3" placeholder="ABC-1234" style="text-transform:uppercase"/>
       </div>
       <div class="id-field">
         <label>Motorista</label>
@@ -61,8 +69,8 @@
         <label>Tipo de Operação</label>
         <select id="id-operacao">
           <option value="">Selecione...</option>
-          <option>Devolução</option>
-          <option>Entrega</option>
+          <option>Carregamento</option>
+          <option>Descarga</option>
           <option>Saída do pátio</option>
           <option>Retorno ao pátio</option>
           <option>Manutenção preventiva</option>
@@ -83,7 +91,7 @@
   <div class="tabs">
     <div class="tab active" onclick="switchTab('cavalo')">🚛 Cavalo</div>
     <div class="tab"        onclick="switchTab('sider')">📦 Sider</div>
-    <div class="tab"        onclick="switchTab('rodotrem')">🔗 Rodotrem / Rodocacamba</div>
+    <div class="tab"        onclick="switchTab('rodotrem')">🔗 Rodotrem</div>
   </div>
 
   <!-- ── CAVALO ── -->
