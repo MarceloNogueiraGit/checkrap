@@ -10,24 +10,19 @@ const DATA = {
     {
       id: 'elétrica', icon: '⚡', name: 'Elétrica',
       items: [
-        'Faróis dianteiros (baixo)',
-        'Faróis dianteiros (alto)',
-        'Lanternas dianteiras',
-        'Lanternas traseiras',
-        'Pisca-alertas (4 lados)',
-        'Luz de ré',
-        'Luz de placa',
-        'Tomada elétrica semirreboque (7 pinos)',
+        'Faróis Dianteiros (alto, baixo)',
+        'Lanternas Dianteiras',
+        'Lanternas Traseiras (freio, ré, pisca)',
+        'Pisca-Alertas (4 lados)',
+        'Luz de Placa',
       ]
     },
     {
       id: 'documentos', icon: '📄', name: 'Documentos',
       items: [
-        'CRLV do cavalo (válido)',
-        'CNH do motorista (categoria E, válida)',
-        'MOPP (se carga perigosa)',
+        'CRLV do cavalo e carretas (válido)',
         'RNTRC / Licença ANTT',
-        'Tacógrafo calibrado e lacrado',
+        'Tacógrafo calibrado, lacrado e válido',
         'AET (se carga especial)',
       ]
     },
@@ -36,11 +31,11 @@ const DATA = {
       items: [
         'Painel de instrumentos (sem alertas)',
         'Tacógrafo (funcionando / disco inserido)',
-        'Rastreador (online e ativo)',
-        'Ar-condicionado',
-        'Cinto de segurança (motorista)',
-        'Cinto de segurança (passageiro)',
-        'Retrovisores regulados',
+        'Rastreador (teclado bom, online e ativo)',
+        'Estofados (boas condições)',
+        'Carpetes, tapetes e capas (boas condições)',
+        'Defletor de ar (boas condições)',
+        'Partes Externas (escadas, parachoques, parabarros, pintura)',
       ]
     },
     {
@@ -48,21 +43,16 @@ const DATA = {
       items: [
         'Extintor (validade e fixação)',
         'Macaco hidráulico (presente e funcional)',
-        'Chave de roda',
-        'Triângulo de sinalização',
+        'Chave de roda, Triângulo de sinalização',
       ]
     },
     {
       id: 'motor', icon: '🔧', name: 'Motor / Mecânica',
       items: [
-        'Nível do óleo do motor',
-        'Nível do óleo do câmbio',
+        'Nível do óleo do motor, cambio e direção hidráulica',
         'Nível do fluido de arrefecimento',
-        'Nível do óleo de direção hidráulica',
-        'Vazamentos visíveis (motor)',
-        'Vazamentos visíveis (câmbio)',
-        'Vazamentos visíveis (diferencial)',
-        'Correias e mangueiras (aparência)',
+        'Vazamentos visíveis (motor, cambio e diferencial e arrefecimento)',
+        'Correias e mangueiras (--)',
       ]
     },
   ],
@@ -71,7 +61,7 @@ const DATA = {
       id: 'estrutura', icon: '🏗️', name: 'Estrutura / Lona',
       items: [
         'Lonas laterais (rasgos ou furos)',
-        'Amarrações das lonas',
+        'Amarrações (Catracas, Cintas, Reguas, Cantoneiras)' ,
         'Longarinas e travessas (danos)',
         'Porta traseira / alçapão',
         'Piso da carroceria',
@@ -80,17 +70,14 @@ const DATA = {
     {
       id: 'acoplamento-s', icon: '🔗', name: 'Acoplamento',
       items: [
-        'Pino rei (condição e assentamento)',
-        'Quinta roda encaixada e travada',
-        'Mangueiras de ar conectadas',
-        'Cabo elétrico conectado (7 pinos)',
+        'Quinta roda, Gavião e Pino rei (condição e assentamento)',
+        'Mangueiras de ar, Cabo elétrico',
       ]
     },
     {
       id: 'freios-s', icon: '🔴', name: 'Freios / Ar',
       items: [
         'Câmaras de freio (vazamentos)',
-        'Freio de mola (funcionamento)',
         'Mangueiras de ar (estado)',
         'Conexões rápidas (estado)',
       ]
@@ -98,7 +85,7 @@ const DATA = {
     {
       id: 'eletrica-s', icon: '⚡', name: 'Elétrica',
       items: [
-        'Lanternas traseiras',
+        'Lanternas traseiras (freio, ré, pisca)',
         'Pisca-alertas traseiros',
         'Luz de placa traseira',
         'Lanternas laterais',
@@ -108,33 +95,17 @@ const DATA = {
       id: 'pneus-s', icon: '⭕', name: 'Pneus',
       items: [
         'Calibragem (todos os eixos)',
-        'Desgaste / sulcos mínimos',
+        'Desgaste',
         'Danos visíveis (cortes, bolhas)',
-        'Estepe (presente e calibrado)',
+        'Estepe (presente)',
       ]
     },
   ],
   rodotrem: [
-    {
-      id: 'primeiro-impl', icon: '📦', name: '1º Implemento (igual ao Sider)',
+   {
+      id: 'acoplamentos-s', icon: '🔗', name: 'Acoplamento 1º Implemento',
       items: [
-        'Lonas laterais (rasgos ou furos)',
-        'Amarrações das lonas',
-        'Estrutura (longarinas e travessas)',
-        'Pino rei — encaixe e condição',
-        'Quinta roda — travamento',
-        'Câmaras de freio (vazamentos)',
-        'Mangueiras de ar (estado)',
-        'Lanternas e pisca traseiros',
-        'Pneus — calibragem e desgaste',
-        'Estepe (presente e calibrado)',
-      ]
-    },
-    {
-      id: 'gaviao', icon: '🦅', name: 'Gavião (Pino de Conexão)',
-      items: [
-        'Gavião — condição geral',
-        'Pino de conexão travado',
+        'Quinta Roda, Gavião, Pino rei  — condição geral',
         'Trava de segurança do pino',
         'Jogo / folga excessiva',
         'Deformações ou trincas visíveis',
@@ -146,11 +117,10 @@ const DATA = {
         'Lonas laterais (rasgos ou furos)',
         'Amarrações das lonas',
         'Estrutura (longarinas e travessas)',
-        'Pino rei do 2º implemento — condição',
         'Câmaras de freio (vazamentos)',
         'Mangueiras de ar (estado)',
-        'Lanternas e pisca traseiros',
-        'Pneus — calibragem e desgaste',
+        'Lanternas Traseiros (freio, ré, pisca)',
+        'Pneus',
         'Estepe do 2º implemento',
       ]
     },
@@ -159,9 +129,9 @@ const DATA = {
       items: [
         'Comprimento total dentro do limite (≤30m)',
         'Largura dentro do limite',
-        'AET (autorização especial de trânsito) presente',
+        'documentação (presente)',
         'Sinalizações obrigatórias (retrorefletivos laterais)',
-        'Luzes de contorno (se exigido)',
+        'Luzes de contorno',
       ]
     },
   ]
@@ -325,12 +295,12 @@ function resetAll() {
 }
 
 // ============================================================
-// PDF via window.print() — sem dependência externa
+// PDF via window.print() — layout compacto, sem botão
 // ============================================================
 function gerarPDF() {
-  const tabLabels  = { cavalo: 'CAVALO MECÂNICO', sider: 'SEMIRREBOQUE SIDER', rodotrem: 'RODOTREM 9 EIXOS' };
+  const tabLabels   = { cavalo: 'CAVALO MECÂNICO', sider: 'SEMIRREBOQUE SIDER', rodotrem: 'RODOTREM 9 EIXOS' };
   const statusLabel = { ok: 'OK', nok: 'NOK', na: 'N/A', '': '---' };
-  const statusColor = { ok: '#22c55e', nok: '#ef4444', na: '#6b7280', '': '#f5a623' };
+  const statusColor = { ok: '#22c55e', nok: '#ef4444', na: '#9ca3af', '': '#f5a623' };
 
   // Abas com pelo menos 1 item preenchido
   const abasAtivas = ['cavalo', 'sider', 'rodotrem'].filter(tab =>
@@ -368,131 +338,221 @@ function gerarPDF() {
 
   const dataVal = document.getElementById('id-data').value || '—';
   const hora    = document.getElementById('id-hora').value || '—';
-  const placaC  = document.getElementById('id-placa-cavalo').value || '—';
-  const placaS  = document.getElementById('id-placa-semi').value || '—';
+  const placaC  = (document.getElementById('id-placa-cavalo').value || '').toUpperCase() || '—';
+  const placaS1 = (document.getElementById('id-placa-semi1').value || '').toUpperCase() || '—';
+  const placaS2 = (document.getElementById('id-placa-semi2').value || '').toUpperCase();
+  const placaS3 = (document.getElementById('id-placa-semi3').value || '').toUpperCase();
+  const placaS  = [placaS1, placaS2, placaS3].filter(p => p && p !== '—').join(' / ');
   const motor   = document.getElementById('id-motorista').value || '—';
   const conf    = document.getElementById('id-conferente').value || '—';
   const oper    = document.getElementById('id-operacao').value || '—';
   const gerado  = new Date().toLocaleString('pt-BR');
 
-  // Monta linhas de detalhe apenas das abas ativas
+  // Monta colunas de itens por seção — 2 colunas para compactar
   let detalheHTML = '';
   abasAtivas.forEach(tab => {
-    detalheHTML += `<div class="p-tab-header">${tabLabels[tab]}</div>`;
+    detalheHTML += `<div class="tab-bloco">
+      <div class="p-tab-header">${tabLabels[tab]}</div>
+      <div class="secoes-grid">`;
+
     DATA[tab].forEach(sec => {
-      detalheHTML += `<div class="p-sec-header">${sec.icon} ${sec.name.toUpperCase()}</div>`;
+      let itensHTML = '';
       sec.items.forEach((itemName, idx) => {
         const s   = getState(tab, sec.id, idx);
         const st  = s.status || '';
         const cor = statusColor[st];
         const lbl = statusLabel[st];
-        detalheHTML += `
-          <div class="p-item${st === 'nok' ? ' p-item-nok' : ''}">
-            <span class="p-pill" style="background:${cor};color:#000">${lbl}</span>
-            <span class="p-item-name">${itemName}</span>
-          </div>
-          ${s.obs ? `<div class="p-obs">↳ Obs: ${s.obs}</div>` : ''}
-        `;
+        itensHTML += `<div class="p-item${st === 'nok' ? ' p-item-nok' : ''}">
+          <span class="p-pill" style="background:${cor}">${lbl}</span>
+          <span class="p-item-name">${itemName}</span>
+        </div>`;
+        if (s.obs) {
+          itensHTML += `<div class="p-obs">↳ ${s.obs}</div>`;
+        }
       });
+
+      detalheHTML += `<div class="secao-box">
+        <div class="p-sec-header">${sec.name.toUpperCase()}</div>
+        ${itensHTML}
+      </div>`;
     });
+
+    detalheHTML += `</div></div>`;
   });
 
-  // Monta HTML do NOK summary
+  // NOKs compactos no rodapé (só se houver)
   let nokHTML = '';
   if (nokItems.length > 0) {
-    nokHTML = `<div class="p-tab-header p-nok-title">⚠ ITENS NÃO CONFORMES (NOK)</div>`;
+    nokHTML = `<div class="nok-bloco">
+      <div class="nok-titulo">⚠ ITENS NÃO CONFORMES</div>
+      <div class="nok-grid">`;
     nokItems.forEach((item, i) => {
-      nokHTML += `
-        <div class="p-nok-item">
-          <div class="p-nok-name">${i + 1}. ${item.name}</div>
-          <div class="p-nok-sub">${tabLabels[item.tab]} › ${item.sec}</div>
-          ${item.obs ? `<div class="p-nok-obs">Obs: ${item.obs}</div>` : ''}
+      nokHTML += `<div class="nok-item">
+        <span class="nok-num">${i + 1}</span>
+        <div>
+          <div class="nok-name">${item.name}</div>
+          <div class="nok-sub">${tabLabels[item.tab]} › ${item.sec}</div>
+          ${item.obs ? `<div class="nok-obs">Obs: ${item.obs}</div>` : ''}
         </div>
-      `;
+      </div>`;
     });
+    nokHTML += `</div></div>`;
   }
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8"/>
-<title>Checklist Frota — ${placaC} — ${dataVal}</title>
+<title>Checklist — ${placaC} — ${dataVal}</title>
 <style>
+  @page { margin: 10mm 12mm; }
   @media print {
-    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .no-print { display: none; }
+    html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #fff; color: #111; font-size: 11px; }
-  .capa { padding: 32px 28px 24px; border-bottom: 4px solid #f5a623; page-break-after: always; }
-  .capa-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
-  .capa-titulo { font-size: 32px; font-weight: 900; color: #f5a623; letter-spacing: 2px; text-transform: uppercase; line-height: 1; }
-  .capa-sub { font-size: 12px; color: #666; letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; }
-  .capa-data { text-align: right; font-size: 10px; color: #888; }
-  .capa-data strong { display: block; font-size: 18px; color: #111; font-weight: 800; }
-  .id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden; margin-bottom: 20px; }
-  .id-cell { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; border-right: 1px solid #e0e0e0; }
-  .id-cell:nth-child(2n) { border-right: none; }
-  .id-cell.full { grid-column: 1 / -1; border-right: none; }
-  .id-cell:last-child, .id-cell:nth-last-child(2):not(.full) { border-bottom: none; }
-  .id-label { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 2px; }
-  .id-val { font-size: 13px; font-weight: 600; color: #111; }
-  .resumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-  .resumo-box { border-radius: 6px; padding: 12px 8px; text-align: center; border: 2px solid; }
-  .resumo-num { font-size: 28px; font-weight: 900; line-height: 1; }
-  .resumo-lbl { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 3px; }
+  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 7.5px; color: #111; background: #fff; }
+
+  /* ── TOPO ── */
+  .topo {
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px solid #f5a623; padding-bottom: 5px; margin-bottom: 6px;
+  }
+  .topo-titulo { font-size: 16px; font-weight: 900; color: #f5a623; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
+  .topo-sub    { font-size: 7px; color: #888; text-transform: uppercase; letter-spacing: 2px; }
+  .topo-info   { text-align: right; font-size: 7px; color: #555; line-height: 1.6; }
+  .topo-info strong { font-size: 11px; color: #111; }
+
+  /* ── IDENTIFICAÇÃO ── */
+  .id-row {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: 0; border: 1px solid #ddd; border-radius: 4px;
+    overflow: hidden; margin-bottom: 6px;
+  }
+  .id-cell { padding: 3px 6px; border-right: 1px solid #ddd; }
+  .id-cell:last-child { border-right: none; }
+  .id-label { font-size: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #999; }
+  .id-val   { font-size: 8px; font-weight: 700; color: #111; margin-top: 1px; }
+
+  /* ── RESUMO ── */
+  .resumo {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 4px; margin-bottom: 7px;
+  }
+  .r-box { border-radius: 3px; padding: 4px 6px; text-align: center; border: 1.5px solid; }
+  .r-num { font-size: 14px; font-weight: 900; line-height: 1; }
+  .r-lbl { font-size: 6px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
   .r-ok   { border-color: #22c55e; color: #22c55e; }
   .r-nok  { border-color: #ef4444; color: #ef4444; }
-  .r-na   { border-color: #6b7280; color: #6b7280; }
+  .r-na   { border-color: #9ca3af; color: #9ca3af; }
   .r-pend { border-color: #f5a623; color: #f5a623; }
-  .detalhe { padding: 16px 28px; }
-  .p-tab-header { font-size: 14px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: #fff; background: #1e2333; padding: 8px 12px; margin: 16px 0 4px; border-left: 5px solid #f5a623; page-break-after: avoid; }
-  .p-sec-header { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #f5a623; background: #f8f8f8; padding: 5px 10px; border-bottom: 1px solid #e8e8e8; page-break-after: avoid; }
-  .p-item { display: flex; align-items: center; gap: 8px; padding: 5px 10px; border-bottom: 1px solid #f0f0f0; page-break-inside: avoid; }
+
+  /* ── TAB BLOCO ── */
+  .tab-bloco { margin-bottom: 6px; }
+  .p-tab-header {
+    font-size: 8px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    color: #fff; background: #1e2333; padding: 3px 7px;
+    border-left: 4px solid #f5a623; margin-bottom: 3px;
+  }
+
+  /* ── GRID DE SEÇÕES (2 colunas) ── */
+  .secoes-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+  }
+  .secao-box { border: 1px solid #e5e7eb; border-radius: 3px; overflow: hidden; }
+  .p-sec-header {
+    font-size: 6.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: #fff; background: #374151; padding: 2px 5px;
+  }
+
+  /* ── ITEM ── */
+  .p-item {
+    display: flex; align-items: center; gap: 4px;
+    padding: 2px 5px; border-bottom: 1px solid #f3f4f6;
+  }
+  .p-item:last-child { border-bottom: none; }
   .p-item-nok { background: #fff5f5; }
-  .p-item:nth-child(even) { background: #fafafa; }
-  .p-item-nok:nth-child(even) { background: #fff0f0; }
-  .p-pill { display: inline-block; min-width: 32px; text-align: center; font-size: 7px; font-weight: 800; padding: 2px 5px; border-radius: 3px; letter-spacing: 0.5px; flex-shrink: 0; }
-  .p-item-name { font-size: 10px; color: #222; }
-  .p-obs { padding: 3px 10px 5px 50px; font-size: 9px; color: #666; font-style: italic; border-bottom: 1px solid #f0f0f0; }
-  .p-nok-title { background: #7f1d1d !important; border-left-color: #ef4444 !important; margin-top: 24px; }
-  .p-nok-item { border: 1px solid #fca5a5; border-left: 4px solid #ef4444; border-radius: 4px; padding: 8px 12px; margin: 6px 0; page-break-inside: avoid; background: #fff5f5; }
-  .p-nok-name { font-weight: 700; font-size: 11px; color: #dc2626; }
-  .p-nok-sub  { font-size: 9px; color: #666; margin-top: 2px; }
-  .p-nok-obs  { font-size: 9px; color: #991b1b; font-style: italic; margin-top: 4px; }
-  .p-footer { padding: 12px 28px; border-top: 1px solid #e0e0e0; font-size: 8px; color: #aaa; display: flex; justify-content: space-between; margin-top: 20px; }
-  .print-btn { display: block; margin: 20px auto; padding: 14px 32px; background: linear-gradient(135deg,#e8521a,#f5a623); border: none; border-radius: 8px; color: #000; font-size: 16px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
+  .p-item:nth-child(even):not(.p-item-nok) { background: #fafafa; }
+  .p-pill {
+    display: inline-block; min-width: 22px; text-align: center;
+    font-size: 5.5px; font-weight: 800; padding: 1px 3px;
+    border-radius: 2px; color: #fff; flex-shrink: 0; letter-spacing: 0.3px;
+  }
+  .p-item-name { font-size: 7px; color: #222; line-height: 1.3; }
+  .p-obs {
+    padding: 1px 5px 2px 31px; font-size: 6.5px;
+    color: #666; font-style: italic; background: #fffbf0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  /* ── NOK BLOCO ── */
+  .nok-bloco { margin-top: 6px; }
+  .nok-titulo {
+    font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+    color: #fff; background: #7f1d1d; padding: 3px 7px;
+    border-left: 4px solid #ef4444; margin-bottom: 3px;
+  }
+  .nok-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; }
+  .nok-item {
+    display: flex; gap: 4px; align-items: flex-start;
+    border: 1px solid #fca5a5; border-left: 3px solid #ef4444;
+    border-radius: 3px; padding: 3px 5px; background: #fff5f5;
+  }
+  .nok-num  { font-size: 9px; font-weight: 900; color: #ef4444; flex-shrink: 0; line-height: 1.2; }
+  .nok-name { font-size: 7px; font-weight: 700; color: #dc2626; line-height: 1.3; }
+  .nok-sub  { font-size: 6px; color: #888; margin-top: 1px; }
+  .nok-obs  { font-size: 6px; color: #991b1b; font-style: italic; margin-top: 2px; }
+
+  /* ── RODAPÉ ── */
+  .rodape {
+    display: flex; justify-content: space-between;
+    border-top: 1px solid #e5e7eb; padding-top: 3px;
+    margin-top: 6px; font-size: 6px; color: #aaa;
+  }
 </style>
 </head>
 <body>
-<button class="print-btn no-print" onclick="window.print()">🖨 Imprimir / Salvar PDF</button>
-<div class="capa">
-  <div class="capa-header">
+
+  <!-- TOPO -->
+  <div class="topo">
     <div>
-      <div class="capa-titulo">Checklist</div>
-      <div class="capa-sub">Conferência de Frota</div>
+      <div class="topo-titulo">Checklist de Frota</div>
+      <div class="topo-sub">Conferência de Veículo</div>
     </div>
-    <div class="capa-data"><strong>${dataVal}</strong>${hora}</div>
+    <div class="topo-info">
+      <strong>${dataVal} ${hora}</strong>
+      Operação: ${oper}
+    </div>
   </div>
-  <div class="id-grid">
+
+  <!-- IDENTIFICAÇÃO -->
+  <div class="id-row">
     <div class="id-cell"><div class="id-label">Placa Cavalo</div><div class="id-val">${placaC}</div></div>
-    <div class="id-cell"><div class="id-label">Placa Semirreboque</div><div class="id-val">${placaS}</div></div>
+    <div class="id-cell" style="grid-column:span 2"><div class="id-label">Placas Semi</div><div class="id-val">${placaS}</div></div>
     <div class="id-cell"><div class="id-label">Motorista</div><div class="id-val">${motor}</div></div>
     <div class="id-cell"><div class="id-label">Conferente</div><div class="id-val">${conf}</div></div>
-    <div class="id-cell full"><div class="id-label">Operação</div><div class="id-val">${oper}</div></div>
+    <div class="id-cell" style="border-right:none;grid-column:span 2"><div class="id-label">Gerado em</div><div class="id-val">${gerado}</div></div>
   </div>
+
+  <!-- RESUMO -->
   <div class="resumo">
-    <div class="resumo-box r-ok">  <div class="resumo-num">${totalOk}</div>  <div class="resumo-lbl">OK</div></div>
-    <div class="resumo-box r-nok"> <div class="resumo-num">${totalNok}</div> <div class="resumo-lbl">NOK</div></div>
-    <div class="resumo-box r-na">  <div class="resumo-num">${totalNa}</div>  <div class="resumo-lbl">N/A</div></div>
-    <div class="resumo-box r-pend"><div class="resumo-num">${totalPend}</div><div class="resumo-lbl">Pendente</div></div>
+    <div class="r-box r-ok">  <div class="r-num">${totalOk}</div>  <div class="r-lbl">OK</div></div>
+    <div class="r-box r-nok"> <div class="r-num">${totalNok}</div> <div class="r-lbl">NOK</div></div>
+    <div class="r-box r-na">  <div class="r-num">${totalNa}</div>  <div class="r-lbl">N/A</div></div>
+    <div class="r-box r-pend"><div class="r-num">${totalPend}</div><div class="r-lbl">Pendente</div></div>
   </div>
-</div>
-<div class="detalhe">${detalheHTML}${nokHTML}</div>
-<div class="p-footer">
-  <span>Checklist de Frota — ${placaC}</span>
-  <span>Gerado em: ${gerado}</span>
-</div>
+
+  <!-- DETALHE -->
+  ${detalheHTML}
+
+  <!-- NOK SUMMARY -->
+  ${nokHTML}
+
+  <!-- RODAPÉ -->
+  <div class="rodape">
+    <span>Checklist de Frota — ${placaC} | Semi: ${placaS}</span>
+    <span>${dataVal} ${hora} — ${oper}</span>
+  </div>
+
 </body>
 </html>`;
 
