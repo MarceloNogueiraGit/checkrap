@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Checklist de Entrega ou Devolução </title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-block">
+        <div class="logo-icon">🚛</div>
+        <div>
+          <div class="logo-text">Checklist</div>
+          <div class="logo-sub">Conferência de Frota</div>
+        </div>
+      </div>
+      <div class="progress-block">
+        <div class="progress-pct" id="pct">0%</div>
+        <div class="progress-label">concluído</div>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <!-- ── IDENTIFICAÇÃO ── -->
+  <div class="section-id">
+    <div class="section-id-title">📋 Identificação</div>
+    <div class="id-grid">
+      <div class="id-field">
+        <label>Data</label>
+        <input type="date" id="id-data"/>
+      </div>
+      <div class="id-field">
+        <label>Hora</label>
+        <input type="time" id="id-hora"/>
+      </div>
+      <div class="id-field">
+        <label>Placa Cavalo</label>
+        <input type="text" id="id-placa-cavalo" placeholder="ABC-1234" style="text-transform:uppercase"/>
+      </div>
+      <div class="id-field">
+        <label>Placa Semirreboque</label>
+        <input type="text" id="id-placa-semi" placeholder="ABC-1234" style="text-transform:uppercase"/>
+      </div>
+      <div class="id-field">
+        <label>Motorista</label>
+        <input type="text" id="id-motorista" placeholder="Nome completo"/>
+      </div>
+      <div class="id-field">
+        <label>Conferente</label>
+        <input type="text" id="id-conferente" placeholder="Nome completo"/>
+      </div>
+      <div class="id-field full">
+        <label>Tipo de Operação</label>
+        <select id="id-operacao">
+          <option value="">Selecione...</option>
+          <option>Devolução</option>
+          <option>Entrega</option>
+          <option>Saída do pátio</option>
+          <option>Retorno ao pátio</option>
+          <option>Manutenção preventiva</option>
+          <option>Vistoria rotineira</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CHIPS DE RESUMO ── -->
+  <div class="summary-chips">
+    <div class="chip chip-ok"   id="chip-ok">✔ OK: 0</div>
+    <div class="chip chip-nok"  id="chip-nok">✖ NOK: 0</div>
+    <div class="chip chip-pend" id="chip-pend">⏳ Pendente: 0</div>
+  </div>
+
+  <!-- ── TABS ── -->
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('cavalo')">🚛 Cavalo</div>
+    <div class="tab"        onclick="switchTab('sider')">📦 Sider</div>
+    <div class="tab"        onclick="switchTab('rodotrem')">🔗 Rodotrem / Rodocacamba</div>
+  </div>
+
+  <!-- ── CAVALO ── -->
+  <div class="tab-content active" id="tab-cavalo">
+    <div id="sections-cavalo"></div>
+  </div>
+
+  <!-- ── SIDER ── -->
+  <div class="tab-content" id="tab-sider">
+    <div id="sections-sider"></div>
+  </div>
+
+  <!-- ── RODOTREM ── -->
+  <div class="tab-content" id="tab-rodotrem">
+    <div id="sections-rodotrem"></div>
+  </div>
+
+  <!-- ── FOOTER FIXO ── -->
+  <div class="footer-fixed">
+    <button class="btn-reset" onclick="resetAll()">↺ Reset</button>
+    <button class="btn-pdf"   onclick="gerarPDF()">📄 Gerar Relatório PDF</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
