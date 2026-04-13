@@ -61,8 +61,7 @@ const DATA = {
       id: 'estrutura', icon: '🏗️', name: 'Estrutura / Lona',
       items: [
         'Lonas laterais (rasgos ou furos)',
-        'Amarrações (Catracas, Cintas, Reguas, Cantoneiras)' ,
-        'Longarinas e travessas (danos)',
+        'Amarrações (Catracas, Cintas, Réguas, Cantoneiras)' ,
         'Porta traseira / alçapão',
         'Piso da carroceria',
       ]
@@ -88,7 +87,7 @@ const DATA = {
         'Lanternas traseiras (freio, ré, pisca)',
         'Pisca-alertas traseiros',
         'Luz de placa traseira',
-        'Lanternas laterais',
+        'Lanternas sinalização laterais e sinalização reflexivo',
       ]
     },
     {
