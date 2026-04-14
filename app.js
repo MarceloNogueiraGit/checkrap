@@ -142,7 +142,7 @@ const DATA = {
       id: 'segundo-impl', icon: '📦', name: '2º Implemento',
       items: [
         'Lonas laterais (rasgos ou furos)',
-        ' Cintas, catracas, cantoneiras , réguas',
+        'Cintas, catracas, cantoneiras , réguas',
         'Amarrações das lonas',
         'Pino rei do 2º implemento — condição',
         'Lanternas e pisca traseiros',
