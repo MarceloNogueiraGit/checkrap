@@ -119,15 +119,13 @@ const DATA = {
       id: 'primeiro-impl', icon: '📦', name: '1º Implemento (igual ao Sider)',
       items: [
         'Lonas laterais (rasgos ou furos)',
+        'Cintas, catracas, cantoneiras , réguas',
         'Amarrações das lonas',
-        'Estrutura (longarinas e travessas)',
         'Pino rei — encaixe e condição',
         'Quinta roda — travamento',
-        'Câmaras de freio (vazamentos)',
-        'Mangueiras de ar (estado)',
-        'Lanternas e pisca traseiros',
-        'Pneus — calibragem e desgaste',
-        'Estepe (presente e calibrado)',
+        'Lanternas e pisca traseiros (luz de posição, ré)',
+        'faixas reflexivas e luz de sinalização laterais',
+        'Estepe, extintor (presente e calibrado, extintor na validade)',
       ]
     },
     {
@@ -144,22 +142,17 @@ const DATA = {
       id: 'segundo-impl', icon: '📦', name: '2º Implemento',
       items: [
         'Lonas laterais (rasgos ou furos)',
+        ' Cintas, catracas, cantoneiras , réguas',
         'Amarrações das lonas',
-        'Estrutura (longarinas e travessas)',
         'Pino rei do 2º implemento — condição',
-        'Câmaras de freio (vazamentos)',
-        'Mangueiras de ar (estado)',
         'Lanternas e pisca traseiros',
-        'Pneus — calibragem e desgaste',
-        'Estepe do 2º implemento',
+        'Estepe e extintor do 2º implemento',
       ]
     },
     {
       id: 'rodotrem-geral', icon: '🔧', name: 'Geral Rodotrem',
       items: [
         'Comprimento total dentro do limite (≤30m)',
-        'Largura dentro do limite',
-        'AET (autorização especial de trânsito) presente',
         'Sinalizações obrigatórias (retrorefletivos laterais)',
         'Luzes de contorno (se exigido)',
       ]
