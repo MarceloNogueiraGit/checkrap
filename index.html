@@ -1,26 +1,539 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checklist de Frota</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist de Frota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- ============================================================
+     CSS
+============================================================ -->
+<style>
+
+/* ─── VARIÁVEIS ──────────────────────────────────────────────── */
+:root {
+  --bg:         #0f1117;
+  --surface:    #1a1d27;
+  --surface2:   #22263a;
+  --border:     #2e3348;
+  --accent:     #f5a623;
+  --accent2:    #e8531a;
+  --text:       #e8eaf0;
+  --text-muted: #7a7f9a;
+  --ok:         #2ecc71;
+  --nok:        #e74c3c;
+  --na:         #7a7f9a;
+  --radius:     10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  min-height: 100vh;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────────── */
+header {
+  background: linear-gradient(135deg, #0f1117 0%, #1a1d27 100%);
+  border-bottom: 3px solid var(--accent);
+  padding: 20px 24px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+header h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text);
+}
+header h1 span { color: var(--accent); }
+header p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ─── CONTAINER ──────────────────────────────────────────────── */
+.container { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* ─── TÍTULOS DE SEÇÃO ───────────────────────────────────────── */
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+
+/* ─── CARD ───────────────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+/* ─── IDENTIFICAÇÃO ──────────────────────────────────────────── */
+.id-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media(max-width: 500px) { .id-grid { grid-template-columns: 1fr; } }
+
+.field label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.field input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.95rem;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color .2s;
+}
+.field input:focus { border-color: var(--accent); }
+
+/* ─── TIPO CHECKLIST ─────────────────────────────────────────── */
+.tipo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+.tipo-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all .2s;
+  user-select: none;
+}
+.tipo-btn:hover { border-color: var(--accent); }
+.tipo-btn.active {
+  border-color: var(--accent);
+  background: rgba(245,166,35,0.08);
+}
+.tipo-btn .dot {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  transition: all .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.tipo-btn.active .dot {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.tipo-btn.active .dot::after {
+  content: '✓';
+  font-size: 11px;
+  color: #000;
+  font-weight: 800;
+}
+.tipo-btn span {
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── EQUIPAMENTOS ───────────────────────────────────────────── */
+.equip-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+.equip-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all .2s;
+  user-select: none;
+}
+.equip-btn:hover { border-color: var(--accent2); }
+.equip-btn.active {
+  border-color: var(--accent2);
+  background: rgba(232,83,26,0.08);
+}
+.equip-btn .edot {
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  transition: all .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.equip-btn.active .edot {
+  background: var(--accent2);
+  border-color: var(--accent2);
+}
+.equip-btn.active .edot::after {
+  content: '✓';
+  font-size: 11px;
+  color: #fff;
+  font-weight: 800;
+}
+.equip-btn span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── CAMPOS PLACA / KM ──────────────────────────────────────── */
+.equip-fields {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.equip-fields.visible { display: flex; }
+.equip-fields .field  { flex: 1; min-width: 140px; }
+
+/* ─── CHECKLIST DINÂMICO ─────────────────────────────────────── */
+.checklist-section         { display: none; animation: fadeIn .3s ease; }
+.checklist-section.visible { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.equip-badge {
+  display: inline-block;
+  background: var(--accent2);
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+.equip-badge.blue   { background: #2563eb; }
+.equip-badge.green  { background: #16a34a; }
+.equip-badge.purple { background: #7c3aed; }
+
+/* ─── ITEM ROW ───────────────────────────────────────────────── */
+.item-row {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.item-row:hover { border-color: #3e4460; }
+
+.item-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+.item-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 22px;
+  text-align: right;
+}
+.item-label {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.item-btns { display: flex; gap: 4px; flex-shrink: 0; }
+
+.st-btn {
+  width: 44px; height: 32px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+  letter-spacing: 0.5px;
+}
+.st-btn:hover      { border-color: #4e5470; color: var(--text); }
+.st-btn.ok-active  { background: rgba(46,204,113,0.15); border-color: var(--ok);  color: var(--ok);  }
+.st-btn.nok-active { background: rgba(231,76,60,0.15);  border-color: var(--nok); color: var(--nok); }
+.st-btn.na-active  { background: rgba(122,127,154,0.2); border-color: var(--na);  color: var(--na);  }
+
+.obs-btn {
+  width: 32px; height: 32px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.obs-btn:hover   { border-color: var(--accent); color: var(--accent); }
+.obs-btn.has-obs { border-color: var(--accent); color: var(--accent); background: rgba(245,166,35,0.1); }
+
+.obs-area { display: none; padding: 0 12px 10px; }
+.obs-area.open { display: block; }
+.obs-area textarea {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  resize: vertical;
+  min-height: 60px;
+  outline: none;
+  transition: border-color .2s;
+}
+.obs-area textarea:focus        { border-color: var(--accent); }
+.obs-area textarea::placeholder { color: var(--text-muted); }
+
+/* ─── BOTÕES DE AÇÃO ─────────────────────────────────────────── */
+.actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+
+.btn-primary {
+  flex: 1; min-width: 160px;
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-primary:hover { background: #e0951a; transform: translateY(-1px); }
+
+.btn-secondary {
+  flex: 1; min-width: 160px;
+  background: transparent;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-secondary:hover { border-color: var(--text-muted); }
+
+/* ─── EMPTY STATE ────────────────────────────────────────────── */
+.empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+.empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; opacity: .4; }
+.empty-state p { font-size: 0.88rem; letter-spacing: 0.5px; }
+
+/* ─── ELEMENTOS PDF (ocultos na tela) ────────────────────────── */
+#pdf-header, #pdf-footer, #pdf-cols { display: none; }
+
+/* ─── PRINT / PDF ────────────────────────────────────────────── */
+@media print {
+  @page { size: A4; margin: 10mm 12mm; }
+
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  body { background: #fff !important; color: #111 !important; font-size: 8pt; font-family: Arial, sans-serif; }
+
+  header, .container, .actions { display: none !important; }
+
+  /* Cabeçalho */
+  #pdf-header {
+    display: block !important;
+    border-bottom: 2px solid #1a1d27;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+  }
+  #pdf-header .pdf-title {
+    font-size: 13pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #1a1d27;
+  }
+  #pdf-header .pdf-title span { color: #e8531a; }
+  #pdf-header .pdf-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 20px;
+    font-size: 7.5pt;
+    color: #444;
+    margin-top: 5px;
+  }
+  #pdf-header .pdf-meta strong { color: #111; }
+  #pdf-header .pdf-counters {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 7.5pt;
+    font-weight: 700;
+  }
+  #pdf-header .cnt      { padding: 2px 8px; border-radius: 3px; }
+  #pdf-header .cnt-ok   { background: #d4edda; color: #155724; }
+  #pdf-header .cnt-nok  { background: #f8d7da; color: #721c24; }
+  #pdf-header .cnt-na   { background: #e2e3e5; color: #383d41; }
+  #pdf-header .cnt-pend { background: #fff3cd; color: #856404; }
+
+  /* Corpo 2 colunas */
+  #pdf-cols {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 10px;
+    align-items: start;
+  }
+  .pdf-section { break-inside: avoid; margin-bottom: 6px; }
+  .pdf-section-header {
+    background: #1a1d27 !important;
+    color: #fff !important;
+    font-size: 7pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 8px;
+    margin-bottom: 1px;
+    border-radius: 3px 3px 0 0;
+  }
+  .pdf-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 2.5px 6px;
+    border-bottom: 1px solid #eee;
+    break-inside: avoid;
+    font-size: 7.5pt;
+  }
+  .pdf-item:last-child { border-bottom: none; }
+  .pdf-badge {
+    font-size: 6.5pt;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    min-width: 28px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .pdf-badge.ok   { background: #28a745 !important; color: #fff !important; }
+  .pdf-badge.nok  { background: #dc3545 !important; color: #fff !important; }
+  .pdf-badge.na   { background: #868e96 !important; color: #fff !important; }
+  .pdf-badge.pend { background: #ffc107 !important; color: #000 !important; }
+  .pdf-item-text { flex: 1; line-height: 1.3; }
+  .pdf-item-obs  { font-size: 7pt; color: #555; margin-top: 1px; }
+  .pdf-item-obs::before { content: '↳ '; color: #e8531a; font-weight: 700; }
+
+  /* Seção NOK — ocupa as 2 colunas */
+  .pdf-nok-section {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    break-inside: avoid;
+  }
+  .pdf-nok-header {
+    background: #dc3545 !important;
+    color: #fff !important;
+    font-size: 7pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 8px;
+    border-radius: 3px 3px 0 0;
+  }
+  .pdf-nok-item {
+    padding: 3px 8px;
+    font-size: 7.5pt;
+    border-bottom: 1px solid #fcc;
+    break-inside: avoid;
+  }
+  .pdf-nok-item strong   { color: #dc3545; }
+  .pdf-nok-item .nok-loc { font-size: 6.5pt; color: #666; }
+  .pdf-nok-item .nok-obs { font-size: 7pt; color: #c0392b; font-style: italic; }
+  .pdf-nok-item .nok-obs::before { content: 'Obs: '; }
+
+  /* Rodapé fixo */
+  #pdf-footer {
+    display: flex !important;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    border-top: 1px solid #ccc;
+    padding: 3px 12mm;
+    font-size: 6.5pt;
+    color: #888;
+    background: #fff;
+  }
+}
+
+</style>
 </head>
+
+<!-- ============================================================
+     HTML
+============================================================ -->
 <body>
 
-<!-- ─── HEADER ──────────────────────────────────────────────────────────────── -->
+<!-- HEADER -->
 <header>
   <h1>CHECK<span>LIST</span> FROTA</h1>
   <p>Sistema de Vistoria de Veículos</p>
 </header>
 
-<!-- ─── ELEMENTOS EXCLUSIVOS DO PDF (ocultos na tela) ───────────────────────── -->
+<!-- ELEMENTOS DO PDF (invisíveis na tela, visíveis apenas na impressão) -->
 <div id="pdf-header"></div>
-<div class="pdf-cols" id="pdf-cols"></div>
+<div id="pdf-cols"></div>
 <div id="pdf-footer"></div>
 
-<!-- ─── CONTEÚDO PRINCIPAL ──────────────────────────────────────────────────── -->
+<!-- CONTEÚDO PRINCIPAL -->
 <div class="container">
 
   <!-- IDENTIFICAÇÃO -->
@@ -95,7 +608,7 @@
       </div>
     </div>
 
-    <!-- Campos Cavalo Mecânico -->
+    <!-- Campos: Cavalo Mecânico -->
     <div class="equip-fields" id="fields-cavalo">
       <div class="field">
         <label>Placa — Cavalo Mecânico</label>
@@ -107,7 +620,7 @@
       </div>
     </div>
 
-    <!-- Campos Sider -->
+    <!-- Campos: Sider -->
     <div class="equip-fields" id="fields-sider">
       <div class="field">
         <label>Placa — Sider</label>
@@ -115,7 +628,7 @@
       </div>
     </div>
 
-    <!-- Campos Rodotrem -->
+    <!-- Campos: Rodotrem -->
     <div class="equip-fields" id="fields-rodotrem">
       <div class="field">
         <label>Placa — 1ª Carreta</label>
@@ -127,7 +640,7 @@
       </div>
     </div>
 
-    <!-- Campos Rodocaçamba -->
+    <!-- Campos: Rodocaçamba -->
     <div class="equip-fields" id="fields-rodocacamba">
       <div class="field">
         <label>Placa — Carreta 1</label>
@@ -154,12 +667,371 @@
 
   <!-- AÇÕES -->
   <div class="actions">
-    <button class="btn-primary" onclick="gerarPDF()">📄 Gerar PDF</button>
+    <button class="btn-primary"   onclick="gerarPDF()">📄 Gerar PDF</button>
     <button class="btn-secondary" onclick="limparTudo()">🔄 Limpar Tudo</button>
   </div>
 
-</div>
+</div><!-- /container -->
 
-<script src="app.js"></script>
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+
+/* ─── ESTADO ─────────────────────────────────────────────────── */
+const equipAtivos = new Set();
+
+/* ─── DADOS DOS CHECKLISTS ───────────────────────────────────── */
+const itens = {
+
+  cavalo: [
+    "Pintura / Defletor de Ar",
+    "Parabrisa / Limpadores / Esguicho",
+    "Escada / Parachoques / Paralamas",
+    "Farol Diant.: Piscas / Milhas / Luz Baixa / Luz Alta (DRL se houver)",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "5ª Roda / Gavião / Pino Rei",
+    "Conectores e Mangueiras de Ar e Elétrica",
+    "Nível de Óleo (Motor / Câmbio / Diferencial)",
+    "Nível de Arrefecimento",
+    "Óleo e Arrefecimento s/ Vazamentos",
+    "Documentação do Cavalo Mecânico",
+    "Opacidade",
+    "Tacógrafo",
+    "Extintor"
+  ],
+
+  sider: [
+    "Documentação da Carreta",
+    "Sinalização Reflexiva Laterais",
+    "Luz de Sinalização Laterais",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "Porta e Assoalho",
+    "Lonas Laterais / Teto / Cabo de Aço",
+    "Cintas / Catracas / Cantoneiras / Réguas",
+    "Extintor / Estepe",
+    "Pés Hidráulicos / Manivela",
+    "Paralama / Parachoque / Escada / Degraus"
+  ],
+
+  rodotrem_c1: [
+    "Documentação da Carreta",
+    "Sinalização Reflexiva Laterais",
+    "Luz de Sinalização Laterais",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "Porta e Assoalho",
+    "Lonas Laterais / Teto / Cabo de Aço",
+    "Cintas / Catracas / Cantoneiras / Réguas",
+    "Extintor / Estepe",
+    "Pés Hidráulicos / Manivela",
+    "Paralama / Parachoque / Escada / Degraus",
+    "5ª Roda / Gavião / Pino Rei"
+  ],
+
+  rodotrem_c2: [
+    "Documentação da Carreta",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "Lonas Laterais / Teto / Cabo de Aço",
+    "Cintas / Catracas / Cantoneiras / Réguas",
+    "Extintor / Estepe",
+    "Pés Hidráulicos / Manivela",
+    "Paralama / Parachoque / Escada / Degraus"
+  ],
+
+  rodocacamba: [
+    "Documentação da Carreta",
+    "Sinalização Reflexiva Laterais",
+    "Luz de Sinalização Laterais",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "Caçamba / Estrutura",
+    "Mecanismo de Basculamento",
+    "Cilindro Hidráulico / Mangueiras",
+    "Extintor / Estepe",
+    "Pés Hidráulicos / Manivela",
+    "Paralama / Parachoque / Escada / Degraus"
+  ]
+
+};
+
+const equipLabels = {
+  cavalo:      "Cavalo Mecânico",
+  sider:       "Sider",
+  rodotrem_c1: "Rodotrem — 1ª Carreta",
+  rodotrem_c2: "Rodotrem — 2ª Carreta",
+  rodocacamba: "Rodocaçamba"
+};
+
+const equipConfig = {
+  cavalo:      { badge: ""       },
+  sider:       { badge: "blue"   },
+  rodotrem:    { badge: "green"  },
+  rodocacamba: { badge: "purple" }
+};
+
+/* ─── MÁSCARAS ───────────────────────────────────────────────── */
+function maskPlaca(el) {
+  let v = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (v.length > 3) v = v.slice(0, 3) + '-' + v.slice(3, 7);
+  el.value = v;
+}
+
+function maskKm(el) {
+  let v = el.value.replace(/\D/g, '');
+  v = v.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  el.value = v;
+}
+
+/* ─── TIPO CHECKLIST ─────────────────────────────────────────── */
+function toggleTipo(el) {
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ─── EQUIPAMENTOS ───────────────────────────────────────────── */
+function toggleEquip(equip) {
+  const btn    = document.querySelector(`.equip-btn[data-equip="${equip}"]`);
+  const fields = document.getElementById('fields-' + equip);
+
+  if (equipAtivos.has(equip)) {
+    equipAtivos.delete(equip);
+    btn.classList.remove('active');
+    if (fields) fields.classList.remove('visible');
+  } else {
+    equipAtivos.add(equip);
+    btn.classList.add('active');
+    if (fields) fields.classList.add('visible');
+  }
+  renderChecklists();
+}
+
+/* ─── RENDER CHECKLISTS ──────────────────────────────────────── */
+function renderChecklists() {
+  const container = document.getElementById('checklists-container');
+  container.innerHTML = '';
+
+  if (equipAtivos.size === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🚛</div>
+        <p>Selecione ao menos um equipamento acima<br>para exibir o checklist</p>
+      </div>`;
+    return;
+  }
+
+  ['cavalo', 'sider', 'rodotrem', 'rodocacamba'].forEach(equip => {
+    if (!equipAtivos.has(equip)) return;
+    if (equip === 'rodotrem') {
+      renderSection(container, 'green',  equipLabels.rodotrem_c1, itens.rodotrem_c1, 'rodotrem_c1');
+      renderSection(container, 'green',  equipLabels.rodotrem_c2, itens.rodotrem_c2, 'rodotrem_c2');
+    } else {
+      renderSection(container, equipConfig[equip].badge, equipLabels[equip], itens[equip], equip);
+    }
+  });
+}
+
+function renderSection(container, badgeClass, label, items, key) {
+  const sec = document.createElement('div');
+  sec.className = 'checklist-section visible';
+  sec.dataset.key = key;
+  sec.innerHTML = `
+    <div class="section-title" style="margin-top:8px">${label}</div>
+    <div class="card">
+      <span class="equip-badge ${badgeClass}">${label}</span>
+      ${items.map((item, i) => renderItem(key, i, item)).join('')}
+    </div>`;
+  container.appendChild(sec);
+}
+
+function renderItem(key, i, label) {
+  return `
+    <div class="item-row" id="row-${key}-${i}">
+      <div class="item-main">
+        <span class="item-num">${i + 1}</span>
+        <span class="item-label">${label}</span>
+        <div class="item-btns">
+          <button class="st-btn" onclick="setStatus('${key}',${i},'ok',this)">OK</button>
+          <button class="st-btn" onclick="setStatus('${key}',${i},'nok',this)">NOK</button>
+          <button class="st-btn" onclick="setStatus('${key}',${i},'na',this)">—</button>
+          <button class="obs-btn" onclick="toggleObs('${key}',${i},this)" title="Observação">💬</button>
+        </div>
+      </div>
+      <div class="obs-area" id="obs-area-${key}-${i}">
+        <textarea placeholder="Observação..." oninput="updateObsBtn('${key}',${i})"></textarea>
+      </div>
+    </div>`;
+}
+
+/* ─── STATUS ─────────────────────────────────────────────────── */
+function setStatus(key, i, status, btn) {
+  const row = document.getElementById(`row-${key}-${i}`);
+  row.querySelectorAll('.st-btn').forEach(b => b.classList.remove('ok-active', 'nok-active', 'na-active'));
+  btn.classList.add(status + '-active');
+}
+
+/* ─── OBSERVAÇÕES ────────────────────────────────────────────── */
+function toggleObs(key, i, btn) {
+  const area = document.getElementById(`obs-area-${key}-${i}`);
+  area.classList.toggle('open');
+  if (area.classList.contains('open')) area.querySelector('textarea').focus();
+}
+
+function updateObsBtn(key, i) {
+  const area = document.getElementById(`obs-area-${key}-${i}`);
+  const btn  = document.querySelector(`#row-${key}-${i} .obs-btn`);
+  btn.classList.toggle('has-obs', area.querySelector('textarea').value.trim().length > 0);
+}
+
+/* ─── GERAR PDF ──────────────────────────────────────────────── */
+function gerarPDF() {
+
+  // Identificação
+  const motorista  = document.getElementById('motorista').value  || '—';
+  const conferente = document.getElementById('conferente').value || '—';
+  const data       = document.getElementById('data').value       || '—';
+  const hora       = document.getElementById('hora').value       || '—';
+  const tipoEl     = document.querySelector('.tipo-btn.active');
+  const tipo       = tipoEl ? tipoEl.querySelector('span').textContent : '—';
+  const geradoEm   = new Date().toLocaleString('pt-BR');
+
+  // Placas
+  const placaLines = [];
+  if (equipAtivos.has('cavalo')) {
+    const p = document.getElementById('placa-cavalo').value;
+    const k = document.getElementById('km-cavalo').value;
+    placaLines.push(`<strong>Cavalo:</strong> ${p||'—'} &nbsp;|&nbsp; <strong>KM:</strong> ${k||'—'}`);
+  }
+  if (equipAtivos.has('sider')) {
+    placaLines.push(`<strong>Sider:</strong> ${document.getElementById('placa-sider').value||'—'}`);
+  }
+  if (equipAtivos.has('rodotrem')) {
+    const p1 = document.getElementById('placa-rodotrem1').value;
+    const p2 = document.getElementById('placa-rodotrem2').value;
+    placaLines.push(`<strong>Rodotrem 1ª:</strong> ${p1||'—'} &nbsp;|&nbsp; <strong>2ª:</strong> ${p2||'—'}`);
+  }
+  if (equipAtivos.has('rodocacamba')) {
+    const p1 = document.getElementById('placa-rodocacamba1').value;
+    const p2 = document.getElementById('placa-rodocacamba2').value;
+    const p3 = document.getElementById('placa-rodocacamba3').value;
+    placaLines.push(`<strong>Rodocaçamba:</strong> ${p1||'—'} / ${p2||'—'} / ${p3||'—'}`);
+  }
+
+  // Contadores
+  let cntOk = 0, cntNok = 0, cntNa = 0, cntPend = 0;
+  document.querySelectorAll('.item-row').forEach(row => {
+    if      (row.querySelector('.st-btn.ok-active'))  cntOk++;
+    else if (row.querySelector('.st-btn.nok-active')) cntNok++;
+    else if (row.querySelector('.st-btn.na-active'))  cntNa++;
+    else                                               cntPend++;
+  });
+
+  // Cabeçalho
+  document.getElementById('pdf-header').innerHTML = `
+    <div class="pdf-title">CHECK<span>LIST</span> DE FROTA</div>
+    <div class="pdf-meta">
+      <span><strong>Data/Hora:</strong> ${data} ${hora}</span>
+      <span><strong>Operação:</strong> ${tipo}</span>
+      <span><strong>Motorista:</strong> ${motorista}</span>
+      <span><strong>Conferente:</strong> ${conferente}</span>
+      ${placaLines.map(l => `<span>${l}</span>`).join('')}
+      <span><strong>Gerado em:</strong> ${geradoEm}</span>
+    </div>
+    <div class="pdf-counters">
+      <span class="cnt cnt-ok">✔ OK: ${cntOk}</span>
+      <span class="cnt cnt-nok">✘ NOK: ${cntNok}</span>
+      <span class="cnt cnt-na">— N/A: ${cntNa}</span>
+      <span class="cnt cnt-pend">⚠ Pendente: ${cntPend}</span>
+    </div>`;
+
+  // Corpo 2 colunas
+  const pdfCols = document.getElementById('pdf-cols');
+  pdfCols.innerHTML = '';
+  const nokList = [];
+
+  ['cavalo', 'sider', 'rodotrem_c1', 'rodotrem_c2', 'rodocacamba'].forEach(key => {
+    if (!itens[key]) return;
+    const equipBase = key.startsWith('rodotrem') ? 'rodotrem' : key;
+    if (!equipAtivos.has(equipBase)) return;
+
+    let rowsHtml = '';
+    itens[key].forEach((label, i) => {
+      const row = document.getElementById(`row-${key}-${i}`);
+      if (!row) return;
+      const isOk  = row.querySelector('.st-btn.ok-active');
+      const isNok = row.querySelector('.st-btn.nok-active');
+      const isNa  = row.querySelector('.st-btn.na-active');
+      const obs   = row.querySelector('textarea').value.trim();
+
+      let sc = 'pend', sl = 'PEND';
+      if (isOk)  { sc = 'ok';  sl = 'OK';  }
+      if (isNok) { sc = 'nok'; sl = 'NOK'; nokList.push({ label, sectionLabel: equipLabels[key]||key, obs }); }
+      if (isNa)  { sc = 'na';  sl = 'N/A'; }
+
+      rowsHtml += `
+        <div class="pdf-item">
+          <span class="pdf-badge ${sc}">${sl}</span>
+          <div class="pdf-item-text">
+            ${label}
+            ${obs ? `<div class="pdf-item-obs">${obs}</div>` : ''}
+          </div>
+        </div>`;
+    });
+
+    const sec = document.createElement('div');
+    sec.className = 'pdf-section';
+    sec.innerHTML = `
+      <div class="pdf-section-header">${equipLabels[key]||key}</div>
+      ${rowsHtml}`;
+    pdfCols.appendChild(sec);
+  });
+
+  // Seção NOK
+  if (nokList.length > 0) {
+    const nokSec = document.createElement('div');
+    nokSec.className = 'pdf-nok-section';
+    nokSec.innerHTML = `
+      <div class="pdf-nok-header">⚠ Itens Não Conformes (${nokList.length})</div>
+      ${nokList.map((n, i) => `
+        <div class="pdf-nok-item">
+          <strong>${i + 1}. ${n.label}</strong>
+          <div class="nok-loc">${n.sectionLabel}</div>
+          ${n.obs ? `<div class="nok-obs">${n.obs}</div>` : ''}
+        </div>`).join('')}`;
+    pdfCols.appendChild(nokSec);
+  }
+
+  // Rodapé
+  const placaResume = equipAtivos.has('cavalo') ? (document.getElementById('placa-cavalo').value || '') : '';
+  document.getElementById('pdf-footer').innerHTML = `
+    <span>Checklist de Frota${placaResume ? ' — ' + placaResume : ''} | ${motorista}</span>
+    <span>${data} ${hora} — ${tipo}</span>`;
+
+  window.print();
+}
+
+/* ─── LIMPAR TUDO ────────────────────────────────────────────── */
+function limparTudo() {
+  if (!confirm('Deseja limpar todos os dados do checklist?')) return;
+  document.querySelectorAll('input[type=text], input[type=date], input[type=time], textarea')
+    .forEach(el => el.value = '');
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.equip-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.equip-fields').forEach(f => f.classList.remove('visible'));
+  equipAtivos.clear();
+  renderChecklists();
+  initDefaults();
+}
+
+/* ─── INIT ───────────────────────────────────────────────────── */
+function initDefaults() {
+  const hoje = new Date();
+  document.getElementById('data').value = hoje.toISOString().split('T')[0];
+  const hh = String(hoje.getHours()).padStart(2, '0');
+  const mm = String(hoje.getMinutes()).padStart(2, '0');
+  document.getElementById('hora').value = `${hh}:${mm}`;
+}
+
+document.addEventListener('DOMContentLoaded', initDefaults);
+
+</script>
 </body>
 </html>
