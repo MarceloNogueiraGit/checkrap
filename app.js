@@ -1,679 +1,608 @@
 /* ============================================================
-   CHECKLIST DE FROTA — app.js
+   CHECKLIST FROTA — app.js
    ============================================================ */
 
-// ============================================================
-// DATA
-// ============================================================
-const DATA = {
+/* ─── ESTADO ─────────────────────────────────────────────────── */
+const equipAtivos = new Set();
+const fotosCache  = {}; // { "key-index": [{ dataUrl, compressed }] }
+
+/* ─── DADOS DOS CHECKLISTS ───────────────────────────────────── */
+const itens = {
+
   cavalo: [
-    {
-      id: 'elétrica', icon: '⚡', name: 'Elétrica',
-      items: [
-        'Faróis dianteiros (baixo)',
-        'Faróis dianteiros (alto)',
-        'Lanternas dianteiras',
-        'Lanternas traseiras',
-        'Pisca-alertas (4 lados)',
-        'Luz de ré',
-        'Luz de placa',
-        'Tomada elétrica semirreboque (7 pinos)',
-      ]
-    },
-    {
-      id: 'documentos', icon: '📄', name: 'Documentos',
-      items: [
-        'CRLV do cavalo (válido)',
-        'CNH do motorista (categoria E, válida)',
-        'MOPP (se carga perigosa)',
-        'RNTRC / Licença ANTT',
-        'Tacógrafo calibrado e lacrado',
-        'AET (se carga especial)',
-      ]
-    },
-    {
-      id: 'cabine', icon: '🪟', name: 'Cabine / Painel',
-      items: [
-        'Painel de instrumentos (sem alertas)',
-        'Tacógrafo (funcionando / disco inserido)',
-        'Rastreador (online e ativo)',
-        'Ar-condicionado',
-        'Cinto de segurança (motorista)',
-        'Cinto de segurança (passageiro)',
-        'Retrovisores regulados',
-      ]
-    },
-    {
-      id: 'segurança', icon: '🛡️', name: 'Segurança',
-      items: [
-        'Extintor (validade e fixação)',
-        'Macaco hidráulico (presente e funcional)',
-        'Chave de roda',
-        'Triângulo de sinalização',
-      ]
-    },
-    {
-      id: 'motor', icon: '🔧', name: 'Motor / Mecânica',
-      items: [
-        'Nível do óleo do motor',
-        'Nível do óleo do câmbio',
-        'Nível do fluido de arrefecimento',
-        'Nível do óleo de direção hidráulica',
-        'Vazamentos visíveis (motor)',
-        'Vazamentos visíveis (câmbio)',
-        'Vazamentos visíveis (diferencial)',
-        'Correias e mangueiras (aparência)',
-      ]
-    },
+    "Pintura / Defletor de Ar",
+    "Parabrisa / Limpadores / Esguicho",
+    "Escada / Parachoques / Paralamas",
+    "Farol Diant.: Piscas / Milhas / Luz Baixa / Luz Alta (DRL se houver)",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "5ª Roda / Gavião / Pino Rei",
+    "Conectores e Mangueiras de Ar e Elétrica",
+    "Nível de Óleo (Motor / Câmbio / Diferencial)",
+    "Nível de Arrefecimento",
+    "Óleo e Arrefecimento s/ Vazamentos",
+    "Documentação do Cavalo Mecânico",
+    "Opacidade",
+    "Tacógrafo",
+    "Extintor"
   ],
+
   sider: [
-    {
-      id: 'estrutura', icon: '🏗️', name: 'Estrutura / Lona',
-      items: [
-        'Lonas laterais (rasgos ou furos)',
-        'Amarrações das lonas',
-        'Longarinas e travessas (danos)',
-        'Porta traseira / alçapão',
-        'Piso da carroceria',
-      ]
-    },
-    {
-      id: 'acoplamento-s', icon: '🔗', name: 'Acoplamento',
-      items: [
-        'Pino rei (condição e assentamento)',
-        'Quinta roda encaixada e travada',
-        'Mangueiras de ar conectadas',
-        'Cabo elétrico conectado (7 pinos)',
-      ]
-    },
-    {
-      id: 'freios-s', icon: '🔴', name: 'Freios / Ar',
-      items: [
-        'Câmaras de freio (vazamentos)',
-        'Freio de mola (funcionamento)',
-        'Mangueiras de ar (estado)',
-        'Conexões rápidas (estado)',
-      ]
-    },
-    {
-      id: 'eletrica-s', icon: '⚡', name: 'Elétrica',
-      items: [
-        'Lanternas traseiras',
-        'Pisca-alertas traseiros',
-        'Luz de placa traseira',
-        'Lanternas laterais',
-      ]
-    },
-    {
-      id: 'pneus-s', icon: '⭕', name: 'Pneus',
-      items: [
-        'Calibragem (todos os eixos)',
-        'Desgaste / sulcos mínimos',
-        'Danos visíveis (cortes, bolhas)',
-        'Estepe (presente e calibrado)',
-      ]
-    },
+    "Documentação da Carreta",
+    "Sinalização Reflexiva Laterais",
+    "Luz de Sinalização Laterais",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "Porta e Assoalho",
+    "Lonas Laterais / Teto / Cabo de Aço",
+    "Cintas / Catracas / Cantoneiras / Réguas",
+    "Extintor / Estepe",
+    "Pés Hidráulicos / Manivela",
+    "Paralama / Parachoque / Escada / Degraus"
   ],
-  rodotrem: [
-    {
-      id: 'primeiro-impl', icon: '📦', name: '1º Implemento (igual ao Sider)',
-      items: [
-        'Lonas laterais (rasgos ou furos)',
-        'Cintas, catracas, cantoneiras , réguas',
-        'Amarrações das lonas',
-        'Pino rei — encaixe e condição',
-        'Quinta roda — travamento',
-        'Lanternas e pisca traseiros (luz de posição, ré)',
-        'faixas reflexivas e luz de sinalização laterais',
-        'Estepe, extintor (presente e calibrado, extintor na validade)',
-      ]
-    },
-    {
-      id: 'gaviao', icon: '🦅', name: 'Gavião (Pino de Conexão)',
-      items: [
-        'Gavião — condição geral',
-        'Pino de conexão travado',
-        'Trava de segurança do pino',
-        'Jogo / folga excessiva',
-        'Deformações ou trincas visíveis',
-      ]
-    },
-    {
-      id: 'segundo-impl', icon: '📦', name: '2º Implemento',
-      items: [
-        'Lonas laterais (rasgos ou furos)',
-        'Cintas, catracas, cantoneiras , réguas',
-        'Amarrações das lonas',
-        'Pino rei do 2º implemento — condição',
-        'Lanternas e pisca traseiros',
-        'Estepe e extintor do 2º implemento',
-      ]
-    },
-    {
-      id: 'rodotrem-geral', icon: '🔧', name: 'Geral Rodotrem',
-      items: [
-        'Comprimento total dentro do limite (≤30m)',
-        'Sinalizações obrigatórias (retrorefletivos laterais)',
-        'Luzes de contorno (se exigido)',
-      ]
-    },
+
+  rodotrem_c1: [
+    "Documentação da Carreta",
+    "Sinalização Reflexiva Laterais",
+    "Luz de Sinalização Laterais",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "Porta e Assoalho",
+    "Lonas Laterais / Teto / Cabo de Aço",
+    "Cintas / Catracas / Cantoneiras / Réguas",
+    "Extintor / Estepe",
+    "Pés Hidráulicos / Manivela",
+    "Paralama / Parachoque / Escada / Degraus",
+    "5ª Roda / Gavião / Pino Rei"
+  ],
+
+  rodotrem_c2: [
+    "Documentação da Carreta",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "Lonas Laterais / Teto / Cabo de Aço",
+    "Cintas / Catracas / Cantoneiras / Réguas",
+    "Extintor / Estepe",
+    "Pés Hidráulicos / Manivela",
+    "Paralama / Parachoque / Escada / Degraus"
+  ],
+
+  rodocacamba: [
+    "Documentação da Carreta",
+    "Sinalização Reflexiva Laterais",
+    "Luz de Sinalização Laterais",
+    "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+    "Caçamba / Estrutura",
+    "Mecanismo de Basculamento",
+    "Cilindro Hidráulico / Mangueiras",
+    "Extintor / Estepe",
+    "Pés Hidráulicos / Manivela",
+    "Paralama / Parachoque / Escada / Degraus"
   ]
+
 };
 
-// ============================================================
-// STATE
-// ============================================================
-const state = {};
+const equipLabels = {
+  cavalo:      "Cavalo Mecânico",
+  sider:       "Sider",
+  rodotrem_c1: "Rodotrem — 1ª Carreta",
+  rodotrem_c2: "Rodotrem — 2ª Carreta",
+  rodocacamba: "Rodocaçamba"
+};
 
-function getKey(tab, secId, idx) { return `${tab}||${secId}||${idx}`; }
+const equipConfig = {
+  cavalo:      { badge: ""       },
+  sider:       { badge: "blue"   },
+  rodotrem:    { badge: "green"  },
+  rodocacamba: { badge: "purple" }
+};
 
-function getState(tab, secId, idx) {
-  const k = getKey(tab, secId, idx);
-  if (!state[k]) state[k] = { status: '', obs: '', fotos: [] };
-  if (!state[k].fotos) state[k].fotos = [];
-  return state[k];
+/* ─── MÁSCARAS ───────────────────────────────────────────────── */
+function maskPlaca(el) {
+  let v = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3,7);
+  el.value = v;
 }
 
-// ============================================================
-// FOTO — captura, compressão e cache em memória
-// ============================================================
-
-// Abre input file (câmera no mobile, galeria no desktop)
-function abrirCamera(tab, secId, idx) {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'image/*';
-  input.capture = 'environment'; // câmera traseira no mobile
-  input.onchange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    comprimirFoto(file, (dataUrl) => {
-      const s = getState(tab, secId, idx);
-      s.fotos.push(dataUrl);
-      // Re-renderiza só as miniaturas sem reconstruir o item inteiro
-      renderFotos(tab, secId, idx);
-    });
-  };
-  input.click();
+function maskKm(el) {
+  let v = el.value.replace(/\D/g,'');
+  v = v.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  el.value = v;
 }
 
-// Comprime a foto para baixa qualidade (max 400px, JPEG 40%)
-function comprimirFoto(file, callback) {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const img = new Image();
-    img.onload = () => {
-      const MAX = 400;
-      let w = img.width, h = img.height;
-      if (w > h && w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
-      else if (h > MAX)     { w = Math.round(w * MAX / h); h = MAX; }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      callback(canvas.toDataURL('image/jpeg', 0.4));
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+/* ─── TIPO CHECKLIST (SELECT) ────────────────────────────────── */
+function onTipoChange(sel) {
+  const val = sel.value;
+  // auto-seleciona equipamento se tipo for sider ou rodotrem
+  if (val === 'Sider' && !equipAtivos.has('sider')) {
+    toggleEquip('sider');
+  } else if (val === 'Rodotrem' && !equipAtivos.has('rodotrem')) {
+    toggleEquip('rodotrem');
+  }
 }
 
-// Renderiza miniaturas de fotos dentro do item (sem re-render completo)
-function renderFotos(tab, secId, idx) {
-  const s = getState(tab, secId, idx);
-  const wrap = document.getElementById(`fotos-wrap-${tab}-${secId}-${idx}`);
-  if (!wrap) return;
-  if (s.fotos.length === 0) {
-    wrap.innerHTML = '';
-    wrap.classList.remove('visible');
+/* ─── EQUIPAMENTOS ───────────────────────────────────────────── */
+function toggleEquip(equip) {
+  const btn    = document.querySelector(`.equip-btn[data-equip="${equip}"]`);
+  const fields = document.getElementById('fields-' + equip);
+
+  if (equipAtivos.has(equip)) {
+    equipAtivos.delete(equip);
+    btn.classList.remove('active');
+    if (fields) fields.classList.remove('visible');
+  } else {
+    equipAtivos.add(equip);
+    btn.classList.add('active');
+    if (fields) fields.classList.add('visible');
+  }
+  renderChecklists();
+}
+
+/* ─── RENDER CHECKLISTS ──────────────────────────────────────── */
+function renderChecklists() {
+  const container = document.getElementById('checklists-container');
+  container.innerHTML = '';
+
+  if (equipAtivos.size === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🚛</div>
+        <p>Selecione ao menos um equipamento acima<br>para exibir o checklist</p>
+      </div>`;
     return;
   }
-  wrap.classList.add('visible');
-  wrap.innerHTML = s.fotos.map((src, fi) => `
-    <div class="foto-thumb-wrap">
-      <img class="foto-thumb" src="${src}" alt="foto ${fi+1}"/>
-      <button class="foto-del" onclick="deletarFoto('${tab}','${secId}',${idx},${fi})" title="Remover foto">✕</button>
-    </div>
-  `).join('');
-}
 
-function deletarFoto(tab, secId, idx, fi) {
-  const s = getState(tab, secId, idx);
-  s.fotos.splice(fi, 1);
-  renderFotos(tab, secId, idx);
-}
-
-// ============================================================
-// RENDER
-// ============================================================
-function renderAll() {
-  ['cavalo', 'sider', 'rodotrem'].forEach(tab => {
-    const container = document.getElementById(`sections-${tab}`);
-    container.innerHTML = '';
-    DATA[tab].forEach(sec => {
-      container.appendChild(buildSection(tab, sec));
-    });
+  ['cavalo','sider','rodotrem','rodocacamba'].forEach(equip => {
+    if (!equipAtivos.has(equip)) return;
+    if (equip === 'rodotrem') {
+      renderSection(container, 'green',  equipLabels.rodotrem_c1, itens.rodotrem_c1, 'rodotrem_c1');
+      renderSection(container, 'green',  equipLabels.rodotrem_c2, itens.rodotrem_c2, 'rodotrem_c2');
+    } else {
+      renderSection(container, equipConfig[equip].badge, equipLabels[equip], itens[equip], equip);
+    }
   });
-  updateProgress();
 }
 
-function buildSection(tab, sec) {
-  const wrap = document.createElement('div');
-  wrap.className = 'section';
-  wrap.id = `sec-${tab}-${sec.id}`;
-
-  const header = document.createElement('div');
-  header.className = 'section-header';
-  header.innerHTML = `
-    <span class="section-icon">${sec.icon}</span>
-    <span class="section-name">${sec.name}</span>
-    <span class="section-badge" id="badge-${tab}-${sec.id}">0/${sec.items.length}</span>
-    <span class="section-chevron">▼</span>
-  `;
-  header.addEventListener('click', () => wrap.classList.toggle('collapsed'));
-
-  const body = document.createElement('div');
-  body.className = 'section-body';
-  sec.items.forEach((itemName, idx) => {
-    body.appendChild(buildItem(tab, sec.id, idx, itemName));
-  });
-
-  wrap.appendChild(header);
-  wrap.appendChild(body);
-  return wrap;
+function renderSection(container, badgeClass, label, items, key) {
+  const sec = document.createElement('div');
+  sec.className = 'checklist-section visible';
+  sec.dataset.key = key;
+  sec.innerHTML = `
+    <div class="section-title" style="margin-top:8px">${label}</div>
+    <div class="card">
+      <span class="equip-label ${badgeClass}">${label}</span>
+      ${items.map((item, i) => renderItem(key, i, item)).join('')}
+    </div>`;
+  container.appendChild(sec);
 }
 
-function buildItem(tab, secId, idx, name) {
-  const s = getState(tab, secId, idx);
-  const div = document.createElement('div');
-  div.className = `item${s.status ? ' status-' + s.status : ''}`;
-  div.id = `item-${tab}-${secId}-${idx}`;
-
-  const fotoCount = s.fotos.length;
-
-  div.innerHTML = `
-    <div class="item-top">
-      <span class="item-name">${name}</span>
-      <div class="btn-group">
-        <button class="btn-status${s.status==='ok'?' active-ok':''}"  title="OK"  onclick="setStatus('${tab}','${secId}',${idx},'ok')">✔</button>
-        <button class="btn-status${s.status==='nok'?' active-nok':''}" title="NOK" onclick="setStatus('${tab}','${secId}',${idx},'nok')">✖</button>
-        <button class="btn-status${s.status==='na'?' active-na':''}"   title="N/A" onclick="setStatus('${tab}','${secId}',${idx},'na')">—</button>
-        <button class="btn-status btn-cam${fotoCount > 0 ? ' has-foto' : ''}" title="Foto" onclick="abrirCamera('${tab}','${secId}',${idx})">📷${fotoCount > 0 ? `<span class="foto-badge">${fotoCount}</span>` : ''}</button>
+function renderItem(key, i, label) {
+  return `
+    <div class="item-row" id="row-${key}-${i}">
+      <div class="item-main">
+        <span class="item-num">${i+1}</span>
+        <span class="item-label">${label}</span>
+        <div class="item-btns">
+          <button class="st-btn" onclick="setStatus('${key}',${i},'ok',this)">OK</button>
+          <button class="st-btn" onclick="setStatus('${key}',${i},'nok',this)">NOK</button>
+          <button class="st-btn" onclick="setStatus('${key}',${i},'na',this)">—</button>
+          <button class="obs-btn" onclick="toggleObs('${key}',${i},this)" title="Observação">💬</button>
+          <button class="cam-btn" onclick="togglePhoto('${key}',${i},this)" title="Foto">📷</button>
+        </div>
       </div>
-    </div>
-    <span class="obs-toggle" onclick="toggleObs('${tab}','${secId}',${idx})">✏ observação</span>
-    <div class="item-obs${s.obs ? ' visible' : ''}" id="obs-wrap-${tab}-${secId}-${idx}">
-      <textarea class="obs-input" placeholder="Digite uma observação..." oninput="saveObs('${tab}','${secId}',${idx},this.value)">${s.obs}</textarea>
-    </div>
-    <div class="fotos-wrap${fotoCount > 0 ? ' visible' : ''}" id="fotos-wrap-${tab}-${secId}-${idx}">
-      ${s.fotos.map((src, fi) => `
-        <div class="foto-thumb-wrap">
-          <img class="foto-thumb" src="${src}" alt="foto ${fi+1}"/>
-          <button class="foto-del" onclick="deletarFoto('${tab}','${secId}',${idx},${fi})" title="Remover">✕</button>
-        </div>
-      `).join('')}
-    </div>
-  `;
-  return div;
+      <div class="obs-area"   id="obs-area-${key}-${i}">
+        <textarea placeholder="Observação..." oninput="updateObsBtn('${key}',${i})"></textarea>
+      </div>
+      <div class="photo-area" id="photo-area-${key}-${i}">
+        <button class="photo-add-btn" onclick="triggerCamera('${key}',${i})">＋</button>
+        <input type="file" id="file-${key}-${i}" accept="image/*" capture="environment"
+               style="display:none" onchange="handlePhoto(event,'${key}',${i})">
+      </div>
+    </div>`;
 }
 
-function setStatus(tab, secId, idx, status) {
-  const s = getState(tab, secId, idx);
-  s.status = s.status === status ? '' : status;
-  const div = document.getElementById(`item-${tab}-${secId}-${idx}`);
-  const newDiv = buildItem(tab, secId, idx, DATA[tab].find(x => x.id === secId).items[idx]);
-  div.replaceWith(newDiv);
-  if (s.status === 'nok') {
-    document.getElementById(`obs-wrap-${tab}-${secId}-${idx}`).classList.add('visible');
+/* ─── STATUS ─────────────────────────────────────────────────── */
+function setStatus(key, i, status, btn) {
+  const row = document.getElementById(`row-${key}-${i}`);
+  row.querySelectorAll('.st-btn').forEach(b => b.classList.remove('ok-active','nok-active','na-active'));
+  btn.classList.add(status + '-active');
+}
+
+/* ─── OBSERVAÇÕES ────────────────────────────────────────────── */
+function toggleObs(key, i, btn) {
+  const area = document.getElementById(`obs-area-${key}-${i}`);
+  area.classList.toggle('open');
+  if (area.classList.contains('open')) area.querySelector('textarea').focus();
+}
+
+function updateObsBtn(key, i) {
+  const area = document.getElementById(`obs-area-${key}-${i}`);
+  const btn  = document.querySelector(`#row-${key}-${i} .obs-btn`);
+  btn.classList.toggle('has-obs', area.querySelector('textarea').value.trim().length > 0);
+}
+
+/* ─── FOTOS ──────────────────────────────────────────────────── */
+function togglePhoto(key, i, btn) {
+  const area = document.getElementById(`photo-area-${key}-${i}`);
+  area.classList.toggle('open');
+}
+
+function triggerCamera(key, i) {
+  document.getElementById(`file-${key}-${i}`).click();
+}
+
+function compressImage(file, maxW, maxH, quality) {
+  return new Promise(resolve => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+        if (h > maxH) { w = Math.round(w * maxH / h); h = maxH; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function handlePhoto(event, key, i) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Comprime para cache/preview (media qualidade)
+  const compressed = await compressImage(file, 800, 600, 0.6);
+  const fotoKey = `${key}-${i}`;
+  if (!fotosCache[fotoKey]) fotosCache[fotoKey] = [];
+  fotosCache[fotoKey].push(compressed);
+
+  renderPhotoPreviews(key, i);
+
+  // Marca botão e borda
+  const camBtn = document.querySelector(`#row-${key}-${i} .cam-btn`);
+  camBtn.classList.add('has-photo');
+  document.getElementById(`row-${key}-${i}`).classList.add('has-photo');
+
+  // Limpa input para permitir nova foto do mesmo item
+  event.target.value = '';
+}
+
+function renderPhotoPreviews(key, i) {
+  const area    = document.getElementById(`photo-area-${key}-${i}`);
+  const fotoKey = `${key}-${i}`;
+  const fotos   = fotosCache[fotoKey] || [];
+
+  // Remove previews existentes, mantém botão e input
+  area.querySelectorAll('.photo-preview').forEach(el => el.remove());
+  const addBtn  = area.querySelector('.photo-add-btn');
+
+  fotos.forEach((src, idx) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'photo-preview';
+    wrap.innerHTML = `
+      <img src="${src}" alt="foto ${idx+1}">
+      <button class="photo-remove" onclick="removePhoto('${key}',${i},${idx})">✕</button>`;
+    area.insertBefore(wrap, addBtn);
+  });
+}
+
+function removePhoto(key, i, idx) {
+  const fotoKey = `${key}-${i}`;
+  fotosCache[fotoKey].splice(idx, 1);
+  renderPhotoPreviews(key, i);
+
+  if (!fotosCache[fotoKey].length) {
+    document.querySelector(`#row-${key}-${i} .cam-btn`).classList.remove('has-photo');
+    document.getElementById(`row-${key}-${i}`).classList.remove('has-photo');
   }
-  updateBadge(tab, secId);
-  updateProgress();
 }
 
-function toggleObs(tab, secId, idx) {
-  document.getElementById(`obs-wrap-${tab}-${secId}-${idx}`).classList.toggle('visible');
-}
-
-function saveObs(tab, secId, idx, val) {
-  getState(tab, secId, idx).obs = val;
-}
-
-function updateBadge(tab, secId) {
-  const sec = DATA[tab].find(x => x.id === secId);
-  let done = 0, hasNok = false;
-  sec.items.forEach((_, idx) => {
-    const s = getState(tab, secId, idx);
-    if (s.status) done++;
-    if (s.status === 'nok') hasNok = true;
-  });
-  const badge = document.getElementById(`badge-${tab}-${secId}`);
-  badge.textContent = `${done}/${sec.items.length}`;
-  badge.className = 'section-badge';
-  if (done === sec.items.length) {
-    badge.classList.add(hasNok ? 'has-nok' : 'all-ok');
-  }
-}
-
-function updateProgress() {
-  let total = 0, done = 0, ok = 0, nok = 0;
-  ['cavalo', 'sider', 'rodotrem'].forEach(tab => {
-    DATA[tab].forEach(sec => {
-      sec.items.forEach((_, idx) => {
-        total++;
-        const s = getState(tab, sec.id, idx);
-        if (s.status) done++;
-        if (s.status === 'ok') ok++;
-        if (s.status === 'nok') nok++;
-      });
-    });
-  });
-  const pct = total ? Math.round(done / total * 100) : 0;
-  document.getElementById('pct').textContent = pct + '%';
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('chip-ok').textContent   = `✔ OK: ${ok}`;
-  document.getElementById('chip-nok').textContent  = `✖ NOK: ${nok}`;
-  document.getElementById('chip-pend').textContent = `⏳ Pendente: ${total - done}`;
-}
-
-// ============================================================
-// TABS
-// ============================================================
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach((t, i) => {
-    t.classList.toggle('active', ['cavalo', 'sider', 'rodotrem'][i] === name);
-  });
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById(`tab-${name}`).classList.add('active');
-}
-
-// ============================================================
-// RESET
-// ============================================================
-function resetAll() {
-  if (!confirm('Resetar todo o checklist?')) return;
-  Object.keys(state).forEach(k => { delete state[k]; });
-  renderAll();
-}
-
-// ============================================================
-// SELETOR DE VEÍCULOS
-// ============================================================
-function toggleVeiculo(tipo) {
-  const item = document.getElementById('vbtn-' + tipo).closest('.veiculo-item');
-  item.classList.toggle('active');
-}
-
-// ============================================================
-// PDF via window.print() — layout compacto, sem botão
-// ============================================================
+/* ─── GERAR PDF ──────────────────────────────────────────────── */
 function gerarPDF() {
-  const tabLabels   = { cavalo: 'CAVALO MECÂNICO', sider: 'SEMIRREBOQUE SIDER', rodotrem: 'RODOTREM 9 EIXOS' };
-  const statusLabel = { ok: 'OK', nok: 'NOK', na: 'N/A', '': '---' };
-  const statusColor = { ok: '#22c55e', nok: '#ef4444', na: '#9ca3af', '': '#f5a623' };
 
-  const abasAtivas = ['cavalo', 'sider', 'rodotrem'].filter(tab =>
-    DATA[tab].some(sec => sec.items.some((_, idx) => getState(tab, sec.id, idx).status !== ''))
-  );
+  // — Identificação
+  const motorista  = document.getElementById('motorista').value  || '—';
+  const conferente = document.getElementById('conferente').value || '—';
+  const data       = document.getElementById('data').value       || '—';
+  const hora       = document.getElementById('hora').value       || '—';
+  const tipoSel    = document.getElementById('tipo-select');
+  const tipo       = tipoSel && tipoSel.value ? tipoSel.value : '—';
 
-  if (abasAtivas.length === 0) {
-    alert('Nenhuma aba foi preenchida ainda. Preencha pelo menos um item antes de gerar o relatório.');
-    return;
+  // — Placas
+  const placaLines = [];
+  if (equipAtivos.has('cavalo')) {
+    const p = document.getElementById('placa-cavalo').value;
+    const k = document.getElementById('km-cavalo').value;
+    placaLines.push(`<strong>Cavalo:</strong> ${p||'—'} &nbsp;|&nbsp; <strong>KM:</strong> ${k||'—'}`);
+  }
+  if (equipAtivos.has('sider')) {
+    placaLines.push(`<strong>Sider:</strong> ${document.getElementById('placa-sider').value||'—'}`);
+  }
+  if (equipAtivos.has('rodotrem')) {
+    const p1 = document.getElementById('placa-rodotrem1').value;
+    const p2 = document.getElementById('placa-rodotrem2').value;
+    placaLines.push(`<strong>Rodotrem 1ª:</strong> ${p1||'—'} &nbsp;|&nbsp; <strong>2ª:</strong> ${p2||'—'}`);
+  }
+  if (equipAtivos.has('rodocacamba')) {
+    const p1 = document.getElementById('placa-rodocacamba1').value;
+    const p2 = document.getElementById('placa-rodocacamba2').value;
+    const p3 = document.getElementById('placa-rodocacamba3').value;
+    placaLines.push(`<strong>Rodocaçamba:</strong> ${p1||'—'} / Dolly: ${p2||'—'} / ${p3||'—'}`);
   }
 
-  let totalOk = 0, totalNok = 0, totalNa = 0, totalPend = 0;
-  abasAtivas.forEach(tab => {
-    DATA[tab].forEach(sec => {
-      sec.items.forEach((_, idx) => {
-        const s = getState(tab, sec.id, idx);
-        if      (s.status === 'ok')  totalOk++;
-        else if (s.status === 'nok') totalNok++;
-        else if (s.status === 'na')  totalNa++;
-        else                         totalPend++;
-      });
-    });
+  // — Nome do arquivo PDF
+  let nomePDF = 'Checklist';
+  if (equipAtivos.has('cavalo')) {
+    const p = document.getElementById('placa-cavalo').value;
+    if (p) nomePDF = `Checklist-${p}`;
+  } else {
+    // Pega a primeira placa disponível
+    const primeiraPlaca =
+      (equipAtivos.has('sider')       && document.getElementById('placa-sider').value)       ||
+      (equipAtivos.has('rodotrem')    && document.getElementById('placa-rodotrem1').value)    ||
+      (equipAtivos.has('rodocacamba') && document.getElementById('placa-rodocacamba1').value) ||
+      null;
+    if (primeiraPlaca) nomePDF = `Checklist-${primeiraPlaca}`;
+  }
+
+  // — Contadores
+  let cntOk = 0, cntNok = 0, cntNa = 0, cntPend = 0;
+  document.querySelectorAll('.item-row').forEach(row => {
+    if      (row.querySelector('.st-btn.ok-active'))  cntOk++;
+    else if (row.querySelector('.st-btn.nok-active')) cntNok++;
+    else if (row.querySelector('.st-btn.na-active'))  cntNa++;
+    else                                               cntPend++;
   });
 
-  const nokItems = [];
-  abasAtivas.forEach(tab => {
-    DATA[tab].forEach(sec => {
-      sec.items.forEach((itemName, idx) => {
-        const s = getState(tab, sec.id, idx);
-        if (s.status === 'nok') nokItems.push({ tab, sec: sec.name, secId: sec.id, name: itemName, obs: s.obs, fotos: s.fotos || [] });
-      });
-    });
-  });
+  // — Cabeçalho PDF
+  document.getElementById('pdf-header').innerHTML = `
+    <div class="pdf-title">CHECK<span>LIST</span> DE FROTA</div>
+    <div class="pdf-meta">
+      <span><strong>Data/Hora:</strong> ${data} ${hora}</span>
+      <span><strong>Operação:</strong> ${tipo}</span>
+      <span><strong>Motorista:</strong> ${motorista}</span>
+      <span><strong>Conferente:</strong> ${conferente}</span>
+      ${placaLines.map(l => `<span>${l}</span>`).join('')}
+    </div>
+    <div class="pdf-counters">
+      <span class="cnt cnt-ok">✔ OK: ${cntOk}</span>
+      <span class="cnt cnt-nok">✘ NOK: ${cntNok}</span>
+      <span class="cnt cnt-na">— N/A: ${cntNa}</span>
+      <span class="cnt cnt-pend">⚠ Pendente: ${cntPend}</span>
+    </div>`;
 
-  const dataVal = document.getElementById('id-data').value || '—';
-  const hora    = document.getElementById('id-hora').value || '—';
-  const placaC  = (document.getElementById('id-placa-cavalo').value || '').toUpperCase() || '—';
-  const placaS1 = (document.getElementById('id-placa-semi1').value || '').toUpperCase() || '—';
-  const placaS2 = (document.getElementById('id-placa-semi2').value || '').toUpperCase();
-  const placaS3 = (document.getElementById('id-placa-semi3').value || '').toUpperCase();
-  const placaS  = [placaS1, placaS2, placaS3].filter(p => p && p !== '—').join(' / ');
-  const motor   = document.getElementById('id-motorista').value || '—';
-  const conf    = document.getElementById('id-conferente').value || '—';
-  const oper    = document.getElementById('id-operacao').value || '—';
-  const gerado  = new Date().toLocaleString('pt-BR');
+  // — Corpo 2 colunas
+  const pdfCols = document.getElementById('pdf-cols');
+  pdfCols.innerHTML = '';
+  const nokList    = [];
+  const fotosGrupo = {}; // { sectionLabel: [{ label, fotos }] }
 
-  // ── Detalhe por aba/seção ──
-  let detalheHTML = '';
-  abasAtivas.forEach(tab => {
-    detalheHTML += `<div class="tab-bloco">
-      <div class="p-tab-header">${tabLabels[tab]}</div>
-      <div class="secoes-grid">`;
+  ['cavalo','sider','rodotrem_c1','rodotrem_c2','rodocacamba'].forEach(key => {
+    if (!itens[key]) return;
+    const equipBase = key.startsWith('rodotrem') ? 'rodotrem' : key;
+    if (!equipAtivos.has(equipBase)) return;
 
-    DATA[tab].forEach(sec => {
-      let itensHTML = '';
-      sec.items.forEach((itemName, idx) => {
-        const s   = getState(tab, sec.id, idx);
-        const st  = s.status || '';
-        const cor = statusColor[st];
-        const lbl = statusLabel[st];
-        const temFoto = s.fotos && s.fotos.length > 0;
-        itensHTML += `<div class="p-item${st === 'nok' ? ' p-item-nok' : ''}">
-          <span class="p-pill" style="background:${cor}">${lbl}</span>
-          <span class="p-item-name">${itemName}${temFoto ? ' <span class="p-cam-icon">📷</span>' : ''}</span>
+    const secLabel = equipLabels[key] || key;
+    let rowsHtml = '';
+
+    itens[key].forEach((label, i) => {
+      const row = document.getElementById(`row-${key}-${i}`);
+      if (!row) return;
+      const isOk  = row.querySelector('.st-btn.ok-active');
+      const isNok = row.querySelector('.st-btn.nok-active');
+      const isNa  = row.querySelector('.st-btn.na-active');
+      const obs   = row.querySelector('textarea').value.trim();
+      const fotos = fotosCache[`${key}-${i}`] || [];
+
+      let sc = 'pend', sl = 'PEND';
+      if (isOk)  { sc = 'ok';  sl = 'OK';  }
+      if (isNok) { sc = 'nok'; sl = 'NOK'; nokList.push({ label, sectionLabel: secLabel, obs }); }
+      if (isNa)  { sc = 'na';  sl = 'N/A'; }
+
+      rowsHtml += `
+        <div class="pdf-item">
+          <span class="pdf-badge ${sc}">${sl}</span>
+          <div class="pdf-item-text">
+            ${label}
+            ${obs ? `<div class="pdf-item-obs">${obs}</div>` : ''}
+          </div>
         </div>`;
-        if (s.obs) {
-          itensHTML += `<div class="p-obs">↳ ${s.obs}</div>`;
-        }
-      });
 
-      detalheHTML += `<div class="secao-box">
-        <div class="p-sec-header">${sec.name.toUpperCase()}</div>
-        ${itensHTML}
-      </div>`;
+      // Coleta fotos para o grupo
+      if (fotos.length) {
+        if (!fotosGrupo[secLabel]) fotosGrupo[secLabel] = [];
+        fotos.forEach(f => fotosGrupo[secLabel].push({ label, src: f }));
+      }
     });
 
-    detalheHTML += `</div></div>`;
+    const sec = document.createElement('div');
+    sec.className = 'pdf-section';
+    sec.innerHTML = `<div class="pdf-section-header">${secLabel}</div>${rowsHtml}`;
+    pdfCols.appendChild(sec);
   });
 
-  // ── Seção de fotos agrupadas por seção ──
-  let fotosHTML = '';
-  // Coleta todas as seções que têm pelo menos 1 foto em qualquer item
-  abasAtivas.forEach(tab => {
-    DATA[tab].forEach(sec => {
-      const itensComFoto = [];
-      sec.items.forEach((itemName, idx) => {
-        const s = getState(tab, sec.id, idx);
-        if (s.fotos && s.fotos.length > 0) {
-          itensComFoto.push({ name: itemName, fotos: s.fotos, obs: s.obs, status: s.status });
-        }
+  // — Fotos agrupadas por seção (2 colunas)
+  Object.entries(fotosGrupo).forEach(([grupo, fotos]) => {
+    const fotoSec = document.createElement('div');
+    fotoSec.className = 'pdf-photos-section';
+    fotoSec.innerHTML = `
+      <div class="pdf-photos-header">📷 Registros Fotográficos — ${grupo}</div>
+      <div class="pdf-photos-grid">
+        ${fotos.map(f => `
+          <div class="pdf-photo-item">
+            <img src="${f.src}" alt="${f.label}">
+            <div class="pdf-photo-caption">${f.label}</div>
+          </div>`).join('')}
+      </div>`;
+    pdfCols.appendChild(fotoSec);
+  });
+
+  // — Seção NOK
+  if (nokList.length > 0) {
+    const nokSec = document.createElement('div');
+    nokSec.className = 'pdf-nok-section';
+    nokSec.innerHTML = `
+      <div class="pdf-nok-header">⚠ Itens Não Conformes (${nokList.length})</div>
+      ${nokList.map((n,i) => `
+        <div class="pdf-nok-item">
+          <strong>${i+1}. ${n.label}</strong>
+          <div class="nok-loc">${n.sectionLabel}</div>
+          ${n.obs ? `<div class="nok-obs">${n.obs}</div>` : ''}
+        </div>`).join('')}`;
+    pdfCols.appendChild(nokSec);
+  }
+
+  // — Rodapé
+  const placaResume = equipAtivos.has('cavalo') ? (document.getElementById('placa-cavalo').value||'') : '';
+  document.getElementById('pdf-footer').innerHTML = `
+    <span>Checklist de Frota${placaResume ? ' — '+placaResume : ''} | ${motorista}</span>
+    <span>${data} ${hora} — ${tipo}</span>`;
+
+  // — Salvar no histórico
+  salvarHistorico(motorista, conferente, data, hora, tipo, nomePDF, cntOk, cntNok, cntPend);
+
+  // — Nomear e imprimir
+  const tituloOriginal = document.title;
+  document.title = nomePDF;
+  window.print();
+  document.title = tituloOriginal;
+}
+
+/* ─── HISTÓRICO (localStorage) ───────────────────────────────── */
+const DB_KEY = 'checklist_frota_historico';
+
+function salvarHistorico(motorista, conferente, data, hora, tipo, nomePDF, ok, nok, pend) {
+  const historico = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+
+  // Monta placas para busca
+  const placas = [];
+  if (equipAtivos.has('cavalo'))      placas.push(document.getElementById('placa-cavalo').value);
+  if (equipAtivos.has('sider'))       placas.push(document.getElementById('placa-sider').value);
+  if (equipAtivos.has('rodotrem'))    placas.push(document.getElementById('placa-rodotrem1').value, document.getElementById('placa-rodotrem2').value);
+  if (equipAtivos.has('rodocacamba')) placas.push(document.getElementById('placa-rodocacamba1').value, document.getElementById('placa-rodocacamba2').value, document.getElementById('placa-rodocacamba3').value);
+
+  // Monta snapshot dos itens
+  const snapshot = [];
+  ['cavalo','sider','rodotrem_c1','rodotrem_c2','rodocacamba'].forEach(key => {
+    const equipBase = key.startsWith('rodotrem') ? 'rodotrem' : key;
+    if (!equipAtivos.has(equipBase)) return;
+    itens[key].forEach((label, i) => {
+      const row = document.getElementById(`row-${key}-${i}`);
+      if (!row) return;
+      const isOk  = row.querySelector('.st-btn.ok-active');
+      const isNok = row.querySelector('.st-btn.nok-active');
+      const isNa  = row.querySelector('.st-btn.na-active');
+      const obs   = row.querySelector('textarea').value.trim();
+      snapshot.push({
+        secao: equipLabels[key]||key,
+        item: label,
+        status: isOk?'ok': isNok?'nok': isNa?'na':'pend',
+        obs
       });
-      if (itensComFoto.length === 0) return;
-
-      fotosHTML += `
-        <div class="foto-grupo">
-          <div class="foto-grupo-header">
-            <span class="foto-grupo-tab">${tabLabels[tab]}</span>
-            <span class="foto-grupo-sec"> › ${sec.name.toUpperCase()}</span>
-          </div>`;
-
-      itensComFoto.forEach(item => {
-        fotosHTML += `<div class="foto-item-label">${item.name}${item.obs ? ` — <em>${item.obs}</em>` : ''}</div>
-          <div class="foto-grid">`;
-        item.fotos.forEach((src, fi) => {
-          fotosHTML += `<img class="foto-img" src="${src}" alt="foto ${fi+1}"/>`;
-        });
-        fotosHTML += `</div>`;
-      });
-
-      fotosHTML += `</div>`;
     });
   });
 
-  const temFotos = fotosHTML.length > 0;
+  const registro = {
+    id:          Date.now(),
+    nomePDF,
+    motorista,
+    conferente,
+    data,
+    hora,
+    tipo,
+    placas:      placas.filter(Boolean),
+    equipamentos: [...equipAtivos],
+    cntOk:  ok,
+    cntNok: nok,
+    cntPend: pend,
+    itens:  snapshot,
+    geradoEm: new Date().toISOString()
+  };
 
-  // ── NOKs ──
-  let nokHTML = '';
-  if (nokItems.length > 0) {
-    nokHTML = `<div class="nok-bloco">
-      <div class="nok-titulo">⚠ ITENS NÃO CONFORMES</div>
-      <div class="nok-grid">`;
-    nokItems.forEach((item, i) => {
-      nokHTML += `<div class="nok-item">
-        <span class="nok-num">${i + 1}</span>
-        <div>
-          <div class="nok-name">${item.name}</div>
-          <div class="nok-sub">${tabLabels[item.tab]} › ${item.sec}</div>
-          ${item.obs  ? `<div class="nok-obs">Obs: ${item.obs}</div>` : ''}
-          ${item.fotos.length > 0 ? `<div class="nok-obs">📷 ${item.fotos.length} foto(s) registrada(s)</div>` : ''}
-        </div>
-      </div>`;
-    });
-    nokHTML += `</div></div>`;
-  }
+  historico.unshift(registro); // mais recente primeiro
 
-  const html = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8"/>
-<title>Checklist — ${placaC} — ${dataVal}</title>
-<style>
-  @page { margin: 10mm 12mm; }
-  @media print {
-    html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 7.5px; color: #111; background: #fff; }
+  // Limita a 200 registros
+  if (historico.length > 200) historico.splice(200);
 
-  .topo { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #f5a623; padding-bottom: 5px; margin-bottom: 6px; }
-  .topo-titulo { font-size: 16px; font-weight: 900; color: #f5a623; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
-  .topo-sub    { font-size: 7px; color: #888; text-transform: uppercase; letter-spacing: 2px; }
-  .topo-info   { text-align: right; font-size: 7px; color: #555; line-height: 1.6; }
-  .topo-info strong { font-size: 11px; color: #111; }
+  localStorage.setItem(DB_KEY, JSON.stringify(historico));
+}
 
-  .id-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; border: 1px solid #ddd; border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
-  .id-cell { padding: 3px 6px; border-right: 1px solid #ddd; }
-  .id-cell:last-child { border-right: none; }
-  .id-label { font-size: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #999; }
-  .id-val   { font-size: 8px; font-weight: 700; color: #111; margin-top: 1px; }
+function carregarHistorico(filtro = '') {
+  const historico = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+  const body = document.getElementById('hist-body');
 
-  .resumo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 7px; }
-  .r-box  { border-radius: 3px; padding: 4px 6px; text-align: center; border: 1.5px solid; }
-  .r-num  { font-size: 14px; font-weight: 900; line-height: 1; }
-  .r-lbl  { font-size: 6px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
-  .r-ok   { border-color: #22c55e; color: #22c55e; }
-  .r-nok  { border-color: #ef4444; color: #ef4444; }
-  .r-na   { border-color: #9ca3af; color: #9ca3af; }
-  .r-pend { border-color: #f5a623; color: #f5a623; }
+  const filtrado = filtro
+    ? historico.filter(r =>
+        r.placas.some(p => p.toUpperCase().includes(filtro.toUpperCase())) ||
+        (r.motorista||'').toUpperCase().includes(filtro.toUpperCase())
+      )
+    : historico;
 
-  .tab-bloco { margin-bottom: 6px; }
-  .p-tab-header { font-size: 8px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; background: #1e2333; padding: 3px 7px; border-left: 4px solid #f5a623; margin-bottom: 3px; }
-  .secoes-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-  .secao-box    { border: 1px solid #e5e7eb; border-radius: 3px; overflow: hidden; }
-  .p-sec-header { font-size: 6.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #fff; background: #374151; padding: 2px 5px; }
-
-  .p-item { display: flex; align-items: center; gap: 4px; padding: 2px 5px; border-bottom: 1px solid #f3f4f6; }
-  .p-item:last-child { border-bottom: none; }
-  .p-item-nok { background: #fff5f5; }
-  .p-item:nth-child(even):not(.p-item-nok) { background: #fafafa; }
-  .p-pill { display: inline-block; min-width: 22px; text-align: center; font-size: 5.5px; font-weight: 800; padding: 1px 3px; border-radius: 2px; color: #fff; flex-shrink: 0; letter-spacing: 0.3px; }
-  .p-item-name { font-size: 7px; color: #222; line-height: 1.3; }
-  .p-cam-icon  { font-size: 6px; }
-  .p-obs { padding: 1px 5px 2px 31px; font-size: 6.5px; color: #666; font-style: italic; background: #fffbf0; border-bottom: 1px solid #f3f4f6; }
-
-  .nok-bloco  { margin-top: 6px; }
-  .nok-titulo { font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: #7f1d1d; padding: 3px 7px; border-left: 4px solid #ef4444; margin-bottom: 3px; }
-  .nok-grid   { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; }
-  .nok-item   { display: flex; gap: 4px; align-items: flex-start; border: 1px solid #fca5a5; border-left: 3px solid #ef4444; border-radius: 3px; padding: 3px 5px; background: #fff5f5; }
-  .nok-num    { font-size: 9px; font-weight: 900; color: #ef4444; flex-shrink: 0; line-height: 1.2; }
-  .nok-name   { font-size: 7px; font-weight: 700; color: #dc2626; line-height: 1.3; }
-  .nok-sub    { font-size: 6px; color: #888; margin-top: 1px; }
-  .nok-obs    { font-size: 6px; color: #991b1b; font-style: italic; margin-top: 2px; }
-
-  /* ── FOTOS ── */
-  .foto-secao-titulo { font-size: 8px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; background: #1e3a5f; padding: 3px 7px; border-left: 4px solid #3b82f6; margin: 8px 0 4px; page-break-after: avoid; }
-  .foto-grupo { margin-bottom: 8px; page-break-inside: avoid; }
-  .foto-grupo-header { background: #f0f4ff; border-left: 3px solid #3b82f6; padding: 2px 6px; margin-bottom: 3px; }
-  .foto-grupo-tab  { font-size: 6.5px; font-weight: 900; color: #1e3a5f; text-transform: uppercase; letter-spacing: 1px; }
-  .foto-grupo-sec  { font-size: 6.5px; color: #4b5563; }
-  .foto-item-label { font-size: 6.5px; color: #374151; font-style: italic; margin: 2px 0 2px 4px; }
-  .foto-grid { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 4px; }
-  .foto-img  { width: 80px; height: 60px; object-fit: cover; border-radius: 3px; border: 1px solid #e5e7eb; }
-
-  .rodape { display: flex; justify-content: space-between; border-top: 1px solid #e5e7eb; padding-top: 3px; margin-top: 6px; font-size: 6px; color: #aaa; }
-</style>
-</head>
-<body>
-
-  <div class="topo">
-    <div>
-      <div class="topo-titulo">Checklist de Frota</div>
-      <div class="topo-sub">Conferência de Veículo</div>
-    </div>
-    <div class="topo-info">
-      <strong>${dataVal} ${hora}</strong>
-      Operação: ${oper}
-    </div>
-  </div>
-
-  <div class="id-row">
-    <div class="id-cell"><div class="id-label">Placa Cavalo</div><div class="id-val">${placaC}</div></div>
-    <div class="id-cell" style="grid-column:span 2"><div class="id-label">Placas Semi</div><div class="id-val">${placaS}</div></div>
-    <div class="id-cell"><div class="id-label">Motorista</div><div class="id-val">${motor}</div></div>
-    <div class="id-cell"><div class="id-label">Conferente</div><div class="id-val">${conf}</div></div>
-    <div class="id-cell" style="border-right:none"><div class="id-label">Gerado em</div><div class="id-val">${gerado}</div></div>
-  </div>
-
-  <div class="resumo">
-    <div class="r-box r-ok">  <div class="r-num">${totalOk}</div>  <div class="r-lbl">OK</div></div>
-    <div class="r-box r-nok"> <div class="r-num">${totalNok}</div> <div class="r-lbl">NOK</div></div>
-    <div class="r-box r-na">  <div class="r-num">${totalNa}</div>  <div class="r-lbl">N/A</div></div>
-    <div class="r-box r-pend"><div class="r-num">${totalPend}</div><div class="r-lbl">Pendente</div></div>
-  </div>
-
-  ${detalheHTML}
-  ${nokHTML}
-
-  ${temFotos ? `<div class="foto-secao-titulo">📷 REGISTROS FOTOGRÁFICOS</div>${fotosHTML}` : ''}
-
-  <div class="rodape">
-    <span>Checklist de Frota — ${placaC} | Semi: ${placaS}</span>
-    <span>${dataVal} ${hora} — ${oper}</span>
-  </div>
-
-</body>
-</html>`;
-
-  const win = window.open('', '_blank');
-  if (!win) {
-    alert('Por favor, permita pop-ups para este arquivo e tente novamente.');
+  if (!filtrado.length) {
+    body.innerHTML = `<div class="hist-empty">Nenhum checklist encontrado.</div>`;
     return;
   }
-  win.document.write(html);
-  win.document.close();
-  win.focus();
-  setTimeout(() => win.print(), 600);
+
+  body.innerHTML = filtrado.map(r => `
+    <div class="hist-item">
+      <div class="hist-item-top">
+        <span class="hist-placa">${r.placas.join(' / ') || r.nomePDF}</span>
+        <span class="hist-date">${r.data} ${r.hora}</span>
+      </div>
+      <div class="hist-info">${r.motorista} &nbsp;·&nbsp; ${r.conferente} &nbsp;·&nbsp; ${r.tipo}</div>
+      <div class="hist-badges">
+        <span class="hist-badge ok">✔ ${r.cntOk} OK</span>
+        ${r.cntNok  ? `<span class="hist-badge nok">✘ ${r.cntNok} NOK</span>` : ''}
+        ${r.cntPend ? `<span class="hist-badge pend">⚠ ${r.cntPend} Pend.</span>` : ''}
+      </div>
+    </div>`).join('');
 }
 
-// ============================================================
-// INIT
-// ============================================================
-function init() {
-  const now = new Date();
-  document.getElementById('id-data').value = now.toISOString().split('T')[0];
-  document.getElementById('id-hora').value = now.toTimeString().slice(0, 5);
-  renderAll();
+function abrirHistorico() {
+  carregarHistorico();
+  document.getElementById('modal-historico').classList.add('open');
 }
 
-init();
+function fecharHistorico() {
+  document.getElementById('modal-historico').classList.remove('open');
+}
+
+/* ─── LIMPAR TUDO ────────────────────────────────────────────── */
+function limparTudo() {
+  if (!confirm('Deseja limpar todos os dados do checklist?')) return;
+  document.querySelectorAll('input[type=text], input[type=date], input[type=time], textarea')
+    .forEach(el => el.value = '');
+  const sel = document.getElementById('tipo-select');
+  if (sel) sel.selectedIndex = 0;
+  document.querySelectorAll('.equip-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.equip-fields').forEach(f => f.classList.remove('visible'));
+  equipAtivos.clear();
+  Object.keys(fotosCache).forEach(k => delete fotosCache[k]);
+  renderChecklists();
+  initDefaults();
+}
+
+/* ─── INIT ───────────────────────────────────────────────────── */
+function initDefaults() {
+  const hoje = new Date();
+  document.getElementById('data').value = hoje.toISOString().split('T')[0];
+  const hh = String(hoje.getHours()).padStart(2,'0');
+  const mm = String(hoje.getMinutes()).padStart(2,'0');
+  document.getElementById('hora').value = `${hh}:${mm}`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initDefaults();
+
+  // Pesquisa no histórico
+  const searchInput = document.getElementById('hist-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', e => carregarHistorico(e.target.value));
+  }
+
+  // Fecha modal clicando fora
+  document.getElementById('modal-historico').addEventListener('click', e => {
+    if (e.target === e.currentTarget) fecharHistorico();
+  });
+});
