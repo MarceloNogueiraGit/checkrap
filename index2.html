@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Checklist de Frota</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- ============================================================
+     CSS
+============================================================ -->
+<style>
+/* ============================================================
+   CHECKLIST FROTA — style.css  v2
+   ============================================================ */
+
+/* ─── VARIÁVEIS ──────────────────────────────────────────────── */
+:root {
+–bg:          #0d0f18;
+–surface:     #161927;
+–surface2:    #1e2235;
+–border:      #2a3050;
+–border2:     #343c5c;
+–accent:      #f5a623;
+–accent-dim:  rgba(245,166,35,0.12);
+–accent2:     #e8531a;
+–accent2-dim: rgba(232,83,26,0.10);
+–text:        #eaecf4;
+–text-muted:  #6b7194;
+–text-soft:   #9da3c0;
+–ok:          #22c55e;
+–ok-dim:      rgba(34,197,94,0.12);
+–nok:         #ef4444;
+–nok-dim:     rgba(239,68,68,0.12);
+–na:          #64748b;
+–na-dim:      rgba(100,116,139,0.15);
+–blue:        #3b82f6;
+–green:       #16a34a;
+–purple:      #7c3aed;
+–radius:      10px;
+–radius-sm:   6px;
+}
+
+/* ─── RESET ──────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘Barlow’, sans-serif;
+font-size: 15px;
+min-height: 100vh;
+-webkit-text-size-adjust: 100%;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(–bg); }
+::-webkit-scrollbar-thumb { background: var(–border2); border-radius: 3px; }
+
+/* ─── HEADER ─────────────────────────────────────────────────── */
+header {
+background: linear-gradient(135deg, var(–bg) 0%, var(–surface) 100%);
+border-bottom: 2px solid var(–accent);
+padding: 16px 20px 12px;
+position: sticky; top: 0; z-index: 200;
+display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.header-left h1 {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 1.75rem; font-weight: 800;
+letter-spacing: 3px; text-transform: uppercase;
+color: var(–text); line-height: 1;
+}
+.header-left h1 span { color: var(–accent); }
+.header-left p {
+font-size: 0.65rem; color: var(–text-muted);
+letter-spacing: 2px; text-transform: uppercase; margin-top: 3px;
+}
+.btn-hist {
+background: var(–surface2); border: 1px solid var(–border2);
+border-radius: var(–radius-sm); color: var(–text-soft);
+font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.76rem;
+font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+padding: 8px 14px; cursor: pointer; transition: all .2s; white-space: nowrap;
+-webkit-tap-highlight-color: transparent;
+}
+.btn-hist:hover { border-color: var(–accent); color: var(–accent); }
+
+/* ─── CONTAINER ──────────────────────────────────────────────── */
+.container { max-width: 880px; margin: 0 auto; padding: 20px 14px 80px; }
+
+/* ─── SECTION TITLE ──────────────────────────────────────────── */
+.section-title {
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 0.65rem; font-weight: 700;
+letter-spacing: 3px; text-transform: uppercase;
+color: var(–accent); margin-bottom: 8px; padding-left: 2px;
+display: flex; align-items: center; gap: 8px;
+}
+.section-title::after { content: ‘’; flex: 1; height: 1px; background: var(–border); }
+
+/* ─── CARD ───────────────────────────────────────────────────── */
+.card {
+background: var(–surface); border: 1px solid var(–border);
+border-radius: var(–radius); padding: 14px; margin-bottom: 12px;
+}
+
+/* ─── IDENTIFICAÇÃO ──────────────────────────────────────────── */
+/* Grid responsivo: 2 colunas em telas >= 480px, 1 coluna abaixo */
+.id-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+}
+@media (max-width: 479px) {
+.id-grid { grid-template-columns: 1fr; }
+}
+
+.field label {
+display: block; font-size: 0.62rem; font-weight: 700;
+letter-spacing: 1.5px; text-transform: uppercase;
+color: var(–text-muted); margin-bottom: 5px;
+}
+.field input, .field select {
+width: 100%; background: var(–surface2);
+border: 1px solid var(–border); border-radius: var(–radius-sm);
+color: var(–text); font-family: ‘Barlow’, sans-serif;
+font-size: 1rem; /* >=16px evita zoom no iOS */
+padding: 9px 11px; outline: none;
+transition: border-color .2s, box-shadow .2s;
+-webkit-appearance: none;
+appearance: none;
+}
+.field input:focus, .field select:focus {
+border-color: var(–accent); box-shadow: 0 0 0 3px var(–accent-dim);
+}
+
+/* ─── SELECT TIPO ────────────────────────────────────────────── */
+.tipo-select-wrap { position: relative; }
+.tipo-select-wrap::after {
+content: ‘▾’; position: absolute; right: 12px; top: 50%;
+transform: translateY(-50%); color: var(–accent);
+pointer-events: none; font-size: 0.85rem;
+}
+.tipo-select {
+width: 100%; background: var(–surface2);
+border: 1px solid var(–border); border-radius: var(–radius-sm);
+color: var(–text); font-family: ‘Barlow’, sans-serif;
+font-size: 1rem; padding: 10px 34px 10px 12px;
+outline: none; cursor: pointer;
+-webkit-appearance: none; appearance: none;
+transition: border-color .2s, box-shadow .2s;
+}
+.tipo-select:focus { border-color: var(–accent); box-shadow: 0 0 0 3px var(–accent-dim); }
+.tipo-select option { background: #1e2235; color: var(–text); }
+
+/* ─── EQUIPAMENTOS ───────────────────────────────────────────── */
+.equip-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+gap: 8px;
+}
+.equip-btn {
+display: flex; align-items: center; gap: 9px;
+background: var(–surface2); border: 2px solid var(–border);
+border-radius: var(–radius-sm); padding: 11px 12px;
+cursor: pointer; transition: all .15s; user-select: none;
+-webkit-tap-highlight-color: transparent;
+}
+.equip-btn:hover  { border-color: var(–accent2); background: var(–accent2-dim); }
+.equip-btn.active { border-color: var(–accent2); background: var(–accent2-dim); }
+.equip-btn.disabled {
+opacity: .35; pointer-events: none;
+}
+.equip-btn .edot {
+width: 18px; height: 18px; border-radius: 4px;
+border: 2px solid var(–border2); flex-shrink: 0;
+transition: all .15s; display: flex; align-items: center; justify-content: center;
+}
+.equip-btn.active .edot { background: var(–accent2); border-color: var(–accent2); }
+.equip-btn.active .edot::after { content: ‘✓’; font-size: 10px; color: #fff; font-weight: 800; }
+.equip-btn span { font-size: 0.79rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ─── CAMPOS PLACA / KM ──────────────────────────────────────── */
+.equip-fields {
+display: none; margin-top: 10px; padding-top: 10px;
+border-top: 1px solid var(–border); gap: 8px; flex-wrap: wrap;
+}
+.equip-fields.visible { display: flex; }
+.equip-fields .field  { flex: 1; min-width: 130px; }
+
+/* ─── CHECKLIST ──────────────────────────────────────────────── */
+.checklist-section         { display: none; }
+.checklist-section.visible { display: block; animation: fadeUp .22s ease; }
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(5px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+.equip-label {
+display: inline-flex; align-items: center; gap: 5px;
+font-family: ‘Barlow Condensed’, sans-serif;
+font-size: 0.65rem; font-weight: 700; letter-spacing: 2px;
+text-transform: uppercase; padding: 3px 9px; border-radius: 3px;
+margin-bottom: 9px; background: var(–accent2); color: #fff;
+}
+.equip-label.blue   { background: var(–blue); }
+.equip-label.green  { background: var(–green); }
+.equip-label.purple { background: var(–purple); }
+
+/* ─── ITEM ROW ───────────────────────────────────────────────── */
+.item-row {
+background: var(–surface2); border: 1px solid var(–border);
+border-radius: var(–radius-sm); margin-bottom: 4px;
+overflow: hidden; transition: border-color .13s;
+}
+.item-row:hover    { border-color: var(–border2); }
+.item-row.has-photo { border-left: 3px solid #38bdf8; }
+
+.item-main {
+display: flex; align-items: center; gap: 7px; padding: 7px 9px;
+}
+.item-num {
+font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.66rem;
+font-weight: 700; color: var(–text-muted);
+min-width: 18px; text-align: right; flex-shrink: 0;
+}
+.item-label { flex: 1; font-size: 0.83rem; font-weight: 500; color: var(–text); }
+.item-btns  { display: flex; gap: 3px; flex-shrink: 0; }
+
+.st-btn {
+width: 38px; height: 30px; border: 1.5px solid var(–border);
+border-radius: 5px; background: transparent; color: var(–text-muted);
+font-size: 0.68rem; font-weight: 700; cursor: pointer;
+transition: all .11s; letter-spacing: 0.5px; font-family: ‘Barlow’, sans-serif;
+-webkit-tap-highlight-color: transparent;
+}
+.st-btn:hover      { border-color: var(–border2); color: var(–text); }
+.st-btn.ok-active  { background: var(–ok-dim);  border-color: var(–ok);  color: var(–ok);  }
+.st-btn.nok-active { background: var(–nok-dim); border-color: var(–nok); color: var(–nok); }
+.st-btn.na-active  { background: var(–na-dim);  border-color: var(–na);  color: var(–na);  }
+
+.obs-btn, .cam-btn {
+width: 30px; height: 30px; border: 1.5px solid var(–border);
+border-radius: 5px; background: transparent; color: var(–text-muted);
+font-size: 0.72rem; cursor: pointer; transition: all .11s;
+display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+-webkit-tap-highlight-color: transparent;
+}
+.obs-btn:hover   { border-color: var(–accent); color: var(–accent); }
+.obs-btn.has-obs { border-color: var(–accent); color: var(–accent); background: var(–accent-dim); }
+.cam-btn:hover     { border-color: #38bdf8; color: #38bdf8; }
+.cam-btn.has-photo { border-color: #38bdf8; color: #38bdf8; background: rgba(56,189,248,0.1); }
+
+.obs-area { display: none; padding: 0 9px 7px; }
+.obs-area.open { display: block; }
+.obs-area textarea {
+width: 100%; background: var(–surface);
+border: 1px solid var(–border); border-radius: 5px;
+color: var(–text); font-family: ‘Barlow’, sans-serif;
+font-size: 1rem; padding: 6px 8px; resize: vertical;
+min-height: 50px; outline: none; transition: border-color .2s;
+-webkit-appearance: none;
+}
+.obs-area textarea:focus { border-color: var(–accent); }
+.obs-area textarea::placeholder { color: var(–text-muted); }
+
+.photo-area { display: none; padding: 0 9px 7px; }
+.photo-area.open { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+
+.photo-preview {
+position: relative; width: 60px; height: 60px;
+border-radius: 4px; overflow: hidden;
+border: 2px solid var(–border2); flex-shrink: 0;
+}
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-preview.status-ok  { border-color: #22c55e; }
+.photo-preview.status-nok { border-color: #ef4444; }
+.photo-preview.status-na  { border-color: #eab308; }
+
+.photo-remove {
+position: absolute; top: 2px; right: 2px;
+width: 15px; height: 15px; background: rgba(239,68,68,0.9);
+border: none; border-radius: 50%; color: #fff; font-size: 7px;
+cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.photo-add-btn {
+width: 60px; height: 60px; border: 2px dashed var(–border2);
+border-radius: 4px; background: transparent; color: var(–text-muted);
+font-size: 1.2rem; cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+transition: all .13s; flex-shrink: 0;
+-webkit-tap-highlight-color: transparent;
+}
+.photo-add-btn:hover { border-color: #38bdf8; color: #38bdf8; }
+
+/* ─── EMPTY STATE ────────────────────────────────────────────── */
+.empty-state { text-align: center; padding: 34px 20px; color: var(–text-muted); }
+.empty-state .icon { font-size: 2rem; margin-bottom: 8px; opacity: .28; }
+.empty-state p { font-size: 0.82rem; }
+
+/* ─── AÇÕES ──────────────────────────────────────────────────── */
+.actions { display: flex; gap: 9px; margin-top: 18px; flex-wrap: wrap; }
+
+.btn-primary {
+flex: 1; min-width: 140px; background: var(–accent); color: #000;
+border: none; border-radius: var(–radius-sm);
+font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.92rem;
+font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+padding: 13px 16px; cursor: pointer; transition: all .16s;
+-webkit-tap-highlight-color: transparent;
+}
+.btn-primary:hover { background: #e0951a; transform: translateY(-1px); }
+
+.btn-secondary {
+flex: 1; min-width: 140px; background: transparent; color: var(–text-soft);
+border: 1.5px solid var(–border); border-radius: var(–radius-sm);
+font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.92rem;
+font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+padding: 13px 16px; cursor: pointer; transition: all .16s;
+-webkit-tap-highlight-color: transparent;
+}
+.btn-secondary:hover { border-color: var(–text-muted); color: var(–text); }
+
+/* ─── MODAL HISTÓRICO ────────────────────────────────────────── */
+.modal-overlay {
+display: none; position: fixed; inset: 0;
+background: rgba(0,0,0,0.72); z-index: 500;
+align-items: center; justify-content: center; padding: 14px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+background: var(–surface); border: 1px solid var(–border2);
+border-radius: var(–radius); width: 100%; max-width: 640px;
+max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
+}
+.modal-header {
+display: flex; align-items: center; justify-content: space-between;
+padding: 14px 16px; border-bottom: 1px solid var(–border);
+}
+.modal-header h2 {
+font-family: ‘Barlow Condensed’, sans-serif; font-size: 1rem;
+font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(–accent);
+}
+.modal-close {
+width: 28px; height: 28px; border: 1px solid var(–border);
+border-radius: 4px; background: transparent; color: var(–text-muted);
+font-size: 0.85rem; cursor: pointer;
+display: flex; align-items: center; justify-content: center;
+transition: all .13s; -webkit-tap-highlight-color: transparent;
+}
+.modal-close:hover { border-color: var(–nok); color: var(–nok); }
+.modal-search { padding: 10px 16px; border-bottom: 1px solid var(–border); }
+.modal-search input {
+width: 100%; background: var(–surface2); border: 1px solid var(–border);
+border-radius: var(–radius-sm); color: var(–text);
+font-family: ‘Barlow’, sans-serif; font-size: 1rem;
+padding: 8px 11px; outline: none; transition: border-color .2s;
+-webkit-appearance: none;
+}
+.modal-search input:focus { border-color: var(–accent); }
+.modal-search input::placeholder { color: var(–text-muted); }
+.modal-body { overflow-y: auto; padding: 10px 16px; flex: 1; -webkit-overflow-scrolling: touch; }
+
+.hist-item {
+background: var(–surface2); border: 1px solid var(–border);
+border-radius: var(–radius-sm); padding: 10px 12px;
+margin-bottom: 7px; transition: border-color .13s;
+}
+.hist-item:hover { border-color: var(–accent); }
+.hist-item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.hist-placa { font-family: ‘Barlow Condensed’, sans-serif; font-size: 0.95rem; font-weight: 700; color: var(–accent); letter-spacing: 1px; }
+.hist-date  { font-size: 0.7rem; color: var(–text-muted); white-space: nowrap; }
+.hist-info  { font-size: 0.75rem; color: var(–text-soft); margin-top: 2px; }
+.hist-badges { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+.hist-badge { font-size: 0.62rem; font-weight: 700; padding: 1px 6px; border-radius: 3px; }
+.hist-badge.ok   { background: var(–ok-dim);  color: var(–ok);  border: 1px solid var(–ok);  }
+.hist-badge.nok  { background: var(–nok-dim); color: var(–nok); border: 1px solid var(–nok); }
+.hist-badge.pend { background: rgba(251,191,36,.1); color: #fbbf24; border: 1px solid #fbbf24; }
+.hist-empty { text-align: center; padding: 28px; color: var(–text-muted); font-size: 0.82rem; }
+
+/* ─── ELEMENTOS PDF (ocultos na tela) ────────────────────────── */
+#pdf-header, #pdf-footer, #pdf-cols { display: none; }
+
+/* ─── PRINT / PDF ────────────────────────────────────────────── */
+@media print {
+@page { size: A4 portrait; margin: 10mm 11mm 13mm; }
+
+- { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: #fff !important; color: #111 !important; font-size: 7.5pt; font-family: Arial, sans-serif; }
+  header, .container, .actions, .modal-overlay { display: none !important; }
+
+/* ── Cabeçalho ── */
+#pdf-header {
+display: block !important; border-bottom: 2px solid #1a1d27;
+padding-bottom: 6px; margin-bottom: 7px;
+}
+#pdf-header .pdf-title { font-size: 12pt; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #1a1d27; }
+#pdf-header .pdf-title span { color: #e8531a; }
+#pdf-header .pdf-meta { display: flex; flex-wrap: wrap; gap: 3px 16px; font-size: 7pt; color: #444; margin-top: 4px; }
+#pdf-header .pdf-meta strong { color: #111; }
+#pdf-header .pdf-counters { display: flex; gap: 6px; margin-top: 5px; font-size: 7pt; font-weight: 700; }
+#pdf-header .cnt { padding: 2px 6px; border-radius: 3px; }
+#pdf-header .cnt-ok   { background: #d4edda; color: #155724; }
+#pdf-header .cnt-nok  { background: #f8d7da; color: #721c24; }
+#pdf-header .cnt-na   { background: #e2e3e5; color: #383d41; }
+#pdf-header .cnt-pend { background: #fff3cd; color: #856404; }
+
+/* ── Grid 2 colunas ── */
+#pdf-cols { display: grid !important; grid-template-columns: 1fr 1fr; gap: 0 8px; align-items: start; }
+
+.pdf-section { break-inside: avoid; margin-bottom: 5px; }
+.pdf-section-header {
+background: #1a1d27 !important; color: #fff !important;
+font-size: 6.5pt; font-weight: 700; text-transform: uppercase;
+letter-spacing: 1.5px; padding: 3px 6px; margin-bottom: 1px; border-radius: 3px 3px 0 0;
+}
+.pdf-item {
+display: flex; align-items: flex-start; gap: 4px;
+padding: 2px 5px; border-bottom: 1px solid #eee;
+break-inside: avoid; font-size: 6.5pt;
+}
+.pdf-item:last-child { border-bottom: none; }
+
+.pdf-badge {
+font-size: 5.5pt; font-weight: 700; padding: 1px 4px;
+border-radius: 3px; min-width: 24px; text-align: center;
+flex-shrink: 0; margin-top: 1px;
+}
+.pdf-badge.ok   { background: #28a745 !important; color: #fff !important; }
+.pdf-badge.nok  { background: #dc3545 !important; color: #fff !important; }
+.pdf-badge.na   { background: #868e96 !important; color: #fff !important; }
+.pdf-badge.pend { background: #ffc107 !important; color: #000 !important; }
+
+.pdf-item-body { flex: 1; }
+.pdf-item-text { line-height: 1.3; }
+.pdf-item-obs  { font-size: 6pt; color: #555; margin-top: 1px; }
+.pdf-item-obs::before { content: ’↳ ’; color: #e8531a; font-weight: 700; }
+
+/* Miniatura inline da foto */
+.pdf-inline-photo {
+width: 36px; height: 36px; object-fit: cover;
+border-radius: 2px; margin-top: 2px; display: block;
+flex-shrink: 0;
+}
+.pdf-inline-photo.border-ok  { border: 1.5px solid #28a745 !important; }
+.pdf-inline-photo.border-nok { border: 1.5px solid #dc3545 !important; }
+.pdf-inline-photo.border-na  { border: 1.5px solid #eab308 !important; }
+.pdf-inline-photo.border-pend{ border: 1.5px solid #ffc107 !important; }
+
+/* ── Seção NOK ── */
+.pdf-nok-section { grid-column: 1/-1; margin-top: 7px; break-inside: avoid; }
+.pdf-nok-header {
+background: #dc3545 !important; color: #fff !important;
+font-size: 6.5pt; font-weight: 700; text-transform: uppercase;
+letter-spacing: 1.5px; padding: 3px 6px; border-radius: 3px 3px 0 0;
+}
+.pdf-nok-item { padding: 2px 6px; font-size: 7pt; border-bottom: 1px solid #fcc; break-inside: avoid; }
+.pdf-nok-item strong   { color: #dc3545; }
+.pdf-nok-item .nok-loc { font-size: 6pt; color: #666; }
+.pdf-nok-item .nok-obs { font-size: 6pt; color: #c0392b; font-style: italic; }
+.pdf-nok-item .nok-obs::before { content: ’Obs: ’; }
+
+/* ── Registros Fotográficos (ao final, até 3 colunas) ── */
+.pdf-photos-section { grid-column: 1/-1; margin-top: 8px; break-inside: avoid; }
+.pdf-photos-header {
+background: #1d4ed8 !important; color: #fff !important;
+font-size: 6.5pt; font-weight: 700; text-transform: uppercase;
+letter-spacing: 1.5px; padding: 3px 6px; border-radius: 3px 3px 0 0;
+}
+.pdf-photos-grid {
+display: grid !important;
+grid-template-columns: repeat(3, 1fr);
+gap: 4px; padding: 5px;
+border: 1px solid #dde; border-top: none; border-radius: 0 0 3px 3px;
+}
+.pdf-photo-item { break-inside: avoid; text-align: center; }
+.pdf-photo-item img {
+width: 100%; height: auto; max-height: 75px;
+object-fit: cover; border-radius: 3px; display: block;
+}
+.pdf-photo-item img.border-ok  { border: 2px solid #28a745 !important; }
+.pdf-photo-item img.border-nok { border: 2px solid #dc3545 !important; }
+.pdf-photo-item img.border-na  { border: 2px solid #eab308 !important; }
+.pdf-photo-item img.border-pend{ border: 2px solid #ffc107 !important; }
+.pdf-photo-caption { font-size: 5pt; color: #555; margin-top: 2px; }
+
+/* ── Rodapé fixo ── */
+#pdf-footer {
+display: flex !important; justify-content: space-between;
+position: fixed; bottom: 0; left: 0; right: 0;
+border-top: 1px solid #ccc; padding: 2px 11mm;
+font-size: 6pt; color: #888; background: #fff;
+}
+}
+
+/* ─── BADGES NOVAS CATEGORIAS ────────────────────────────────── */
+.equip-label.teal   { background: #0d9488; }
+.equip-label.orange { background: #d97706; }
+
+/* ─── CHECKUP RÁPIDO — ITENS ─────────────────────────────────── */
+.cu-item-row { flex-direction: column; align-items: stretch; }
+.cu-item-main { padding-bottom: 4px; }
+
+.cu-field-row {
+display: flex;
+align-items: center;
+gap: 5px;
+padding: 4px 9px 7px;
+flex-wrap: wrap;
+}
+.cu-label {
+font-size: 0.62rem;
+font-weight: 700;
+letter-spacing: 1px;
+text-transform: uppercase;
+color: var(–text-muted);
+white-space: nowrap;
+flex-shrink: 0;
+}
+.cu-input {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 5px;
+color: var(–text);
+font-family: ‘Barlow’, sans-serif;
+font-size: 0.88rem;
+padding: 5px 8px;
+outline: none;
+transition: border-color .2s;
+width: 110px;
+flex-shrink: 0;
+-webkit-appearance: none;
+}
+.cu-input-sm { width: 62px; }
+.cu-input:focus { border-color: var(–accent); }
+
+.cu-status-btns { display: flex; gap: 3px; flex-shrink: 0; }
+
+/* Botão atenção (amarelo) */
+.st-btn-atencao { border-color: #ca8a04 !important; }
+.st-btn.atencao-active {
+background: rgba(202,138,4,0.15) !important;
+border-color: #ca8a04 !important;
+color: #fbbf24 !important;
+}
+
+/* ─── PDF — badge atenção ────────────────────────────────────── */
+@media print {
+.pdf-badge.atencao { background: #f59e0b !important; color: #000 !important; }
+#pdf-header .cnt-atencao { background: #fff3cd; color: #92400e; }
+
+/* badges teal / orange para checkups */
+.pdf-section-header.teal   { background: #0d9488 !important; }
+.pdf-section-header.orange { background: #d97706 !important; }
+}
+</style>
+
+</head>
+
+<!-- ============================================================
+     HTML
+============================================================ -->
+
+<body>
+
+<!-- HEADER -->
+
+<header>
+  <div class="header-left">
+    <h1>CHECK<span>LIST</span> FROTA</h1>
+    <p>Sistema de Vistoria de Veículos</p>
+  </div>
+  <button class="btn-hist" onclick="abrirHistorico()">📋 Histórico</button>
+</header>
+
+<!-- ELEMENTOS DO PDF (invisíveis na tela) -->
+
+<div id="pdf-header"></div>
+<div id="pdf-cols"></div>
+<div id="pdf-footer"></div>
+
+<!-- CONTEÚDO PRINCIPAL -->
+
+<div class="container">
+
+  <!-- IDENTIFICAÇÃO -->
+
+  <div class="section-title">Identificação</div>
+  <div class="card">
+    <div class="id-grid">
+      <div class="field" id="motorista-field">
+        <label for="motorista">Nome do Motorista</label>
+        <input type="text" id="motorista" placeholder="NOME COMPLETO" autocomplete="name" oninput="toUpperInput(this)">
+      </div>
+      <div class="field">
+        <label for="conferente">Nome do Conferente</label>
+        <input type="text" id="conferente" placeholder="NOME COMPLETO" autocomplete="name" oninput="toUpperInput(this)">
+      </div>
+      <div class="field">
+        <label for="data">Data</label>
+        <input type="date" id="data">
+      </div>
+      <div class="field">
+        <label for="hora">Hora</label>
+        <input type="time" id="hora">
+      </div>
+    </div>
+  </div>
+
+  <!-- TIPO DE CHECKLIST -->
+
+  <div class="section-title">Tipo de Checklist</div>
+  <div class="card">
+    <div class="field">
+      <div class="tipo-select-wrap">
+        <select class="tipo-select" id="tipo-select" onchange="onTipoChange(this)">
+          <option value="">— Selecione o tipo —</option>
+          <option value="Vistoria Rotineira">Vistoria Rotineira</option>
+          <option value="Manutenção Preventiva">Manutenção Preventiva</option>
+          <option value="Devolução">Devolução</option>
+          <option value="Entrega">Entrega</option>
+          <option value="Saída da Garagem">Saída da Garagem</option>
+          <option value="Entrada da Garagem">Entrada da Garagem</option>
+          <option value="Sider">Sider</option>
+          <option value="Rodotrem">Rodotrem</option>
+          <option value="Checkup Rápido Sider">Checkup Rápido Sider</option>
+          <option value="Checkup Rápido Rodotrem">Checkup Rápido Rodotrem</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- EQUIPAMENTOS -->
+
+  <div class="section-title">Equipamentos</div>
+  <div class="card">
+    <div class="equip-grid">
+      <div class="equip-btn" data-equip="cavalo" onclick="toggleEquip('cavalo')">
+        <div class="edot"></div><span>🚛 Cavalo Mecânico</span>
+      </div>
+      <div class="equip-btn" data-equip="sider" onclick="toggleEquip('sider')">
+        <div class="edot"></div><span>📦 Sider</span>
+      </div>
+      <div class="equip-btn" data-equip="rodotrem" onclick="toggleEquip('rodotrem')">
+        <div class="edot"></div><span>🚚 Rodotrem</span>
+      </div>
+      <div class="equip-btn" data-equip="rodocacamba" onclick="toggleEquip('rodocacamba')">
+        <div class="edot"></div><span>🪣 Rodocaçamba</span>
+      </div>
+      <div class="equip-btn" data-equip="checkup_sider" onclick="toggleEquip('checkup_sider')">
+        <div class="edot"></div><span>⚡ Checkup Rápido Sider</span>
+      </div>
+      <div class="equip-btn" data-equip="checkup_rodo" onclick="toggleEquip('checkup_rodo')">
+        <div class="edot"></div><span>⚡ Checkup Rápido Rodotrem</span>
+      </div>
+    </div>
+
+```
+<!-- Campos: Cavalo Mecânico -->
+<div class="equip-fields" id="fields-cavalo">
+  <div class="field">
+    <label for="placa-cavalo">Placa — Cavalo Mecânico</label>
+    <input type="text" id="placa-cavalo" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+  <div class="field">
+    <label for="km-cavalo">KM Atual</label>
+    <input type="text" id="km-cavalo" placeholder="000.000"
+           oninput="maskKm(this)" inputmode="numeric" autocomplete="off">
+  </div>
+</div>
+
+<!-- Campos: Sider -->
+<div class="equip-fields" id="fields-sider">
+  <div class="field">
+    <label for="placa-sider">Placa — Sider</label>
+    <input type="text" id="placa-sider" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+</div>
+
+<!-- Campos: Rodotrem -->
+<div class="equip-fields" id="fields-rodotrem">
+  <div class="field">
+    <label for="placa-rodotrem1">Placa — 1ª Carreta</label>
+    <input type="text" id="placa-rodotrem1" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+  <div class="field">
+    <label for="placa-rodotrem2">Placa — 2ª Carreta</label>
+    <input type="text" id="placa-rodotrem2" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+</div>
+
+<!-- Campos: Rodocaçamba -->
+<div class="equip-fields" id="fields-rodocacamba">
+  <div class="field">
+    <label for="placa-rodocacamba1">Placa — Carreta 1</label>
+    <input type="text" id="placa-rodocacamba1" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+  <div class="field">
+    <label for="placa-rodocacamba2">Placa — Dolly</label>
+    <input type="text" id="placa-rodocacamba2" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+  <div class="field">
+    <label for="placa-rodocacamba3">Placa — Carreta 3</label>
+    <input type="text" id="placa-rodocacamba3" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+</div>
+
+<!-- Campos: Checkup Rápido Sider -->
+<div class="equip-fields" id="fields-checkup_sider">
+  <div class="field">
+    <label for="placa-checkup-sider">Placa — Sider</label>
+    <input type="text" id="placa-checkup-sider" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+</div>
+
+<!-- Campos: Checkup Rápido Rodotrem -->
+<div class="equip-fields" id="fields-checkup_rodo">
+  <div class="field">
+    <label for="placa-checkup-rodo">Placa — 1ª Carreta</label>
+    <input type="text" id="placa-checkup-rodo" placeholder="AAA-0000" maxlength="8"
+           oninput="maskPlaca(this)" autocomplete="off">
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- CHECKLISTS DINÂMICOS -->
+
+  <div id="checklists-container">
+    <div class="empty-state">
+      <div class="icon">🚛</div>
+      <p>Selecione ao menos um equipamento acima<br>para exibir o checklist</p>
+    </div>
+  </div>
+
+  <!-- AÇÕES -->
+
+  <div class="actions">
+    <button class="btn-primary"   onclick="gerarPDF()">📄 Gerar PDF</button>
+    <button class="btn-secondary" onclick="limparTudo()">🔄 Limpar Tudo</button>
+  </div>
+
+</div><!-- /container -->
+
+<!-- MODAL HISTÓRICO -->
+
+<div class="modal-overlay" id="modal-historico">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>📋 Histórico de Checklists</h2>
+      <button class="modal-close" onclick="fecharHistorico()">✕</button>
+    </div>
+    <div class="modal-search">
+      <input type="text" id="hist-search"
+             placeholder="Pesquisar por placa, motorista ou conferente..."
+             autocomplete="off">
+    </div>
+    <div class="modal-body" id="hist-body">
+      <div class="hist-empty">Nenhum checklist gerado ainda.</div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+
+<script>
+/* ============================================================
+   CHECKLIST FROTA — app.js  v3
+   ============================================================ */
+
+/* ─── ESTADO ─────────────────────────────────────────────────── */
+const equipAtivos = new Set();
+const fotosCache  = {};
+
+/* ─── DADOS DOS CHECKLISTS NORMAIS ───────────────────────────── */
+const ITENS_EXTRAS_IMPL = ["Bexigão e Embuchamentos","Sem Vazamentos de Ar"];
+
+const itensCavalo = [
+  "Documentação do Cavalo Mecânico","Painel de Instrumentos (avisos)",
+  "Pintura / Defletor de Ar","Parabrisa / Limpadores / Esguicho",
+  "Farol Diant.: Piscas / Milhas / Luz Baixa / Luz Alta (DRL se houver)",
+  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+  "Escada / Parachoques / Paralamas","5ª Roda / Gavião",
+  "Conectores e Mangueiras de Ar e Elétrica",
+  "Nível de Óleo (Motor / Câmbio / Diferencial)","Nível de Arrefecimento",
+  "Óleo e Arrefecimento s/ Vazamentos","Opacidade","Tacógrafo","Extintor"
+];
+
+function buildImplList(base) { return [...base,...ITENS_EXTRAS_IMPL,"Observações"]; }
+
+const itensSiderBase = [
+  "Documentação da Carreta","Sinalização Reflexiva Laterais","Luz de Sinalização Laterais",
+  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré","Lonas Laterais / Teto / Cabo de Aço",
+  "Cintas / Catracas / Cantoneiras / Réguas","Pés Hidráulicos / Manivela","Pino Rei",
+  "Extintor / Estepe","Porta e Assoalho","Paralama / Parachoque / Escada / Degraus"
+];
+const itensRodoC1Base = [
+  "Documentação da Carreta","Sinalização Reflexiva Laterais","Luz de Sinalização Laterais",
+  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré","Porta e Assoalho",
+  "Lonas Laterais / Teto / Cabo de Aço","Cintas / Catracas / Cantoneiras / Réguas",
+  "Extintor / Estepe","5ª Roda / Gavião / Pino Rei","Pés Hidráulicos / Manivela",
+  "Paralama / Parachoque / Escada / Degraus"
+];
+const itensRodoC2Base = [
+  "Documentação da Carreta","Pino Rei","Pés Hidráulicos / Manivela",
+  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré","Lonas Laterais / Teto / Cabo de Aço",
+  "Cintas / Catracas / Cantoneiras / Réguas","Extintor / Estepe",
+  "Paralama / Parachoque / Escada / Degraus"
+];
+const itensRodoCacambaBase = [
+  "Documentação das Carretas e Dolly","Sinalização Reflexiva Laterais","Luz de Sinalização Laterais",
+  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré","Caçamba / Estrutura",
+  "Mecanismo de Basculamento","Lona, abertura e fechamento","Cilindro Hidráulico / Mangueiras",
+  "Extintor / Estepe","Pés Hidráulicos / Manivela","Paralama / Parachoque / Escada / Degraus"
+];
+
+const itens = {
+  cavalo:      itensCavalo,
+  sider:       buildImplList(itensSiderBase),
+  rodotrem_c1: buildImplList(itensRodoC1Base),
+  rodotrem_c2: buildImplList(itensRodoC2Base),
+  rodocacamba: buildImplList(itensRodoCacambaBase)
+};
+
+/* ─── DADOS CHECKUP RÁPIDO ───────────────────────────────────── */
+// tipo: qty|extintor|estepe|pneu|quinta
+const checkupSiderItens = [
+  {label:"Cintas",        tipo:"qty"},
+  {label:"Catracas",      tipo:"qty"},
+  {label:"Cantoneiras",   tipo:"qty"},
+  {label:"Réguas",        tipo:"qty"},
+  {label:"Extintor",      tipo:"extintor"},
+  {label:"Estepe 1",      tipo:"estepe"},
+  {label:"Estepe 2",      tipo:"estepe"},
+  {label:"Pneus",         tipo:"pneu"},
+  {label:"Quinta Roda / Gavião / Pino Rei", tipo:"quinta"}
+];
+const checkupRodoItens = [
+  {label:"Cintas",        tipo:"qty"},
+  {label:"Catracas",      tipo:"qty"},
+  {label:"Cantoneiras",   tipo:"qty"},
+  {label:"Réguas",        tipo:"qty"},
+  {label:"Extintor",      tipo:"extintor"},
+  {label:"Estepe 1",      tipo:"estepe"},
+  {label:"Estepe 2",      tipo:"estepe"},
+  {label:"Pneus",         tipo:"pneu"},
+  {label:"Quinta Roda / Gavião / Pino Rei", tipo:"quinta"}
+];
+
+const equipLabels = {
+  cavalo:"Cavalo Mecânico", sider:"Sider",
+  rodotrem_c1:"Rodotrem — 1ª Carreta", rodotrem_c2:"Rodotrem — 2ª Carreta",
+  rodocacamba:"Rodocaçamba",
+  checkup_sider:"Checkup Rápido — Sider", checkup_rodo:"Checkup Rápido — Rodotrem"
+};
+const equipConfig = {
+  cavalo:{badge:""}, sider:{badge:"blue"}, rodotrem:{badge:"green"},
+  rodocacamba:{badge:"purple"}, checkup_sider:{badge:"teal"}, checkup_rodo:{badge:"orange"}
+};
+const SOMENTE_COM_CAVALO = ['sider','rodotrem','rodocacamba','checkup_sider','checkup_rodo'];
+
+/* ─── MAIÚSCULAS ─────────────────────────────────────────────── */
+function toUpperInput(el) {
+  const pos = el.selectionStart;
+  el.value = el.value.toUpperCase();
+  try { el.setSelectionRange(pos,pos); } catch(e) {}
+}
+
+/* ─── MÁSCARAS ───────────────────────────────────────────────── */
+function maskPlaca(el) {
+  let v = el.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if (v.length>3) v = v.slice(0,3)+'-'+v.slice(3,7);
+  el.value = v;
+}
+function maskKm(el) {
+  let v = el.value.replace(/\D/g,'');
+  v = v.replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+  el.value = v;
+}
+function maskValidade(el) {
+  let v = el.value.replace(/\D/g,'');
+  if (v.length>2) v = v.slice(0,2)+'/'+v.slice(2,6);
+  el.value = v;
+}
+
+/* ─── TIPO CHECKLIST ─────────────────────────────────────────── */
+function onTipoChange(sel) {
+  const val = sel.value;
+  const semCavalo = !equipAtivos.has('cavalo');
+  if (val==='Sider' && !equipAtivos.has('sider')) {
+    if (semCavalo) setMotoristaModeImplemento('Sider');
+    toggleEquip('sider');
+  } else if (val==='Rodotrem' && !equipAtivos.has('rodotrem')) {
+    if (semCavalo) setMotoristaModeImplemento('Rodotrem');
+    toggleEquip('rodotrem');
+  } else {
+    if (semCavalo) resetMotoristaLabel();
+  }
+}
+
+/* ─── LABEL MOTORISTA ────────────────────────────────────────── */
+function setMotoristaModeImplemento(nome) {
+  const inp = document.getElementById('motorista');
+  const lbl = document.querySelector('label[for="motorista"]');
+  if (!inp||!lbl) return;
+  lbl.textContent = 'Implemento';
+  inp.value = nome; inp.readOnly = true; inp.style.opacity = '0.7';
+}
+function resetMotoristaLabel() {
+  const inp = document.getElementById('motorista');
+  const lbl = document.querySelector('label[for="motorista"]');
+  if (!inp||!lbl) return;
+  if (lbl.textContent==='Implemento') {
+    lbl.textContent = 'Nome do Motorista';
+    inp.readOnly = false; inp.style.opacity = '';
+    if (inp.value==='Sider'||inp.value==='Rodotrem') inp.value='';
+  }
+}
+
+/* ─── EQUIPAMENTOS ───────────────────────────────────────────── */
+function toggleEquip(equip) {
+  const btn    = document.querySelector(`.equip-btn[data-equip="${equip}"]`);
+  const fields = document.getElementById('fields-'+equip);
+  if (!btn) return;
+
+  if (equipAtivos.has(equip)) {
+    equipAtivos.delete(equip);
+    btn.classList.remove('active');
+    if (fields) fields.classList.remove('visible');
+    if (SOMENTE_COM_CAVALO.includes(equip)&&!equipAtivos.has('cavalo')) resetMotoristaLabel();
+  } else {
+    if (SOMENTE_COM_CAVALO.includes(equip)) {
+      const implAtivo = SOMENTE_COM_CAVALO.find(e=>e!==equip&&equipAtivos.has(e));
+      if (implAtivo) {
+        alert(`"${getEquipName(equip)}" não pode ser combinado com "${getEquipName(implAtivo)}".\nImplementos só podem ser combinados com o Cavalo Mecânico.`);
+        return;
+      }
+    }
+    if (equip==='cavalo') resetMotoristaLabel();
+    equipAtivos.add(equip);
+    btn.classList.add('active');
+    if (fields) fields.classList.add('visible');
+  }
+  atualizarVisibilidadeMotorista();
+  atualizarBotoesDisabled();
+  renderChecklists();
+}
+
+function getEquipName(e) {
+  return {cavalo:'Cavalo Mecânico',sider:'Sider',rodotrem:'Rodotrem',
+    rodocacamba:'Rodocaçamba',checkup_sider:'Checkup Rápido Sider',
+    checkup_rodo:'Checkup Rápido Rodotrem'}[e]||e;
+}
+
+function atualizarVisibilidadeMotorista() {
+  const soCheckup = (equipAtivos.has('checkup_sider')||equipAtivos.has('checkup_rodo'))
+    &&!equipAtivos.has('cavalo')&&!equipAtivos.has('sider')
+    &&!equipAtivos.has('rodotrem')&&!equipAtivos.has('rodocacamba');
+  const f = document.getElementById('motorista-field');
+  if (f) f.style.display = soCheckup ? 'none' : '';
+}
+
+function atualizarBotoesDisabled() {
+  const ativo = SOMENTE_COM_CAVALO.find(e=>equipAtivos.has(e));
+  SOMENTE_COM_CAVALO.forEach(e=>{
+    const b = document.querySelector(`.equip-btn[data-equip="${e}"]`);
+    if (!b) return;
+    (ativo&&ativo!==e&&!equipAtivos.has(e)) ? b.classList.add('disabled') : b.classList.remove('disabled');
+  });
+}
+
+/* ─── RENDER ─────────────────────────────────────────────────── */
+function renderChecklists() {
+  const c = document.getElementById('checklists-container');
+  c.innerHTML = '';
+  if (equipAtivos.size===0) {
+    c.innerHTML=`<div class="empty-state"><div class="icon">🚛</div><p>Selecione ao menos um equipamento acima<br>para exibir o checklist</p></div>`;
+    return;
+  }
+  ['cavalo','sider','rodotrem','rodocacamba'].forEach(equip=>{
+    if (!equipAtivos.has(equip)) return;
+    if (equip==='rodotrem') {
+      renderSection(c,'green',equipLabels.rodotrem_c1,itens.rodotrem_c1,'rodotrem_c1');
+      renderSection(c,'green',equipLabels.rodotrem_c2,itens.rodotrem_c2,'rodotrem_c2');
+    } else {
+      renderSection(c,equipConfig[equip].badge,equipLabels[equip],itens[equip],equip);
+    }
+  });
+  if (equipAtivos.has('checkup_sider')) renderCheckup(c,'teal',equipLabels.checkup_sider,checkupSiderItens,'checkup_sider');
+  if (equipAtivos.has('checkup_rodo'))  renderCheckup(c,'orange',equipLabels.checkup_rodo,checkupRodoItens,'checkup_rodo');
+}
+
+function renderSection(c,badge,label,items,key) {
+  const s=document.createElement('div');
+  s.className='checklist-section visible'; s.dataset.key=key;
+  s.innerHTML=`<div class="section-title" style="margin-top:8px">${label}</div>
+    <div class="card"><span class="equip-label ${badge}">${label}</span>
+    ${items.map((item,i)=>renderItem(key,i,item)).join('')}</div>`;
+  c.appendChild(s);
+}
+
+function renderItem(key,i,label) {
+  return `<div class="item-row" id="row-${key}-${i}">
+    <div class="item-main">
+      <span class="item-num">${i+1}</span>
+      <span class="item-label">${label}</span>
+      <div class="item-btns">
+        <button class="st-btn" onclick="setStatus('${key}',${i},'ok',this)">OK</button>
+        <button class="st-btn" onclick="setStatus('${key}',${i},'nok',this)">NOK</button>
+        <button class="st-btn" onclick="setStatus('${key}',${i},'na',this)">—</button>
+        <button class="obs-btn" onclick="toggleObs('${key}',${i},this)" title="Obs">💬</button>
+        <button class="cam-btn" onclick="togglePhoto('${key}',${i},this)" title="Foto">📷</button>
+      </div>
+    </div>
+    <div class="obs-area" id="obs-area-${key}-${i}">
+      <textarea placeholder="OBSERVAÇÃO..." oninput="updateObsBtn('${key}',${i});toUpperInput(this)"></textarea>
+
+```
+</div>
+<div class="photo-area" id="photo-area-${key}-${i}">
+  <button class="photo-add-btn" onclick="triggerCamera('${key}',${i})">＋</button>
+  <input type="file" id="file-${key}-${i}" accept="image/*" capture="environment"
+         style="display:none" onchange="handlePhoto(event,'${key}',${i})">
+</div>
+```
+
+  </div>`;
+}
+
+/* ─── RENDER CHECKUP ─────────────────────────────────────────── */
+function renderCheckup(c,badge,label,items,key) {
+const s=document.createElement(‘div’);
+s.className=‘checklist-section visible’; s.dataset.key=key;
+s.innerHTML=`<div class="section-title" style="margin-top:8px">${label}</div> <div class="card"><span class="equip-label ${badge}">${label}</span> ${items.map((item,i)=>renderCheckupItem(key,i,item)).join('')}</div>`;
+c.appendChild(s);
+}
+
+function renderCheckupItem(key,i,item) {
+const {label,tipo}=item;
+const id=`cu-${key}-${i}`;
+const stBtns=`<div class="cu-status-btns">
+<button class="st-btn" onclick="setCuStatus('${key}',${i},'ok',this)">OK</button>
+<button class="st-btn" onclick="setCuStatus('${key}',${i},'nok',this)">NOK</button>
+<button class="st-btn st-btn-atencao" onclick="setCuStatus('${key}',${i},'atencao',this)">⚠</button>
+
+  </div>`;
+  const commonBtns=`<button class="obs-btn" onclick="toggleObs('${key}',${i},this)" title="Obs">💬</button>
+    <button class="cam-btn" onclick="togglePhoto('${key}',${i},this)" title="Foto">📷</button>`;
+  const obsBlock=`<div class="obs-area" id="obs-area-${key}-${i}">
+    <textarea placeholder="OBSERVAÇÃO..." oninput="toUpperInput(this)"></textarea></div>
+    <div class="photo-area" id="photo-area-${key}-${i}">
+    <button class="photo-add-btn" onclick="triggerCamera('${key}',${i})">＋</button>
+    <input type="file" id="file-${key}-${i}" accept="image/*" capture="environment"
+           style="display:none" onchange="handlePhoto(event,'${key}',${i})"></div>`;
+
+let fieldHtml=’’;
+if (tipo===‘qty’) {
+fieldHtml=`<label class="cu-label">QTD:</label> <input class="cu-input cu-input-sm" type="text" id="${id}-qty" placeholder="0" inputmode="numeric" oninput="toUpperInput(this)">`;
+} else if (tipo===‘extintor’) {
+fieldHtml=`<label class="cu-label">VALIDADE:</label> <input class="cu-input" type="text" id="${id}-val" placeholder="MM/AAAA" maxlength="7" oninput="maskValidade(this)">`;
+}
+
+return `<div class="item-row cu-item-row" id="row-${key}-${i}">
+<div class="item-main cu-item-main">
+<span class="item-num">${i+1}</span>
+<span class="item-label">${label}</span>
+</div>
+<div class="cu-field-row">${fieldHtml}${stBtns}${commonBtns}</div>
+${obsBlock}
+
+  </div>`;
+}
+
+/* ─── STATUS ─────────────────────────────────────────────────── */
+function setStatus(key,i,status,btn) {
+const row=document.getElementById(`row-${key}-${i}`);
+row.querySelectorAll(’.st-btn’).forEach(b=>b.classList.remove(‘ok-active’,‘nok-active’,‘na-active’,‘atencao-active’));
+btn.classList.add(status+’-active’);
+atualizarBordaFotos(key,i,status);
+}
+function setCuStatus(key,i,status,btn) {
+const row=document.getElementById(`row-${key}-${i}`);
+row.querySelectorAll(’.cu-status-btns .st-btn’).forEach(b=>b.classList.remove(‘ok-active’,‘nok-active’,‘na-active’,‘atencao-active’));
+btn.classList.add(status+’-active’);
+atualizarBordaFotos(key,i,status);
+}
+function getStatusItem(key,i) {
+const row=document.getElementById(`row-${key}-${i}`);
+if (!row) return ‘pend’;
+if (row.querySelector(’.st-btn.ok-active’))      return ‘ok’;
+if (row.querySelector(’.st-btn.nok-active’))     return ‘nok’;
+if (row.querySelector(’.st-btn.na-active’))      return ‘na’;
+if (row.querySelector(’.st-btn.atencao-active’)) return ‘atencao’;
+return ‘pend’;
+}
+
+/* ─── OBSERVAÇÕES ────────────────────────────────────────────── */
+function toggleObs(key,i,btn) {
+const area=document.getElementById(`obs-area-${key}-${i}`);
+area.classList.toggle(‘open’);
+if (area.classList.contains(‘open’)) area.querySelector(‘textarea’).focus();
+}
+function updateObsBtn(key,i) {
+const area=document.getElementById(`obs-area-${key}-${i}`);
+const btn=document.querySelector(`#row-${key}-${i} .obs-btn`);
+if (btn) btn.classList.toggle(‘has-obs’,area.querySelector(‘textarea’).value.trim().length>0);
+}
+
+/* ─── FOTOS ──────────────────────────────────────────────────── */
+function togglePhoto(key,i) {
+const area=document.getElementById(`photo-area-${key}-${i}`);
+if (area) area.classList.toggle(‘open’);
+}
+function triggerCamera(key,i) {
+const inp=document.getElementById(`file-${key}-${i}`);
+if (inp) inp.click();
+}
+function compressImage(file,maxW,maxH,quality) {
+return new Promise(resolve=>{
+const reader=new FileReader();
+reader.onload=e=>{
+const img=new Image();
+img.onload=()=>{
+let w=img.width,h=img.height;
+if (w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+if (h>maxH){w=Math.round(w*maxH/h);h=maxH;}
+const canvas=document.createElement(‘canvas’);
+canvas.width=w;canvas.height=h;
+canvas.getContext(‘2d’).drawImage(img,0,0,w,h);
+resolve(canvas.toDataURL(‘image/jpeg’,quality));
+};
+img.src=e.target.result;
+};
+reader.readAsDataURL(file);
+});
+}
+async function handlePhoto(event,key,i) {
+const file=event.target.files[0];
+if (!file) return;
+const compressed=await compressImage(file,640,480,0.45);
+const fk=`${key}-${i}`;
+if (!fotosCache[fk]) fotosCache[fk]=[];
+fotosCache[fk].push({src:compressed,status:getStatusItem(key,i)});
+renderPhotoPreviews(key,i);
+const cb=document.querySelector(`#row-${key}-${i} .cam-btn`);
+if (cb) cb.classList.add(‘has-photo’);
+document.getElementById(`row-${key}-${i}`).classList.add(‘has-photo’);
+event.target.value=’’;
+}
+function atualizarBordaFotos(key,i,status) {
+const fk=`${key}-${i}`;
+if (!fotosCache[fk]) return;
+fotosCache[fk].forEach(f=>f.status=status);
+renderPhotoPreviews(key,i);
+}
+function renderPhotoPreviews(key,i) {
+const area=document.getElementById(`photo-area-${key}-${i}`);
+if (!area) return;
+const fk=`${key}-${i}`;
+const fotos=fotosCache[fk]||[];
+area.querySelectorAll(’.photo-preview’).forEach(el=>el.remove());
+const addBtn=area.querySelector(’.photo-add-btn’);
+fotos.forEach((foto,idx)=>{
+const wrap=document.createElement(‘div’);
+wrap.className=`photo-preview status-${foto.status||'pend'}`;
+wrap.innerHTML=`<img src="${foto.src}" alt="foto ${idx+1}"> <button class="photo-remove" onclick="removePhoto('${key}',${i},${idx})">✕</button>`;
+area.insertBefore(wrap,addBtn);
+});
+}
+function removePhoto(key,i,idx) {
+const fk=`${key}-${i}`;
+fotosCache[fk].splice(idx,1);
+renderPhotoPreviews(key,i);
+if (!fotosCache[fk].length) {
+const cb=document.querySelector(`#row-${key}-${i} .cam-btn`);
+if (cb) cb.classList.remove(‘has-photo’);
+document.getElementById(`row-${key}-${i}`).classList.remove(‘has-photo’);
+}
+}
+
+/* ─── COLETA CHECKUP PARA PDF ────────────────────────────────── */
+function coletarCheckupPDF(key,items) {
+let rowsHtml=’’; const nokList=[]; const fotos=[]; const secLabel=equipLabels[key]||key;
+items.forEach((item,i)=>{
+const row=document.getElementById(`row-${key}-${i}`);
+if (!row) return;
+const {label,tipo}=item;
+const sc=getStatusItem(key,i);
+const sl={ok:‘OK’,nok:‘NOK’,na:‘N/A’,atencao:‘⚠’,pend:‘PEND’}[sc]||‘PEND’;
+const obs=row.querySelector(‘textarea’)?row.querySelector(‘textarea’).value.trim():’’;
+const ft=fotosCache[`${key}-${i}`]||[];
+if (sc===‘nok’) nokList.push({label,sectionLabel:secLabel,obs});
+let extraInfo=’’;
+if (tipo===‘qty’){const el=row.querySelector(’[id$=”-qty”]’);if(el&&el.value)extraInfo=`Qtd: ${el.value}`;}
+if (tipo===‘extintor’){const el=row.querySelector(’[id$=”-val”]’);if(el&&el.value)extraInfo=`Validade: ${el.value}`;}
+let inlinePhoto=’’;
+if (ft.length>0){
+inlinePhoto=`<img class="pdf-inline-photo border-${sc}" src="${ft[0].src}" alt="foto">`;
+ft.forEach(f=>fotos.push({src:f.src,label,secLabel,status:sc}));
+}
+rowsHtml+=`<div class="pdf-item"><span class="pdf-badge ${sc}">${sl}</span> <div class="pdf-item-body"><div class="pdf-item-text">${label}${extraInfo?' — '+extraInfo:''}</div> ${obs?`<div class="pdf-item-obs">${obs}</div>`:''}${inlinePhoto}</div></div>`;
+});
+return {rowsHtml,nokList,fotos,secLabel};
+}
+
+/* ─── GERAR PDF ──────────────────────────────────────────────── */
+function gerarPDF() {
+const motorista  = document.getElementById(‘motorista’).value  ||’—’;
+const conferente = document.getElementById(‘conferente’).value ||’—’;
+const data       = document.getElementById(‘data’).value       ||’—’;
+const hora       = document.getElementById(‘hora’).value       ||’—’;
+const tipoSel    = document.getElementById(‘tipo-select’);
+const tipo       = tipoSel&&tipoSel.value?tipoSel.value:’—’;
+
+const placaLines=[];
+if (equipAtivos.has(‘cavalo’)){const p=document.getElementById(‘placa-cavalo’).value,k=document.getElementById(‘km-cavalo’).value;placaLines.push(`<strong>Cavalo:</strong> ${p||'—'} | <strong>KM:</strong> ${k||'—'}`);}
+if (equipAtivos.has(‘sider’)) placaLines.push(`<strong>Sider:</strong> ${document.getElementById('placa-sider').value||'—'}`);
+if (equipAtivos.has(‘rodotrem’)){const p1=document.getElementById(‘placa-rodotrem1’).value,p2=document.getElementById(‘placa-rodotrem2’).value;placaLines.push(`<strong>Rodotrem 1ª:</strong> ${p1||'—'} | <strong>2ª:</strong> ${p2||'—'}`);}
+if (equipAtivos.has(‘rodocacamba’)){const p1=document.getElementById(‘placa-rodocacamba1’).value,p2=document.getElementById(‘placa-rodocacamba2’).value,p3=document.getElementById(‘placa-rodocacamba3’).value;placaLines.push(`<strong>Rodocaçamba:</strong> ${p1||'—'} / Dolly: ${p2||'—'} / ${p3||'—'}`);}
+if (equipAtivos.has(‘checkup_sider’)) placaLines.push(`<strong>Checkup Sider:</strong> ${document.getElementById('placa-checkup-sider').value||'—'}`);
+if (equipAtivos.has(‘checkup_rodo’))  placaLines.push(`<strong>Checkup Rodotrem:</strong> ${document.getElementById('placa-checkup-rodo').value||'—'}`);
+
+let nomePDF=‘Checklist’;
+if (equipAtivos.has(‘cavalo’)){const p=document.getElementById(‘placa-cavalo’).value;if(p)nomePDF=`Checklist-${p}`;}
+else {
+const p=(equipAtivos.has(‘sider’)&&document.getElementById(‘placa-sider’).value)||
+(equipAtivos.has(‘rodotrem’)&&document.getElementById(‘placa-rodotrem1’).value)||
+(equipAtivos.has(‘rodocacamba’)&&document.getElementById(‘placa-rodocacamba1’).value)||
+(equipAtivos.has(‘checkup_sider’)&&document.getElementById(‘placa-checkup-sider’).value)||
+(equipAtivos.has(‘checkup_rodo’)&&document.getElementById(‘placa-checkup-rodo’).value)||null;
+if (p) nomePDF=`Checklist-${p}`;
+}
+
+let cntOk=0,cntNok=0,cntNa=0,cntPend=0,cntAt=0;
+document.querySelectorAll(’.item-row’).forEach(row=>{
+if      (row.querySelector(’.st-btn.ok-active’))      cntOk++;
+else if (row.querySelector(’.st-btn.nok-active’))     cntNok++;
+else if (row.querySelector(’.st-btn.na-active’))      cntNa++;
+else if (row.querySelector(’.st-btn.atencao-active’)) cntAt++;
+else                                                   cntPend++;
+});
+
+const mostraMotorista = document.getElementById(‘motorista-field’)&&
+document.getElementById(‘motorista-field’).style.display!==‘none’;
+
+document.getElementById(‘pdf-header’).innerHTML=` <div class="pdf-title">CHECK<span>LIST</span> DE FROTA</div> <div class="pdf-meta"> <span><strong>Data/Hora:</strong> ${data} ${hora}</span> <span><strong>Operação:</strong> ${tipo}</span> ${mostraMotorista?`<span><strong>Motorista:</strong> ${motorista}</span>`:''} <span><strong>Conferente:</strong> ${conferente}</span> ${placaLines.map(l=>`<span>${l}</span>`).join('')} </div> <div class="pdf-counters"> <span class="cnt cnt-ok">✔ OK: ${cntOk}</span> <span class="cnt cnt-nok">✘ NOK: ${cntNok}</span> <span class="cnt cnt-na">— N/A: ${cntNa}</span> ${cntAt?`<span class="cnt cnt-atencao">⚠ Atenção: ${cntAt}</span>`:''} <span class="cnt cnt-pend">● Pend.: ${cntPend}</span> </div>`;
+
+const pdfCols=document.getElementById(‘pdf-cols’);
+pdfCols.innerHTML=’’;
+const nokList=[]; const todasFotos=[];
+
+[‘cavalo’,‘sider’,‘rodotrem_c1’,‘rodotrem_c2’,‘rodocacamba’].forEach(key=>{
+if (!itens[key]) return;
+const eb=key.startsWith(‘rodotrem’)?‘rodotrem’:key;
+if (!equipAtivos.has(eb)) return;
+const secLabel=equipLabels[key]||key;
+let rowsHtml=’’;
+itens[key].forEach((label,i)=>{
+const row=document.getElementById(`row-${key}-${i}`);
+if (!row) return;
+const sc=getStatusItem(key,i);
+const sl={ok:‘OK’,nok:‘NOK’,na:‘N/A’,atencao:‘⚠’,pend:‘PEND’}[sc]||‘PEND’;
+const obs=row.querySelector(‘textarea’).value.trim();
+const fotos=fotosCache[`${key}-${i}`]||[];
+if (sc===‘nok’) nokList.push({label,sectionLabel:secLabel,obs});
+let inlinePhoto=’’;
+if (fotos.length>0){
+inlinePhoto=`<img class="pdf-inline-photo border-${sc}" src="${fotos[0].src}" alt="foto">`;
+fotos.forEach(f=>todasFotos.push({src:f.src,label,secLabel,status:sc}));
+}
+rowsHtml+=`<div class="pdf-item"><span class="pdf-badge ${sc}">${sl}</span> <div class="pdf-item-body"><div class="pdf-item-text">${label}</div> ${obs?`<div class="pdf-item-obs">${obs}</div>`:''}${inlinePhoto}</div></div>`;
+});
+const sec=document.createElement(‘div’);
+sec.className=‘pdf-section’;
+sec.innerHTML=`<div class="pdf-section-header">${secLabel}</div>${rowsHtml}`;
+pdfCols.appendChild(sec);
+});
+
+[‘checkup_sider’,‘checkup_rodo’].forEach(key=>{
+if (!equipAtivos.has(key)) return;
+const items=key===‘checkup_sider’?checkupSiderItens:checkupRodoItens;
+const {rowsHtml,nokList:nl,fotos:fl,secLabel}=coletarCheckupPDF(key,items);
+nl.forEach(n=>nokList.push(n));
+fl.forEach(f=>todasFotos.push(f));
+const sec=document.createElement(‘div’);
+sec.className=‘pdf-section’;
+sec.innerHTML=`<div class="pdf-section-header">${secLabel}</div>${rowsHtml}`;
+pdfCols.appendChild(sec);
+});
+
+if (nokList.length>0) {
+const s=document.createElement(‘div’);
+s.className=‘pdf-nok-section’;
+s.innerHTML=`<div class="pdf-nok-header">⚠ Itens Não Conformes (${nokList.length})</div> ${nokList.map((n,idx)=>`<div class="pdf-nok-item"><strong>${idx+1}. ${n.label}</strong>
+<div class="nok-loc">${n.sectionLabel}</div>
+${n.obs?`<div class="nok-obs">${n.obs}</div>`:’’}</div>`).join('')}`;
+pdfCols.appendChild(s);
+}
+
+if (todasFotos.length>0) {
+const s=document.createElement(‘div’);
+s.className=‘pdf-photos-section’;
+s.innerHTML=`<div class="pdf-photos-header">📷 Registros Fotográficos</div> <div class="pdf-photos-grid">${todasFotos.map(f=>`
+<div class="pdf-photo-item">
+<img src="${f.src}" class="border-${f.status}" alt="${f.label}">
+<div class="pdf-photo-caption">${f.secLabel} — ${f.label}</div>
+</div>`).join('')}</div>`;
+pdfCols.appendChild(s);
+}
+
+// Rodapé sem marca/URL
+document.getElementById(‘pdf-footer’).innerHTML=` <span>${nomePDF} | ${conferente}</span> <span>${data} ${hora} — ${tipo}</span>`;
+
+salvarHistorico(motorista,conferente,data,hora,tipo,nomePDF,cntOk,cntNok,cntPend);
+const orig=document.title;
+document.title=nomePDF;
+window.print();
+document.title=orig;
+}
+
+/* ─── HISTÓRICO ──────────────────────────────────────────────── */
+const DB_KEY=‘checklist_frota_v3’;
+
+function salvarHistorico(motorista,conferente,data,hora,tipo,nomePDF,ok,nok,pend) {
+let hist=[];
+try{hist=JSON.parse(localStorage.getItem(DB_KEY)||’[]’);}catch(e){hist=[];}
+const placas=[];
+if (equipAtivos.has(‘cavalo’))        placas.push(document.getElementById(‘placa-cavalo’).value);
+if (equipAtivos.has(‘sider’))         placas.push(document.getElementById(‘placa-sider’).value);
+if (equipAtivos.has(‘rodotrem’))      placas.push(document.getElementById(‘placa-rodotrem1’).value,document.getElementById(‘placa-rodotrem2’).value);
+if (equipAtivos.has(‘rodocacamba’))   placas.push(document.getElementById(‘placa-rodocacamba1’).value,document.getElementById(‘placa-rodocacamba2’).value,document.getElementById(‘placa-rodocacamba3’).value);
+if (equipAtivos.has(‘checkup_sider’)) placas.push(document.getElementById(‘placa-checkup-sider’).value);
+if (equipAtivos.has(‘checkup_rodo’))  placas.push(document.getElementById(‘placa-checkup-rodo’).value);
+
+const snapshot=[];
+[‘cavalo’,‘sider’,‘rodotrem_c1’,‘rodotrem_c2’,‘rodocacamba’].forEach(key=>{
+const eb=key.startsWith(‘rodotrem’)?‘rodotrem’:key;
+if (!equipAtivos.has(eb)) return;
+itens[key].forEach((label,i)=>{
+const row=document.getElementById(`row-${key}-${i}`);
+if (!row) return;
+const obs=row.querySelector(‘textarea’)?row.querySelector(‘textarea’).value.trim():’’;
+snapshot.push({secao:equipLabels[key]||key,item:label,status:getStatusItem(key,i),obs});
+});
+});
+
+hist.unshift({id:Date.now(),nomePDF,motorista,conferente,data,hora,tipo,
+placas:placas.filter(Boolean),equipamentos:[…equipAtivos],
+cntOk:ok,cntNok:nok,cntPend:pend,itens:snapshot,geradoEm:new Date().toISOString()});
+if (hist.length>200) hist.splice(200);
+try{localStorage.setItem(DB_KEY,JSON.stringify(hist));}catch(e){}
+}
+
+function carregarHistorico(filtro=’’) {
+let hist=[];
+try{hist=JSON.parse(localStorage.getItem(DB_KEY)||’[]’);}catch(e){}
+const body=document.getElementById(‘hist-body’);
+const filtrado=filtro
+?hist.filter(r=>r.placas.some(p=>p.toUpperCase().includes(filtro.toUpperCase()))||
+(r.motorista||’’).toUpperCase().includes(filtro.toUpperCase())||
+(r.conferente||’’).toUpperCase().includes(filtro.toUpperCase()))
+:hist;
+if (!filtrado.length){body.innerHTML=`<div class="hist-empty">Nenhum checklist encontrado.</div>`;return;}
+body.innerHTML=filtrado.map(r=>{
+const noks=(r.itens||[]).filter(it=>it.status===‘nok’);
+const nd=noks.length?`<div style="margin-top:5px;font-size:0.7rem;color:#ef4444"> ${noks.slice(0,3).map(n=>`▸ ${n.item}${n.obs?’ — ‘+n.obs:’’}`).join('<br>')} ${noks.length>3?`<br>… e mais ${noks.length-3} item(ns)`:''}</div>`:’’;
+return `<div class="hist-item"> <div class="hist-item-top"> <span class="hist-placa">${r.placas.join(' / ')||r.nomePDF}</span> <span class="hist-date">${r.data} ${r.hora}</span> </div> <div class="hist-info">${r.motorista} · ${r.conferente} · ${r.tipo}</div> <div class="hist-badges"> <span class="hist-badge ok">✔ ${r.cntOk} OK</span> ${r.cntNok?`<span class="hist-badge nok">✘ ${r.cntNok} NOK</span>`:''} ${r.cntPend?`<span class="hist-badge pend">⚠ ${r.cntPend} Pend.</span>`:''} </div>${nd}</div>`;
+}).join(’’);
+}
+
+function abrirHistorico(){carregarHistorico();document.getElementById(‘modal-historico’).classList.add(‘open’);}
+function fecharHistorico(){document.getElementById(‘modal-historico’).classList.remove(‘open’);}
+
+/* ─── LIMPAR TUDO ────────────────────────────────────────────── */
+function limparTudo() {
+if (!confirm(‘Deseja limpar todos os dados do checklist?’)) return;
+document.querySelectorAll(‘input[type=text],input[type=date],input[type=time],textarea’).forEach(el=>el.value=’’);
+const sel=document.getElementById(‘tipo-select’);
+if (sel) sel.selectedIndex=0;
+document.querySelectorAll(’.equip-btn’).forEach(b=>b.classList.remove(‘active’,‘disabled’));
+document.querySelectorAll(’.equip-fields’).forEach(f=>f.classList.remove(‘visible’));
+equipAtivos.clear();
+Object.keys(fotosCache).forEach(k=>delete fotosCache[k]);
+resetMotoristaLabel();
+atualizarVisibilidadeMotorista();
+atualizarBotoesDisabled();
+renderChecklists();
+initDefaults();
+}
+
+/* ─── INIT ───────────────────────────────────────────────────── */
+function initDefaults() {
+const hoje=new Date();
+document.getElementById(‘data’).value=hoje.toISOString().split(‘T’)[0];
+const hh=String(hoje.getHours()).padStart(2,‘0’);
+const mm=String(hoje.getMinutes()).padStart(2,‘0’);
+document.getElementById(‘hora’).value=`${hh}:${mm}`;
+}
+
+document.addEventListener(‘DOMContentLoaded’,()=>{
+initDefaults();
+// Maiúsculas em todos os inputs de texto (exceto placa, km, validade, pesquisa)
+document.addEventListener(‘input’,e=>{
+const el=e.target;
+if ((el.tagName===‘TEXTAREA’||(el.tagName===‘INPUT’&&el.type===‘text’))
+&&!el.id.startsWith(‘placa-’)&&!el.id.startsWith(‘km-’)
+&&el.id!==‘hist-search’&&!el.id.endsWith(’-val’)&&!el.id.endsWith(’-qty’)) {
+toUpperInput(el);
+}
+});
+const si=document.getElementById(‘hist-search’);
+if (si) si.addEventListener(‘input’,e=>carregarHistorico(e.target.value));
+document.getElementById(‘modal-historico’).addEventListener(‘click’,e=>{
+if (e.target===e.currentTarget) fecharHistorico();
+});
+});
+</script>
+
+</body>
+</html>
