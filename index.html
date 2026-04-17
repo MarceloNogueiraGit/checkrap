@@ -793,14 +793,22 @@ const fotosCache  = {};
 const ITENS_EXTRAS_IMPL = ["Bexigão e Embuchamentos","Sem Vazamentos de Ar"];
 
 const itensCavalo = [
-  "Documentação do Cavalo Mecânico","Painel de Instrumentos (avisos)",
-  "Pintura / Defletor de Ar","Parabrisa / Limpadores / Esguicho",
+  "Documentação do Cavalo Mecânico",
+  "Painel de Instrumentos (avisos)",
+  "Pintura / Defletor de Ar",
+  "Parabrisa / Limpadores / Esguicho",
   "Farol Diant.: Piscas / Milhas / Luz Baixa / Luz Alta (DRL se houver)",
   "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
-  "Escada / Parachoques / Paralamas","5ª Roda / Gavião",
+  "Escada / Parachoques / Paralamas",
+  "5ª Roda / Gavião",
   "Conectores e Mangueiras de Ar e Elétrica",
-  "Nível de Óleo (Motor / Câmbio / Diferencial)","Nível de Arrefecimento",
-  "Óleo e Arrefecimento s/ Vazamentos","Opacidade","Tacógrafo","Extintor"
+  "Nível de Óleo (Motor / Câmbio / Diferencial)",
+  "Nível de Arrefecimento",
+  "Óleo e Arrefecimento s/ Vazamentos",
+  "Opacidade",
+  "Tacógrafo",
+  "Extintor", 
+  "Observações"
 ];
 
 function buildImplList(base) { return [...base,...ITENS_EXTRAS_IMPL,"Observações"]; }
@@ -812,23 +820,45 @@ const itensSiderBase = [
   "Extintor / Estepe","Porta e Assoalho","Paralama / Parachoque / Escada / Degraus"
 ];
 const itensRodoC1Base = [
-  "Documentação da Carreta","Sinalização Reflexiva Laterais","Luz de Sinalização Laterais",
-  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré","Porta e Assoalho",
-  "Lonas Laterais / Teto / Cabo de Aço","Cintas / Catracas / Cantoneiras / Réguas",
-  "Extintor / Estepe","5ª Roda / Gavião / Pino Rei","Pés Hidráulicos / Manivela",
-  "Paralama / Parachoque / Escada / Degraus"
+  "Documentação da Carreta",
+  "Sinalização Reflexiva Laterais",
+  "Luz de Sinalização Laterais",
+  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+  "Porta e Assoalho",
+  "Lonas Laterais / Teto / Cabo de Aço",
+  "Cintas / Catracas / Cantoneiras / Réguas",
+  "Extintor / Estepe",
+  "5ª Roda / Gavião / Pino Rei",
+  "Pés Hidráulicos / Manivela",
+  "Paralama / Parachoque / Escada / Degraus",
+  "Observações"
 ];
 const itensRodoC2Base = [
-  "Documentação da Carreta","Pino Rei","Pés Hidráulicos / Manivela",
-  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré","Lonas Laterais / Teto / Cabo de Aço",
-  "Cintas / Catracas / Cantoneiras / Réguas","Extintor / Estepe",
-  "Paralama / Parachoque / Escada / Degraus"
+  "Documentação da Carreta",
+  "Sinalização Reflexiva Laterais",
+  "Luz de Sinalização Laterais",
+  "Pino Rei",
+  "Pés Hidráulicos / Manivela",
+  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+  "Lonas Laterais / Teto / Cabo de Aço",
+  "Cintas / Catracas / Cantoneiras / Réguas",
+  "Extintor / Estepe",
+  "Paralama / Parachoque / Escada / Degraus",
+  "Observações"
 ];
 const itensRodoCacambaBase = [
-  "Documentação das Carretas e Dolly","Sinalização Reflexiva Laterais","Luz de Sinalização Laterais",
-  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré","Caçamba / Estrutura",
-  "Mecanismo de Basculamento","Lona, abertura e fechamento","Cilindro Hidráulico / Mangueiras",
-  "Extintor / Estepe","Pés Hidráulicos / Manivela","Paralama / Parachoque / Escada / Degraus"
+  "Documentação das Carretas e Dolly",
+  "Sinalização Reflexiva Laterais",
+  "Luz de Sinalização Laterais",
+  "Lanterna Tras.: Luz de Posição / Freio / Pisca / Ré",
+  "Caçamba / Estrutura",
+  "Mecanismo de Basculamento",
+  "Lona, abertura e fechamento",
+  "Cilindro Hidráulico / Mangueiras",
+  "Extintor / Estepe",
+  "Pés Hidráulicos / Manivela",
+  "Paralama / Parachoque / Escada / Degraus",
+  "Observações"
 ];
 
 const itens = {
