@@ -65,8 +65,10 @@ const checkupSiderItens = [
   {label:"Réguas",        tipo:"qty"},
   {label:"Extintor",      tipo:"extintor"},
   {label:"Estepe 1",      tipo:"estepe"},
-  {label:"Estepe 2",      tipo:"estepe"},
+  {label:"Estepe 1",      tipo:"estepe"},
+  {label:"Cabo de aço",   tipo:"estepe"},
   {label:"Pneus",         tipo:"pneu"},
+  {label:"Lonas Lat. Teto", tipo:"pneu"},
   {label:"Quinta Roda / Gavião / Pino Rei", tipo:"quinta"}
 ];
 const checkupRodoItens = [
@@ -77,7 +79,9 @@ const checkupRodoItens = [
   {label:"Extintor",      tipo:"extintor"},
   {label:"Estepe 1",      tipo:"estepe"},
   {label:"Estepe 2",      tipo:"estepe"},
+  {label:"Cabo de aço",   tipo:"estepe"},
   {label:"Pneus",         tipo:"pneu"},
+  {label:"Lonas Lat. Teto", tipo:"pneu"},
   {label:"Quinta Roda / Gavião / Pino Rei", tipo:"quinta"}
 ];
 
