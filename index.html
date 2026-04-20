@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist de Equipamentos</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="logo-mark">CE</div>
+    <h1>Checklist de <span>Equipamentos</span></h1>
+  </header>
+
+  <div class="container">
+
+    <!-- DADOS DO CONFERENTE -->
+    <div class="card header-card">
+      <div class="card-title">▸ Dados da Vistoria</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="conferente">Conferente</label>
+          <input type="text" id="conferente" placeholder="Nome do conferente" autocomplete="off">
+        </div>
+        <div class="form-group" style="max-width:180px;">
+          <label for="data-vistoria">Data</label>
+          <input type="date" id="data-vistoria">
+        </div>
+        <div class="form-group" style="max-width:130px;">
+          <label for="hora-vistoria">Hora</label>
+          <input type="time" id="hora-vistoria">
+        </div>
+      </div>
+    </div>
+
+    <!-- SELEÇÃO DO IMPLEMENTO -->
+    <div class="card">
+      <div class="card-title">▸ Selecione o Implemento</div>
+      <div class="implemento-selector">
+        <button class="implemento-btn" data-tipo="vanderleia" onclick="selecionarImplemento('vanderleia')">
+          Vanderleia
+        </button>
+        <button class="implemento-btn" data-tipo="rodotrem" onclick="selecionarImplemento('rodotrem')">
+          Rodotrem 9 Eixos
+        </button>
+      </div>
+    </div>
+
+    <!-- ÁREA DE CHECKLISTS -->
+    <div id="checklist-area">
+      <div id="checklists-container"></div>
+
+      <!-- BOTÃO ADICIONAR -->
+      <button class="btn-add" onclick="criarChecklist()">
+        <span class="plus-icon">＋</span>
+        Adicionar Checklist
+      </button>
+
+      <!-- GERAR PDF -->
+      <button class="btn-pdf" onclick="gerarPDF()">
+        ⬇ Gerar PDF
+      </button>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
