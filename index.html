@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check List de Manutenção Preventiva — JCE</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ===== VARIÁVEIS ===== */
+:root {
+  --bg: #0f1117; --surface: #1a1d27; --surface2: #21253a;
+  --border: #2e3348; --accent: #3b6ef5; --accent2: #22d3a0;
+  --text: #e8eaf2; --text2: #8b90a8;
+  --danger: #f25c5c; --warn: #f5a623; --ok: #22d3a0;
+  --radius: 10px;
+}
+
+/* ===== SCREEN BASE ===== */
+body { font-family: 'IBM Plex Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 64px; }
+
+/* TOPBAR */
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 13px 18px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; gap: 10px; }
+.topbar-left { display: flex; align-items: center; gap: 11px; }
+.logo-badge { background: var(--accent); color: #fff; font-weight: 700; font-size: 16px; font-style: italic; padding: 4px 11px; border-radius: 6px; letter-spacing: 2px; }
+.topbar h1 { font-size: 13px; font-weight: 600; line-height: 1.2; }
+.topbar h1 span { display: block; font-size: 11px; font-weight: 400; color: var(--text2); }
+.btn-report { background: var(--accent); color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 7px; font-family: inherit; white-space: nowrap; transition: background 0.15s; }
+.btn-report:hover { background: #2a5ce0; }
+
+/* MAIN */
+.main { max-width: 840px; margin: 0 auto; padding: 18px 12px; }
+
+/* CARDS */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 14px; overflow: hidden; }
+.card-body { padding: 16px; }
+
+/* DOC INFO */
+.doc-info { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 13px; }
+.doc-info .tag { font-size: 10px; color: var(--text2); background: var(--surface2); border: 1px solid var(--border); padding: 3px 8px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; }
+
+/* FIELDS */
+.fields-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.fg { display: flex; flex-direction: column; gap: 4px; }
+.fg label { font-size: 10px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; }
+.fg input { background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 8px 10px; font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.15s; }
+.fg input:focus { border-color: var(--accent); }
+.fg input::placeholder { color: var(--text2); }
+
+/* TIPO */
+.tipo-row { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 13px; align-items: center; }
+.tipo-row .lbl { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; }
+.tipo-opt input[type="checkbox"] { display: none; }
+.tipo-opt .pill { padding: 5px 13px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 12px; font-weight: 600; color: var(--text2); background: var(--surface2); transition: all 0.13s; cursor: pointer; user-select: none; display: block; }
+.tipo-opt input[type="checkbox"]:checked + .pill { border-color: var(--accent); color: #fff; background: var(--accent); }
+
+/* SECTION */
+.sec-title { background: var(--surface2); padding: 9px 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.4px; color: var(--accent2); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 7px; }
+.sec-title .scope { margin-left: auto; font-size: 10px; color: var(--text2); font-weight: 400; text-transform: none; letter-spacing: 0; background: var(--bg); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); }
+.subsec { padding: 7px 14px 3px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); border-top: 1px solid var(--border); background: var(--bg); }
+
+/* ITEM ROW */
+.item-row { display: flex; align-items: center; padding: 7px 14px; gap: 10px; border-top: 1px solid var(--border); transition: background 0.1s; }
+.item-row:hover { background: rgba(59,110,245,0.05); }
+.item-num { font-size: 10px; color: var(--text2); font-family: 'IBM Plex Mono', monospace; min-width: 22px; text-align: right; }
+.item-desc { flex: 1; font-size: 12px; color: var(--text); line-height: 1.35; }
+.cb-group { display: flex; gap: 4px; flex-shrink: 0; }
+.cbo input[type="checkbox"] { display: none; }
+.cbo .cbl { padding: 4px 9px; border-radius: 5px; border: 1.5px solid var(--border); font-size: 10px; font-weight: 600; cursor: pointer; user-select: none; transition: all 0.12s; color: var(--text2); background: var(--surface2); display: block; }
+.cbo input.sim:checked + .cbl { border-color: var(--ok); color: var(--ok); background: rgba(34,211,160,0.1); }
+.cbo input.nao:checked + .cbl { border-color: var(--danger); color: var(--danger); background: rgba(242,92,92,0.1); }
+.cbo input.na:checked + .cbl { border-color: var(--warn); color: var(--warn); background: rgba(245,166,35,0.1); }
+
+/* OBS */
+.obs-title { color: var(--warn) !important; }
+.obs-textarea { width: 100%; background: var(--surface2); border: none; color: var(--text); padding: 12px 14px; font-size: 13px; font-family: inherit; min-height: 90px; resize: vertical; outline: none; }
+.obs-textarea::placeholder { color: var(--text2); }
+
+/* PROGRESS */
+.prog-wrap { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 9px 18px; display: flex; align-items: center; gap: 11px; z-index: 99; }
+.prog-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 3px; transition: width 0.3s; width: 0%; }
+.prog-txt { font-size: 11px; color: var(--text2); white-space: nowrap; font-family: 'IBM Plex Mono', monospace; }
+
+/* ===================================================
+   PRINT — esconde TUDO, mostra só #printDoc
+   =================================================== */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body > * { display: none !important; }
+  #printDoc { display: block !important; }
+  @page { size: A4 portrait; margin: 7mm 7mm 7mm 7mm; }
+  .pp { page-break-after: always; font-family: Arial, Helvetica, sans-serif; }
+  .pp:last-child { page-break-after: auto; }
+}
+
+/* ===================================================
+   ESTILOS DO RELATÓRIO IMPRESSO
+   =================================================== */
+#printDoc {
+  display: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 8.5pt;
+  color: #000;
+}
+.pt { width: 100%; border-collapse: collapse; }
+.pt td { border: 0.5pt solid #333; padding: 1.5pt 3pt; vertical-align: middle; }
+.pt-title { text-align: center; font-weight: bold; font-size: 10.5pt; letter-spacing: 0.5pt; }
+.pt-logo { display: inline-block; border: 1.5pt solid #555; padding: 2pt 7pt; font-weight: bold; font-style: italic; font-size: 14pt; letter-spacing: 2pt; }
+.pt-lbl { font-size: 7pt; font-weight: bold; color: #444; display: block; margin-bottom: 1pt; }
+.pt-val { font-size: 8.5pt; }
+.pt-mainsec { background: #c8c8c8 !important; font-weight: bold; font-size: 9.5pt; text-align: center; letter-spacing: 0.5pt; padding: 2.5pt 3pt; }
+.pt-sec { background: #e4e4e4 !important; font-weight: bold; font-size: 8.5pt; padding: 2pt 3pt; }
+.pt-sub { text-align: right; font-style: italic; font-size: 7.5pt; color: #555; padding: 1pt 4pt; background: #f0f0f0 !important; }
+.pt-num { text-align: center; width: 16pt; font-size: 7.5pt; color: #444; }
+.pt-item { font-size: 7.8pt; }
+.pt-cb { width: 70pt; text-align: center; font-size: 7.5pt; white-space: nowrap; padding: 1.5pt 2pt; }
+.pt-obs-lbl { font-size: 7.5pt; font-weight: bold; margin-bottom: 3pt; }
+.pt-obs-txt { font-size: 8pt; white-space: pre-wrap; line-height: 1.6; min-height: 10pt; }
+.pt-obs-line { border-bottom: 0.4pt solid #bbb; height: 11pt; }
+</style>
+</head>
+<body>
+
+<!-- ===== TOPBAR ===== -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="logo-badge">JCE</div>
+    <h1>Check List de Manutenção Preventiva
+      <span>Frota / Manutenção — Rev. 00</span>
+    </h1>
+  </div>
+  <button class="btn-report" onclick="gerarRelatorio()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="16" y1="13" x2="8" y2="13"/>
+      <line x1="16" y1="17" x2="8" y2="17"/>
+    </svg>
+    Gerar Relatório PDF
+  </button>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="main">
+
+  <!-- CABEÇALHO -->
+  <div class="card">
+    <div class="card-body">
+      <div class="doc-info">
+        <span class="tag">DATA DOC: 17/08/2020</span>
+        <span class="tag">REVISÃO: 00</span>
+        <span class="tag">PÁG: 01–02</span>
+        <span class="tag">DEPTO: Frota / Manutenção</span>
+      </div>
+      <div class="fields-grid">
+        <div class="fg" style="grid-column:span 2">
+          <label>Nome do Motorista</label>
+          <input type="text" id="f_motorista" placeholder="Nome completo">
+        </div>
+        <div class="fg">
+          <label>Data</label>
+          <input type="date" id="f_data">
+        </div>
+        <div class="fg">
+          <label>KM</label>
+          <input type="text" id="f_km" placeholder="Ex: 125.430">
+        </div>
+        <div class="fg">
+          <label>Placa Cavalo</label>
+          <input type="text" id="f_placa_cavalo" placeholder="AAA-0000">
+        </div>
+        <div class="fg">
+          <label>Placa SR1</label>
+          <input type="text" id="f_placa_sr1" placeholder="AAA-0000">
+        </div>
+        <div class="fg">
+          <label>Placa SR2</label>
+          <input type="text" id="f_placa_sr2" placeholder="AAA-0000">
+        </div>
+      </div>
+      <div class="tipo-row">
+        <span class="lbl">Tipo:</span>
+        <label class="tipo-opt"><input type="checkbox" id="tipo_cavalo"><span class="pill">Cavalo</span></label>
+        <label class="tipo-opt"><input type="checkbox" id="tipo_sider"><span class="pill">Sider</span></label>
+        <label class="tipo-opt"><input type="checkbox" id="tipo_rodotrem"><span class="pill">Rodotrem</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAVALO MECÂNICO -->
+  <div class="card">
+    <div class="sec-title">⚙️ Cavalo Mecânico <span class="scope">Pg. 01</span></div>
+    <div class="subsec">Lubrificação</div><div id="s-lubri"></div>
+    <div class="subsec">Motor</div><div id="s-motor"></div>
+    <div class="subsec">Elétrica</div><div id="s-eletrica"></div>
+    <div class="subsec">Freio</div><div id="s-freio-cv"></div>
+    <div class="subsec">Cabine</div><div id="s-cabine"></div>
+    <div class="subsec">Chassi</div><div id="s-chassi-cv"></div>
+    <div class="subsec">Emissão de Gases</div><div id="s-gases"></div>
+  </div>
+
+  <!-- SEMI-REBOQUE -->
+  <div class="card">
+    <div class="sec-title">🚛 Semi-Reboque <span class="scope">Pg. 01–02</span></div>
+    <div class="subsec">Freio</div><div id="s-freio-sr"></div>
+    <div class="subsec">Outros</div><div id="s-outros"></div>
+    <div class="subsec">Chassi</div><div id="s-chassi-sr"></div>
+    <div class="subsec">Suspensão</div><div id="s-suspensao"></div>
+    <div class="subsec">Compartimento de Carga</div><div id="s-carga"></div>
+  </div>
+
+  <!-- OBSERVAÇÕES -->
+  <div class="card">
+    <div class="sec-title obs-title">📝 Observações</div>
+    <textarea class="obs-textarea" id="f_obs" placeholder="Digite suas observações aqui..."></textarea>
+  </div>
+
+  <!-- RODAPÉ -->
+  <div class="card">
+    <div class="card-body">
+      <div class="sec-title" style="color:var(--text2);font-size:11px;padding:0 0 12px;background:none;border:none;">Rodapé do Documento</div>
+      <div class="fields-grid">
+        <div class="fg">
+          <label>Vistoriador</label>
+          <input type="text" id="f_vistoriador" placeholder="Nome do vistoriador">
+        </div>
+        <div class="fg">
+          <label>Elaborado por</label>
+          <input type="text" id="f_elaborado" value="André Cruz">
+        </div>
+        <div class="fg">
+          <label>Aprovado por</label>
+          <input type="text" id="f_aprovado" value="André Cruz">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<!-- BARRA DE PROGRESSO -->
+<div class="prog-wrap">
+  <span class="prog-txt" id="prog-text">0 / 0 itens</span>
+  <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
+  <span class="prog-txt" id="prog-pct">0%</span>
+</div>
+
+<!-- =====================================================
+     RELATÓRIO — invisível na tela, aparece só no print
+     ===================================================== -->
+<div id="printDoc">
+
+  <!-- =========== PÁGINA 1 =========== -->
+  <div class="pp">
+    <!-- Cabeçalho -->
+    <table class="pt" style="margin-bottom:1pt;">
+      <tr>
+        <td colspan="3" class="pt-title" style="border-right:none;">CHECK LIST DE MANUTENÇÃO PREVENTIVA</td>
+        <td rowspan="3" style="width:54pt;text-align:center;vertical-align:middle;border-left:none;"><span class="pt-logo">JCE</span></td>
+      </tr>
+      <tr>
+        <td style="width:88pt;"><span class="pt-lbl">DATA</span><span class="pt-val">17/08/2020</span></td>
+        <td style="width:68pt;"><span class="pt-lbl">REVISÃO</span><span class="pt-val">00</span></td>
+        <td><span class="pt-lbl">PÁGINA</span><span class="pt-val">01 de 02</span></td>
+      </tr>
+      <tr><td colspan="3"><span class="pt-lbl">DEPARTAMENTO</span><span class="pt-val">Frota / Manutenção</span></td></tr>
+    </table>
+    <!-- Tipo / Data / KM -->
+    <table class="pt" style="margin-bottom:1pt;">
+      <tr>
+        <td style="width:52%;padding:2.5pt 4pt;font-size:8pt;">
+          <strong>TIPO</strong>&nbsp;
+          (&nbsp;<span id="px_cavalo"></span>&nbsp;) CAVALO&nbsp;&nbsp;
+          (&nbsp;<span id="px_sider"></span>&nbsp;) SIDER&nbsp;&nbsp;
+          (&nbsp;<span id="px_rodotrem"></span>&nbsp;) RODOTREM
+        </td>
+        <td style="width:26%;padding:2.5pt 4pt;"><span class="pt-lbl">DATA</span><span class="pt-val" id="p_data"></span></td>
+        <td style="padding:2.5pt 4pt;"><span class="pt-lbl">KM</span><span class="pt-val" id="p_km"></span></td>
+      </tr>
+    </table>
+    <!-- Motorista / Placas -->
+    <table class="pt" style="margin-bottom:2.5pt;">
+      <tr>
+        <td style="width:38%;padding:2.5pt 4pt;"><span class="pt-lbl">NOME MOTORISTA</span><span class="pt-val" id="p_motorista"></span></td>
+        <td style="width:20%;padding:2.5pt 4pt;"><span class="pt-lbl">PLACA CAVALO</span><span class="pt-val" id="p_placa_cavalo"></span></td>
+        <td style="width:20%;padding:2.5pt 4pt;"><span class="pt-lbl">PLACA SR1</span><span class="pt-val" id="p_placa_sr1"></span></td>
+        <td style="padding:2.5pt 4pt;"><span class="pt-lbl">PLACA SR2</span><span class="pt-val" id="p_placa_sr2"></span></td>
+      </tr>
+    </table>
+
+    <!-- Checklist -->
+    <table class="pt">
+      <tr><td colspan="3" class="pt-mainsec">CAVALO MECÂNICO</td></tr>
+      <tr><td colspan="3" class="pt-sec">LUBRIFICAÇÃO</td></tr>
+      <tr><td colspan="3" class="pt-sub">cavalo mecânico</td></tr>
+      <tr><td class="pt-num">01</td><td class="pt-item">Óleo de Motor ( examinar nível )</td><td class="pt-cb" id="pr_01"></td></tr>
+      <tr><td class="pt-num">02</td><td class="pt-item">Óleo Direção Hidráulica ( examinar nível )</td><td class="pt-cb" id="pr_02"></td></tr>
+      <tr><td class="pt-num">03</td><td class="pt-item">Fluido de Arrefecimento ( examinar nível )</td><td class="pt-cb" id="pr_03"></td></tr>
+      <tr><td colspan="3" class="pt-sec">MOTOR</td></tr>
+      <tr><td colspan="3" class="pt-sub">cavalo mecânico</td></tr>
+      <tr><td class="pt-num">04</td><td class="pt-item">Ausência de Vazamentos de Óleo</td><td class="pt-cb" id="pr_04"></td></tr>
+      <tr><td class="pt-num">05</td><td class="pt-item">Ruído do Motor</td><td class="pt-cb" id="pr_05"></td></tr>
+      <tr><td class="pt-num">06</td><td class="pt-item">Correias</td><td class="pt-cb" id="pr_06"></td></tr>
+      <tr><td colspan="3" class="pt-sec">ELÉTRICA</td></tr>
+      <tr><td colspan="3" class="pt-sub">cavalo mecânico</td></tr>
+      <tr><td class="pt-num">07</td><td class="pt-item">Faróis / Lanternas / Lâmpadas / Sinalizações</td><td class="pt-cb" id="pr_07"></td></tr>
+      <tr><td colspan="3" class="pt-sec">FREIO</td></tr>
+      <tr><td colspan="3" class="pt-sub">cavalo mecânico</td></tr>
+      <tr><td class="pt-num">08</td><td class="pt-item">Verificar Lonas</td><td class="pt-cb" id="pr_08"></td></tr>
+      <tr><td class="pt-num">09</td><td class="pt-item">Verificar Cubos e Rolamentos</td><td class="pt-cb" id="pr_09"></td></tr>
+      <tr><td colspan="3" class="pt-sec">CABINE</td></tr>
+      <tr><td colspan="3" class="pt-sub">cavalo mecânico</td></tr>
+      <tr><td class="pt-num">10</td><td class="pt-item">Tacógrafo e Computador de Bordo em Perfeito Estado de Funcionamento</td><td class="pt-cb" id="pr_10"></td></tr>
+      <tr><td class="pt-num">11</td><td class="pt-item">Adesivo de Tara e Lotação</td><td class="pt-cb" id="pr_11"></td></tr>
+      <tr><td class="pt-num">12</td><td class="pt-item">Para-brisa sem Trincas / Limpadores / esguicho de água</td><td class="pt-cb" id="pr_12"></td></tr>
+      <tr><td class="pt-num">13</td><td class="pt-item">Extintor</td><td class="pt-cb" id="pr_13"></td></tr>
+      <tr><td class="pt-num">14</td><td class="pt-item">Funilaria e Pintura</td><td class="pt-cb" id="pr_14"></td></tr>
+      <tr><td colspan="3" class="pt-sec">CHASSI</td></tr>
+      <tr><td colspan="3" class="pt-sub">cavalo mecânico</td></tr>
+      <tr><td class="pt-num">15</td><td class="pt-item">Longarinas e Travessas ( verificar corrosão / trinca / torção / amassado )</td><td class="pt-cb" id="pr_15"></td></tr>
+      <tr><td class="pt-num">16</td><td class="pt-item">Para-choque ( amassado / Pintura )</td><td class="pt-cb" id="pr_16"></td></tr>
+      <tr><td class="pt-num">17</td><td class="pt-item">Placa ( Lacre / Iluminação / Pintura )</td><td class="pt-cb" id="pr_17"></td></tr>
+      <tr><td class="pt-num">18</td><td class="pt-item">Suporte dos Grampos ( verificar: grampos/porcas/feixe de molas/batentes e suportes)</td><td class="pt-cb" id="pr_18"></td></tr>
+      <tr><td class="pt-num">19</td><td class="pt-item">Para-Lama / Para-barro ( verificar )</td><td class="pt-cb" id="pr_19"></td></tr>
+      <tr><td class="pt-num">20</td><td class="pt-item">Quinta-Roda e Gavião ( examinar folga ) Pino Rei</td><td class="pt-cb" id="pr_20"></td></tr>
+      <tr><td class="pt-num">21</td><td class="pt-item">Pneus ( avaliar acima de 2,5 mm +/- 0,5 mm ) inclusive estepe e aperto de parafusos das rodas</td><td class="pt-cb" id="pr_21"></td></tr>
+      <tr><td class="pt-num">22</td><td class="pt-item">Alinhamento e Balanceamento</td><td class="pt-cb" id="pr_22"></td></tr>
+      <tr><td colspan="3" class="pt-sec">EMISSÃO DE GASES</td></tr>
+      <tr><td colspan="3" class="pt-sub">cavalo mecânico</td></tr>
+      <tr><td class="pt-num">23</td><td class="pt-item">Verificação opacidade</td><td class="pt-cb" id="pr_23"></td></tr>
+
+      <tr><td colspan="3" class="pt-mainsec">SEMI-REBOQUE</td></tr>
+      <tr><td colspan="3" class="pt-sec">FREIO</td></tr>
+      <tr><td colspan="3" class="pt-sub">semi-reboque</td></tr>
+      <tr><td class="pt-num">24</td><td class="pt-item">Verificar Lonas</td><td class="pt-cb" id="pr_24"></td></tr>
+      <tr><td class="pt-num">25</td><td class="pt-item">Verificar Cubos e Rolamentos</td><td class="pt-cb" id="pr_25"></td></tr>
+      <tr><td colspan="3" class="pt-sec">OUTROS</td></tr>
+      <tr><td colspan="3" class="pt-sub">semi-reboque</td></tr>
+      <tr><td class="pt-num">26</td><td class="pt-item">Válvulas</td><td class="pt-cb" id="pr_26"></td></tr>
+      <tr><td class="pt-num">27</td><td class="pt-item">Acoplamentos</td><td class="pt-cb" id="pr_27"></td></tr>
+      <tr><td class="pt-num">28</td><td class="pt-item">Gaxetas / Selos</td><td class="pt-cb" id="pr_28"></td></tr>
+      <tr><td class="pt-num">29</td><td class="pt-item">Mangotes e Medidores</td><td class="pt-cb" id="pr_29"></td></tr>
+      <tr><td class="pt-num">30</td><td class="pt-item">Unidades de Controle de Temperaturas</td><td class="pt-cb" id="pr_30"></td></tr>
+      <tr><td class="pt-num">31</td><td class="pt-item">Equipamentos de Segurança</td><td class="pt-cb" id="pr_31"></td></tr>
+      <tr><td class="pt-num">32</td><td class="pt-item">Placas de simbologia</td><td class="pt-cb" id="pr_32"></td></tr>
+      <tr><td class="pt-num">33</td><td class="pt-item">Válvulas de Alívio</td><td class="pt-cb" id="pr_33"></td></tr>
+      <tr><td class="pt-num">34</td><td class="pt-item">Óleo do Compressor (verificar)</td><td class="pt-cb" id="pr_34"></td></tr>
+      <tr><td class="pt-num">35</td><td class="pt-item">Filtro do Compressor (verificar estado)</td><td class="pt-cb" id="pr_35"></td></tr>
+      <tr><td class="pt-num">36</td><td class="pt-item">Compressor (Fazer Teste)</td><td class="pt-cb" id="pr_36"></td></tr>
+      <tr><td class="pt-num">37</td><td class="pt-item">Motor da Glucose e seus Componentes (Fazer Teste)</td><td class="pt-cb" id="pr_37"></td></tr>
+      <tr><td class="pt-num">38</td><td class="pt-item">Bomba Descarga (Fazer Teste)</td><td class="pt-cb" id="pr_38"></td></tr>
+      <tr><td class="pt-num">39</td><td class="pt-item">Verificar Parte Elétrica ( cabos e caixa elétrica )</td><td class="pt-cb" id="pr_39"></td></tr>
+      <tr><td colspan="3" class="pt-sec">CHASSI</td></tr>
+      <tr><td colspan="3" class="pt-sub">semi-reboque</td></tr>
+      <tr><td class="pt-num">39</td><td class="pt-item">Longarinas e Travessas ( verificar corrosão / trinca / torção / amassado )</td><td class="pt-cb" id="pr_40"></td></tr>
+      <tr><td class="pt-num">40</td><td class="pt-item">Para-choque ( amassado / Pintura )</td><td class="pt-cb" id="pr_41"></td></tr>
+      <tr><td class="pt-num">41</td><td class="pt-item">Placa ( Lacre / Iluminação / Pintura )</td><td class="pt-cb" id="pr_42"></td></tr>
+      <tr><td class="pt-num">42</td><td class="pt-item">Suporte dos Grampos ( verificar: grampos/porcas/feixe de molas/batentes e suportes)</td><td class="pt-cb" id="pr_43"></td></tr>
+      <tr><td class="pt-num">43</td><td class="pt-item">Para-Lama / Para-barro ( verificar )</td><td class="pt-cb" id="pr_44"></td></tr>
+      <tr><td class="pt-num">44</td><td class="pt-item">Quinta-Roda ( examinar folga )</td><td class="pt-cb" id="pr_45"></td></tr>
+      <tr><td class="pt-num">45</td><td class="pt-item">Pneus ( avaliar acima de 2,5 mm +/- 0,5 mm ) inclusive estepe</td><td class="pt-cb" id="pr_46"></td></tr>
+      <tr><td class="pt-num">46</td><td class="pt-item">Reaperto de Parafusos de Rodas</td><td class="pt-cb" id="pr_47"></td></tr>
+      <tr><td class="pt-num">47</td><td class="pt-item">Reaperto Rala</td><td class="pt-cb" id="pr_48"></td></tr>
+      <tr><td class="pt-num">48</td><td class="pt-item">Reaperto Pistão</td><td class="pt-cb" id="pr_49"></td></tr>
+      <tr><td class="pt-num">49</td><td class="pt-item">Reaperto Pés e Conexões</td><td class="pt-cb" id="pr_50"></td></tr>
+      <tr><td class="pt-num">50</td><td class="pt-item">Reajuste Borracha e anéis de vedação da boca de visita</td><td class="pt-cb" id="pr_51"></td></tr>
+      <tr><td class="pt-num">51</td><td class="pt-item">Alinhamento e Balanceamento</td><td class="pt-cb" id="pr_52"></td></tr>
+    </table>
+  </div><!-- /pp1 -->
+
+  <!-- =========== PÁGINA 2 =========== -->
+  <div class="pp">
+    <!-- Cabeçalho pg2 -->
+    <table class="pt" style="margin-bottom:1pt;">
+      <tr>
+        <td colspan="3" class="pt-title" style="border-right:none;">CHECK LIST DE MANUTENÇÃO PREVENTIVA</td>
+        <td rowspan="3" style="width:54pt;text-align:center;vertical-align:middle;border-left:none;"><span class="pt-logo">JCE</span></td>
+      </tr>
+      <tr>
+        <td style="width:88pt;"><span class="pt-lbl">DATA</span><span class="pt-val">17/08/2020</span></td>
+        <td style="width:68pt;"><span class="pt-lbl">REVISÃO</span><span class="pt-val">00</span></td>
+        <td><span class="pt-lbl">PÁGINA</span><span class="pt-val">02 de 02</span></td>
+      </tr>
+      <tr><td colspan="3"><span class="pt-lbl">DEPARTAMENTO</span><span class="pt-val">Frota / Manutenção</span></td></tr>
+    </table>
+
+    <!-- Suspensão + Carga -->
+    <table class="pt" style="margin-bottom:2.5pt;">
+      <tr><td colspan="3" class="pt-sec">SUSPENSÃO</td></tr>
+      <tr><td colspan="3" class="pt-sub">semi-reboque</td></tr>
+      <tr><td class="pt-num">52</td><td class="pt-item">Molas, Pinos e Estirantes</td><td class="pt-cb" id="pr_53"></td></tr>
+      <tr><td colspan="3" class="pt-sec">COMPARTIMENTO DE CARGA</td></tr>
+      <tr><td colspan="3" class="pt-sub">semi-reboque</td></tr>
+      <tr><td class="pt-num">53</td><td class="pt-item">Condição dos Bocais, Garras, Travas e Tampas</td><td class="pt-cb" id="pr_54"></td></tr>
+      <tr><td class="pt-num">54</td><td class="pt-item">Tanques Isentos de Vazamentos, Trincas e com as Bocas Limpas</td><td class="pt-cb" id="pr_55"></td></tr>
+      <tr><td class="pt-num">55</td><td class="pt-item">Lonas de Forração, Cordas, Madeirite e travas ( uso somente para baú )</td><td class="pt-cb" id="pr_56"></td></tr>
+    </table>
+
+    <!-- Observações -->
+    <table class="pt" style="margin-bottom:2.5pt;">
+      <tr>
+        <td style="vertical-align:top;padding:3pt 4pt;">
+          <div class="pt-obs-lbl">observações:</div>
+          <div class="pt-obs-txt" id="p_obs"></div>
+          <div>
+            <div class="pt-obs-line"></div><div class="pt-obs-line"></div>
+            <div class="pt-obs-line"></div><div class="pt-obs-line"></div>
+            <div class="pt-obs-line"></div><div class="pt-obs-line"></div>
+            <div class="pt-obs-line"></div><div class="pt-obs-line"></div>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Rodapé -->
+    <table class="pt">
+      <tr>
+        <td style="width:36%;padding:4pt 5pt;vertical-align:bottom;">
+          <div style="font-size:7.5pt;margin-bottom:2pt;">Vistoriador</div>
+          <div style="font-size:8pt;margin-bottom:14pt;">Nome: <span id="p_vistoriador"></span></div>
+          <div style="border-top:0.5pt solid #333;width:90%;"></div>
+        </td>
+        <td style="padding:0;vertical-align:bottom;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr>
+              <td style="border:0.5pt solid #333;font-size:7pt;font-weight:bold;text-align:center;padding:2pt;width:33%;">ELABORADO POR</td>
+              <td style="border:0.5pt solid #333;font-size:7pt;font-weight:bold;text-align:center;padding:2pt;width:33%;">APROVADO POR</td>
+              <td style="border:0.5pt solid #333;font-size:7pt;font-weight:bold;text-align:center;padding:2pt;">PÁGINA</td>
+            </tr>
+            <tr>
+              <td style="border:0.5pt solid #333;font-size:8pt;text-align:center;padding:2pt;" id="p_elaborado">André Cruz</td>
+              <td style="border:0.5pt solid #333;font-size:8pt;text-align:center;padding:2pt;" id="p_aprovado">André Cruz</td>
+              <td style="border:0.5pt solid #333;font-size:8pt;text-align:center;padding:2pt;">02 de 02</td>
+            </tr>
+            <tr>
+              <td style="border:0.5pt solid #333;font-size:7pt;padding:2pt;">17/08/2020</td>
+              <td style="border:0.5pt solid #333;font-size:7.5pt;text-align:center;padding:2pt;">00</td>
+              <td style="border:0.5pt solid #333;"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div><!-- /pp2 -->
+
+</div><!-- /printDoc -->
+
+<script>
+// ============================================================
+// DADOS
+// ============================================================
+const SECTIONS = [
+  {id:'s-lubri', items:[
+    {id:'01',desc:'Óleo de Motor ( examinar nível )'},
+    {id:'02',desc:'Óleo Direção Hidráulica ( examinar nível )'},
+    {id:'03',desc:'Fluido de Arrefecimento ( examinar nível )'},
+  ]},
+  {id:'s-motor', items:[
+    {id:'04',desc:'Ausência de Vazamentos de Óleo'},
+    {id:'05',desc:'Ruído do Motor'},
+    {id:'06',desc:'Correias'},
+  ]},
+  {id:'s-eletrica', items:[
+    {id:'07',desc:'Faróis / Lanternas / Lâmpadas / Sinalizações'},
+  ]},
+  {id:'s-freio-cv', items:[
+    {id:'08',desc:'Verificar Lonas'},
+    {id:'09',desc:'Verificar Cubos e Rolamentos'},
+  ]},
+  {id:'s-cabine', items:[
+    {id:'10',desc:'Tacógrafo e Computador de Bordo em Perfeito Estado de Funcionamento'},
+    {id:'11',desc:'Adesivo de Tara e Lotação'},
+    {id:'12',desc:'Para-brisa sem Trincas / Limpadores / esguicho de água'},
+    {id:'13',desc:'Extintor'},
+    {id:'14',desc:'Funilaria e Pintura'},
+  ]},
+  {id:'s-chassi-cv', items:[
+    {id:'15',desc:'Longarinas e Travessas ( verificar corrosão / trinca / torção / amassado )'},
+    {id:'16',desc:'Para-choque ( amassado / Pintura )'},
+    {id:'17',desc:'Placa ( Lacre / Iluminação / Pintura )'},
+    {id:'18',desc:'Suporte dos Grampos ( verificar: grampos/porcas/feixe de molas/batentes e suportes)'},
+    {id:'19',desc:'Para-Lama / Para-barro ( verificar )'},
+    {id:'20',desc:'Quinta-Roda e Gavião ( examinar folga ) Pino Rei'},
+    {id:'21',desc:'Pneus ( avaliar acima de 2,5 mm +/- 0,5 mm ) inclusive estepe e aperto de parafusos das rodas'},
+    {id:'22',desc:'Alinhamento e Balanceamento'},
+  ]},
+  {id:'s-gases', items:[
+    {id:'23',desc:'Verificação opacidade'},
+  ]},
+  {id:'s-freio-sr', items:[
+    {id:'24',desc:'Verificar Lonas'},
+    {id:'25',desc:'Verificar Cubos e Rolamentos'},
+  ]},
+  {id:'s-outros', items:[
+    {id:'26',desc:'Válvulas'},
+    {id:'27',desc:'Acoplamentos'},
+    {id:'28',desc:'Gaxetas / Selos'},
+    {id:'29',desc:'Mangotes e Medidores'},
+    {id:'30',desc:'Unidades de Controle de Temperaturas'},
+    {id:'31',desc:'Equipamentos de Segurança'},
+    {id:'32',desc:'Placas de simbologia'},
+    {id:'33',desc:'Válvulas de Alívio'},
+    {id:'34',desc:'Óleo do Compressor (verificar)'},
+    {id:'35',desc:'Filtro do Compressor (verificar estado)'},
+    {id:'36',desc:'Compressor (Fazer Teste)'},
+    {id:'37',desc:'Motor da Glucose e seus Componentes (Fazer Teste)'},
+    {id:'38',desc:'Bomba Descarga (Fazer Teste)'},
+    {id:'39',desc:'Verificar Parte Elétrica ( cabos e caixa elétrica )'},
+  ]},
+  {id:'s-chassi-sr', items:[
+    {id:'40',desc:'Longarinas e Travessas ( verificar corrosão / trinca / torção / amassado )'},
+    {id:'41',desc:'Para-choque ( amassado / Pintura )'},
+    {id:'42',desc:'Placa ( Lacre / Iluminação / Pintura )'},
+    {id:'43',desc:'Suporte dos Grampos ( verificar: grampos/porcas/feixe de molas/batentes e suportes)'},
+    {id:'44',desc:'Para-Lama / Para-barro ( verificar )'},
+    {id:'45',desc:'Quinta-Roda ( examinar folga )'},
+    {id:'46',desc:'Pneus ( avaliar acima de 2,5 mm +/- 0,5 mm ) inclusive estepe'},
+    {id:'47',desc:'Reaperto de Parafusos de Rodas'},
+    {id:'48',desc:'Reaperto Rala'},
+    {id:'49',desc:'Reaperto Pistão'},
+    {id:'50',desc:'Reaperto Pés e Conexões'},
+    {id:'51',desc:'Reajuste Borracha e anéis de vedação da boca de visita'},
+    {id:'52',desc:'Alinhamento e Balanceamento'},
+  ]},
+  {id:'s-suspensao', items:[
+    {id:'53',desc:'Molas, Pinos e Estirantes'},
+  ]},
+  {id:'s-carga', items:[
+    {id:'54',desc:'Condição dos Bocais, Garras, Travas e Tampas'},
+    {id:'55',desc:'Tanques Isentos de Vazamentos, Trincas e com as Bocas Limpas'},
+    {id:'56',desc:'Lonas de Forração, Cordas, Madeirite e travas ( uso somente para baú )'},
+  ]},
+];
+
+// Mapa: id da tela -> id da célula no relatório
+const PMAP = {};
+for (let n = 1; n <= 56; n++) {
+  const k = String(n).padStart(2,'0');
+  PMAP[k] = 'pr_' + k;
+}
+
+// ============================================================
+// RENDERIZA TELA
+// ============================================================
+function renderItems() {
+  SECTIONS.forEach(sec => {
+    const cont = document.getElementById(sec.id);
+    if (!cont) return;
+    sec.items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'item-row';
+      row.innerHTML = `
+        <span class="item-num">${item.id}</span>
+        <span class="item-desc">${item.desc}</span>
+        <div class="cb-group">
+          <label class="cbo"><input type="checkbox" class="sim" id="cb_${item.id}_sim" onchange="xCB('${item.id}','sim')"><span class="cbl">Sim</span></label>
+          <label class="cbo"><input type="checkbox" class="nao" id="cb_${item.id}_nao" onchange="xCB('${item.id}','nao')"><span class="cbl">Não</span></label>
+          <label class="cbo"><input type="checkbox" class="na"  id="cb_${item.id}_na"  onchange="xCB('${item.id}','na')"><span class="cbl">NA</span></label>
+        </div>`;
+      cont.appendChild(row);
+    });
+  });
+  updateProgress();
+}
+
+function xCB(id, chosen) {
+  ['sim','nao','na'].forEach(opt => {
+    if (opt !== chosen) { const el = document.getElementById(`cb_${id}_${opt}`); if(el) el.checked = false; }
+  });
+  updateProgress();
+}
+
+// ============================================================
+// PROGRESSO
+// ============================================================
+function updateProgress() {
+  const ids = [];
+  SECTIONS.forEach(s => s.items.forEach(i => ids.push(i.id)));
+  const filled = ids.filter(id =>
+    document.getElementById(`cb_${id}_sim`)?.checked ||
+    document.getElementById(`cb_${id}_nao`)?.checked ||
+    document.getElementById(`cb_${id}_na`)?.checked
+  ).length;
+  const pct = ids.length ? Math.round(filled / ids.length * 100) : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = `${filled} / ${ids.length} itens`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+}
+
+// ============================================================
+// GERAR RELATÓRIO
+// ============================================================
+function gerarRelatorio() {
+  const fmtDate = v => {
+    if (!v) return '';
+    const [y,m,d] = v.split('-');
+    return d ? `${d}/${m}/${y}` : v;
+  };
+
+  // Campos de texto
+  document.getElementById('p_motorista').textContent    = document.getElementById('f_motorista').value;
+  document.getElementById('p_data').textContent         = fmtDate(document.getElementById('f_data').value);
+  document.getElementById('p_km').textContent           = document.getElementById('f_km').value;
+  document.getElementById('p_placa_cavalo').textContent = document.getElementById('f_placa_cavalo').value;
+  document.getElementById('p_placa_sr1').textContent    = document.getElementById('f_placa_sr1').value;
+  document.getElementById('p_placa_sr2').textContent    = document.getElementById('f_placa_sr2').value;
+  document.getElementById('p_vistoriador').textContent  = document.getElementById('f_vistoriador').value;
+  document.getElementById('p_elaborado').textContent    = document.getElementById('f_elaborado').value || 'André Cruz';
+  document.getElementById('p_aprovado').textContent     = document.getElementById('f_aprovado').value || 'André Cruz';
+
+  // Observações — preserva quebras de linha com white-space:pre-wrap no CSS
+  document.getElementById('p_obs').textContent = document.getElementById('f_obs').value;
+
+  // Tipo
+  document.getElementById('px_cavalo').textContent   = document.getElementById('tipo_cavalo').checked   ? 'X' : ' ';
+  document.getElementById('px_sider').textContent    = document.getElementById('tipo_sider').checked    ? 'X' : ' ';
+  document.getElementById('px_rodotrem').textContent = document.getElementById('tipo_rodotrem').checked ? 'X' : ' ';
+
+  // Checkboxes
+  const mark = v => v ? '✓' : '&nbsp;';
+  for (const [sid, printId] of Object.entries(PMAP)) {
+    const el = document.getElementById(printId);
+    if (!el) continue;
+    const sim = document.getElementById(`cb_${sid}_sim`)?.checked;
+    const nao = document.getElementById(`cb_${sid}_nao`)?.checked;
+    const na  = document.getElementById(`cb_${sid}_na`)?.checked;
+    el.innerHTML = `(&nbsp;${mark(sim)}&nbsp;)&nbsp;Sim&nbsp;&nbsp;(&nbsp;${mark(nao)}&nbsp;)&nbsp;Não&nbsp;&nbsp;(&nbsp;${mark(na)}&nbsp;)&nbsp;NA`;
+  }
+
+  window.print();
+}
+
+// INIT
+renderItems();
+</script>
+</body>
+</html>
