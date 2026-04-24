@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check List de Manutenção Preventiva – JCE</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#1a1a2e;--acc:#e63946;--borda:#bbb;--fundo:#f0f2f7;--label:#555;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--fundo);font-family:'Segoe UI',Tahoma,sans-serif;color:#222;min-height:100vh;}
+
+header{background:var(--bg);color:#fff;padding:16px 32px;display:flex;align-items:center;gap:14px;box-shadow:0 3px 12px rgba(0,0,0,.4);}
+.logo-box{background:#fff;border-radius:5px;padding:3px 10px;font-weight:900;font-size:22px;color:var(--bg);letter-spacing:2px;font-style:italic;}
+header h1{font-size:16px;font-weight:600;}
+header p{font-size:11px;color:#aac;margin-top:2px;}
+
+.wrap{max-width:960px;margin:24px auto;padding:0 16px 48px;}
+.card{background:#fff;border-radius:10px;padding:22px 26px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.07);}
+.card-header{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--bg);border-bottom:2px solid var(--bg);padding-bottom:6px;margin-bottom:14px;}
+
+.fields{display:grid;gap:12px 18px;}
+.col2{grid-template-columns:1fr 1fr;}
+.col4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.col5{grid-template-columns:2fr 1fr 1fr 1fr;}
+label{display:flex;flex-direction:column;gap:4px;}
+label span{font-size:10.5px;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:.5px;}
+input[type=text],input[type=date],textarea{border:1.5px solid var(--borda);border-radius:5px;padding:7px 10px;font-size:13px;color:#222;width:100%;background:#fafafa;transition:border .15s;}
+input:focus,textarea:focus{outline:none;border-color:var(--bg);background:#fff;}
+
+.tipo-group{display:flex;gap:20px;flex-wrap:wrap;align-items:center;margin-top:8px;}
+.tipo-group label{flex-direction:row;align-items:center;gap:7px;cursor:pointer;}
+.tipo-group label span{font-size:13px;text-transform:none;letter-spacing:0;font-weight:500;color:#222;}
+.tipo-group input[type=checkbox]{width:16px;height:16px;accent-color:var(--bg);cursor:pointer;}
+
+.sub-title{background:#dde3ef;color:var(--bg);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:4px 10px;border-radius:3px;margin:8px 0 3px;}
+
+.item-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+.item-table th{background:#e9ecf5;color:var(--bg);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;padding:6px 8px;border:1px solid #d0d5e8;text-align:center;}
+.item-table th:nth-child(2){text-align:left;}
+.item-table td{border:1px solid #e0e4ee;padding:5px 8px;vertical-align:middle;}
+.item-table tr:nth-child(even) td{background:#f8f9fd;}
+.item-table tr:hover td{background:#edf0ff;}
+.item-table td:first-child{width:36px;text-align:center;font-weight:700;color:#999;font-size:11px;}
+.item-table td:last-child{width:195px;text-align:center;}
+.radio-group{display:flex;gap:10px;justify-content:center;}
+.radio-group label{flex-direction:row;align-items:center;gap:3px;cursor:pointer;font-size:12px;font-weight:500;color:#222;}
+.radio-group input[type=radio]{accent-color:var(--bg);width:13px;height:13px;}
+
+textarea{resize:vertical;min-height:70px;}
+
+.btn-pdf{display:block;margin:0 auto;background:var(--acc);color:#fff;font-size:15px;font-weight:700;letter-spacing:.8px;border:none;border-radius:8px;padding:14px 44px;cursor:pointer;box-shadow:0 4px 14px rgba(230,57,70,.3);transition:background .15s,transform .1s;}
+.btn-pdf:hover{background:#c1121f;transform:translateY(-1px);}
+
+/* MODAL */
+#modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;align-items:center;justify-content:center;}
+#modal-overlay.show{display:flex;}
+#modal{background:#fff;border-radius:12px;padding:26px 28px;width:560px;max-width:96vw;box-shadow:0 8px 40px rgba(0,0,0,.35);}
+#modal h2{font-size:15px;color:var(--bg);margin-bottom:3px;}
+#modal .modal-sub{font-size:12px;color:#666;margin-bottom:16px;}
+.sig-block{margin-bottom:16px;}
+.sig-block .sig-label{font-size:10.5px;font-weight:700;color:var(--bg);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.sig-canvas{border:1.5px solid #ccc;border-radius:6px;background:#f9fff6;cursor:crosshair;touch-action:none;display:block;width:100%;height:110px;}
+.sig-actions{margin-top:5px;}
+.btn-clear{background:none;border:1.5px solid #ccc;border-radius:5px;padding:4px 14px;font-size:12px;cursor:pointer;color:#666;}
+.btn-clear:hover{border-color:#888;color:#222;}
+.modal-footer{display:flex;gap:12px;justify-content:flex-end;margin-top:8px;}
+.btn-cancel{background:none;border:1.5px solid #ccc;border-radius:6px;padding:10px 20px;font-size:13px;cursor:pointer;color:#666;}
+.btn-confirm{background:var(--bg);color:#fff;border:none;border-radius:6px;padding:10px 24px;font-size:13px;font-weight:700;cursor:pointer;}
+.btn-confirm:hover{background:#2d2d50;}
+
+footer{text-align:center;font-size:11px;color:#aaa;padding:10px 0 20px;}
+@media(max-width:600px){.col2,.col4,.col5{grid-template-columns:1fr;}header{flex-wrap:wrap;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-box">JCE</div>
+  <div>
+    <h1>Check List de Manutenção Preventiva</h1>
+    <p>Frota / Manutenção — JCE Transporte</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <div class="card-header">Identificação</div>
+    <div class="fields col4" style="margin-bottom:14px">
+      <label><span>Data</span><input type="date" id="data"></label>
+      <label><span>Revisão</span><input type="text" id="revisao" value="00"></label>
+      <label><span>KM</span><input type="text" id="km" placeholder="Ex: 150.000"></label>
+      <label><span>Departamento</span><input type="text" id="departamento" value="Frota / Manutenção"></label>
+    </div>
+    <div style="margin-bottom:14px">
+      <span style="font-size:10.5px;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:.5px;">Tipo de Veículo (selecione um ou mais)</span>
+      <div class="tipo-group">
+        <label><input type="checkbox" id="tipo_cavalo"><span>Cavalo</span></label>
+        <label><input type="checkbox" id="tipo_sider"><span>Sider</span></label>
+        <label><input type="checkbox" id="tipo_rodotrem"><span>Rodotrem</span></label>
+      </div>
+    </div>
+    <div class="fields col5">
+      <label><span>Nome do Motorista</span><input type="text" id="motorista"></label>
+      <label><span>Placa Cavalo</span><input type="text" id="placa_cavalo"></label>
+      <label><span>Placa SR1</span><input type="text" id="placa_sr1"></label>
+      <label><span>Placa SR2</span><input type="text" id="placa_sr2"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Cavalo Mecânico</div>
+    <div class="sub-title">Lubrificação</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_lub"></tbody></table>
+    <div class="sub-title">Motor</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_motor"></tbody></table>
+    <div class="sub-title">Elétrica</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_eletrica"></tbody></table>
+    <div class="sub-title">Freio</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_freio_cav"></tbody></table>
+    <div class="sub-title">Cabine</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_cabine"></tbody></table>
+    <div class="sub-title">Chassi</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_chassi_cav"></tbody></table>
+    <div class="sub-title">Emissão de Gases</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_gases"></tbody></table>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Semi-Reboque</div>
+    <div class="sub-title">Freio</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_freio_sr"></tbody></table>
+    <div class="sub-title">Outros</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_outros"></tbody></table>
+    <div class="sub-title">Chassi</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_chassi_sr"></tbody></table>
+    <div class="sub-title">Suspensão</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_suspensao"></tbody></table>
+    <div class="sub-title">Compartimento de Carga</div>
+    <table class="item-table"><thead><tr><th>#</th><th>Item</th><th>Sim / Não / NA</th></tr></thead><tbody id="b_carga"></tbody></table>
+  </div>
+
+  <div class="card">
+    <div class="card-header">Observações</div>
+    <label><span>Observações gerais</span><textarea id="observacoes" rows="5"></textarea></label>
+    <div class="fields col2" style="margin-top:12px">
+      <label><span>Conferente / Vistoriador</span><input type="text" id="vistoriador"></label>
+      <label><span>Elaborado / Aprovado por</span><input type="text" id="aprovado" value="Andre Cruz"></label>
+    </div>
+  </div>
+
+  <button class="btn-pdf" onclick="abrirModal()">✍ Assinar e Gerar PDF</button>
+</div>
+
+<footer>JCE Transporte · Check List de Manutenção Preventiva · Rev. 00</footer>
+
+<!-- MODAL ASSINATURA -->
+<div id="modal-overlay">
+  <div id="modal">
+    <h2>Assinaturas</h2>
+    <p class="modal-sub">Assine nos campos abaixo. As assinaturas serão inseridas no rodapé da última página do PDF.</p>
+
+    <div class="sig-block">
+      <div class="sig-label">Assinatura do Conferente / Vistoriador</div>
+      <canvas id="canvas_conf" class="sig-canvas" width="500" height="110"></canvas>
+      <div class="sig-actions"><button class="btn-clear" onclick="limpar('canvas_conf')">✕ Limpar</button></div>
+    </div>
+
+    <div class="sig-block">
+      <div class="sig-label">Assinatura do Motorista</div>
+      <canvas id="canvas_mot" class="sig-canvas" width="500" height="110"></canvas>
+      <div class="sig-actions"><button class="btn-clear" onclick="limpar('canvas_mot')">✕ Limpar</button></div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="gerarPDF()">Gerar PDF ↓</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DADOS ─────────────────────────────────────────────────────────────
+const ITENS={
+  lub:[[1,"Óleo de Motor (examinar nível)"],[2,"Óleo Direção Hidráulica (examinar nível)"],[3,"Fluido de Arrefecimento (examinar nível)"]],
+  motor:[[4,"Ausência de Vazamentos de Óleo"],[5,"Ruído do Motor"],[6,"Correias"]],
+  eletrica:[[7,"Farois / Lanternas / Lampadas / Sinalizações"]],
+  freio_cav:[[8,"Verificar Lonas"],[9,"Verificar Cubos e Rolamentos"]],
+  cabine:[[10,"Tacógrafo e Computador de Bordo em Perfeito Estado de Funcionamento"],[11,"Adesivo de Tara e Lotação"],[12,"Para-brisa sem Trincas / Limpadores / esguicho de água"],[13,"Extintor"],[14,"Funilaria e Pintura"]],
+  chassi_cav:[[15,"Longarinas e Travessas (verificar corrosão / trinca / torção / amassado)"],[16,"Para-choque (amassado / Pintura)"],[17,"Placa (Lacre / Iluminação / Pintura)"],[18,"Suporte dos Grampos (verificar: grampos/porcas/feixe de molas/batentes e suportes)"],[19,"Para-Lama / Para-barro (verificar)"],[20,"Quinta-Roda e Gavião (examinar folga) Pino Rei"],[21,"Pneus (avaliar acima de 2,5 mm +/- 0,5 mm) inclusive estepe - aperto de parafusos das rodas"],[22,"Alinhamento e Balanceamento"]],
+  gases:[[23,"Verificação opacidade"]],
+  freio_sr:[[24,"Verificar Lonas"],[25,"Verificar Cubos e Rolamentos"]],
+  outros:[[26,"Válvulas"],[27,"Acoplamentos"],[28,"Gaxetas / Selos"],[29,"Mangotes e Medidores"],[30,"Unidades de Controle de Temperaturas"],[31,"Equipamentos de Segurança"],[32,"Placas de simbologia"],[33,"Válvulas de Alívio"],[34,"Óleo do Compressor (verificar)"],[35,"Filtro do Compressor (verificar estado)"],[36,"Compressor (Fazer Teste)"],[37,"Motor da Glucose e seus Componentes (Fazer Teste)"],[38,"Bomba Descarga (Fazer Teste)"],[39,"Verificar Parte Elétrica (cabos e caixa elétrica)"]],
+  chassi_sr:[[39,"Longarinas e Travessas (verificar corrosão / trinca / torção / amassado)"],[40,"Para-choque (amassado / Pintura)"],[41,"Placa (Lacre / Iluminação / Pintura)"],[42,"Suporte dos Grampos (verificar: grampos/porcas/feixe de molas/batentes e suportes)"],[43,"Para-Lama / Para-barro (verificar)"],[44,"Quinta-Roda (examinar folga)"],[45,"Pneus (avaliar acima de 2,5 mm +/- 0,5 mm) inclusive estepe"],[46,"Reaperto de Parafusos de Rodas"],[47,"Reaperto Rala"],[48,"Reaperto Pistão"],[49,"Reaperto Pés e Conexões"],[50,"Reajuste Borracha e aneis de vedação da boca de visita"],[51,"Alinhamento e Balanceamento"]],
+  suspensao:[[52,"Molas, Pinos e Estirantes"]],
+  carga:[[53,"Condição dos Bocais, Garras, Travas e Tampas"],[54,"Tanques Isentos de Vazamentos, Trincas e com as Bocas Limpas"],[55,"Lonas de Forração, Cordas, Madeirite e travas (uso somente para baú)"]]
+};
+const MAP={b_lub:'lub',b_motor:'motor',b_eletrica:'eletrica',b_freio_cav:'freio_cav',b_cabine:'cabine',b_chassi_cav:'chassi_cav',b_gases:'gases',b_freio_sr:'freio_sr',b_outros:'outros',b_chassi_sr:'chassi_sr',b_suspensao:'suspensao',b_carga:'carga'};
+
+(function renderItens(){
+  for(const[bid,grp]of Object.entries(MAP)){
+    const tb=document.getElementById(bid);
+    ITENS[grp].forEach(([n,d])=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${n}</td><td>${d}</td><td><div class="radio-group"><label><input type="radio" name="i${n}" value="SIM"> Sim</label><label><input type="radio" name="i${n}" value="NAO"> Não</label><label><input type="radio" name="i${n}" value="NA"> NA</label></div></td>`;
+      tb.appendChild(tr);
+    });
+  }
+})();
+
+// ── CANVAS ────────────────────────────────────────────────────────────
+function setupCanvas(id){
+  const c=document.getElementById(id),ctx=c.getContext('2d');
+  ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#111';
+  let dr=false;
+  const pt=e=>{const r=c.getBoundingClientRect(),s=e.touches?e.touches[0]:e;return{x:(s.clientX-r.left)*(c.width/r.width),y:(s.clientY-r.top)*(c.height/r.height)};};
+  c.addEventListener('mousedown',e=>{dr=true;const p=pt(e);ctx.beginPath();ctx.moveTo(p.x,p.y);});
+  c.addEventListener('mousemove',e=>{if(!dr)return;const p=pt(e);ctx.lineTo(p.x,p.y);ctx.stroke();});
+  c.addEventListener('mouseup',()=>dr=false);
+  c.addEventListener('mouseleave',()=>dr=false);
+  c.addEventListener('touchstart',e=>{e.preventDefault();dr=true;const p=pt(e);ctx.beginPath();ctx.moveTo(p.x,p.y);},{passive:false});
+  c.addEventListener('touchmove',e=>{e.preventDefault();if(!dr)return;const p=pt(e);ctx.lineTo(p.x,p.y);ctx.stroke();},{passive:false});
+  c.addEventListener('touchend',()=>dr=false);
+}
+setupCanvas('canvas_conf');
+setupCanvas('canvas_mot');
+
+function limpar(id){const c=document.getElementById(id);c.getContext('2d').clearRect(0,0,c.width,c.height);}
+function vazio(id){return!document.getElementById(id).getContext('2d').getImageData(0,0,1,1).data.some((v,i)=>i%4===3&&v>0);}
+function abrirModal(){document.getElementById('modal-overlay').classList.add('show');}
+function fecharModal(){document.getElementById('modal-overlay').classList.remove('show');}
+
+const gv=id=>(document.getElementById(id)||{}).value||'';
+const gr=n=>{const r=document.querySelector(`input[name="${n}"]:checked`);return r?r.value:'';};
+const gc=id=>document.getElementById(id).checked;
+
+// ── PDF ───────────────────────────────────────────────────────────────
+function gerarPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const W=210,ML=12,cW=186;
+  let y=0,pag=1;
+  const AZUL=[26,26,46],CZ=[228,232,242],CZS=[210,218,236];
+
+  function cabPag(n,tot){
+    y=0;
+    doc.setFillColor(...AZUL);doc.rect(0,0,W,15,'F');
+    doc.setFontSize(11.5);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
+    doc.text('CHECK LIST DE MANUTENCAO PREVENTIVA',W/2,9.5,{align:'center'});
+    doc.setFillColor(255,255,255);doc.roundedRect(W-ML-20,2,20,11,2,2,'F');
+    doc.setFontSize(9);doc.setFont('helvetica','bolditalic');doc.setTextColor(...AZUL);
+    doc.text('JCE',W-ML-10,9,{align:'center'});
+    y=17;
+    doc.setLineWidth(.25);doc.setDrawColor(160);
+    // linha 1: DATA REVISAO PAGINA DEPTO
+    doc.rect(ML,y,cW,6);
+    const c1=[28,18,26,cW-72];let x=ML;
+    doc.setFontSize(6.2);doc.setFont('helvetica','bold');doc.setTextColor(50,50,50);
+    ['DATA','REVISAO','PAGINA','DEPARTAMENTO'].forEach((h,i)=>{doc.text(h,x+1,y+2.2);x+=c1[i];if(i<3)doc.line(x,y,x,y+6);});
+    x=ML;doc.setFont('helvetica','normal');doc.setTextColor(15,15,15);
+    [gv('data'),gv('revisao')||'00',`${n} de ${tot}`,gv('departamento')||'Frota / Manutencao'].forEach((v,i)=>{doc.text(v,x+1,y+4.8);x+=c1[i];});
+    y+=6.5;
+    // linha 2: TIPO DATA KM
+    doc.rect(ML,y,cW,6);
+    doc.setFont('helvetica','bold');doc.setFontSize(6.2);doc.setTextColor(50,50,50);
+    doc.text('TIPO',ML+1,y+2.2);
+    doc.setFont('helvetica','normal');
+    const cv=gc('tipo_cavalo'),sd=gc('tipo_sider'),rt=gc('tipo_rodotrem');
+    doc.text(`(${cv?'X':' '}) CAVALO  (${sd?'X':' '}) SIDER  (${rt?'X':' '}) RODOTREM`,ML+11,y+2.2);
+    const dx=ML+cW/2-8;
+    doc.setFont('helvetica','bold');doc.text('DATA',dx,y+2.2);
+    doc.setFont('helvetica','normal');doc.text(gv('data'),dx+9,y+2.2);
+    doc.setFont('helvetica','bold');doc.text('KM',ML+cW-22,y+2.2);
+    doc.setFont('helvetica','normal');doc.text(gv('km'),ML+cW-16,y+2.2);
+    y+=6.5;
+    // linha 3: motorista placas
+    doc.rect(ML,y,cW,6);
+    [cW*.44,cW*.63,cW*.81].forEach(p=>doc.line(ML+p,y,ML+p,y+6));
+    doc.setFont('helvetica','bold');doc.setFontSize(6.2);
+    doc.text('NOME MOTORISTA',ML+1,y+2.2);
+    doc.text('PLACA CAVALO',ML+cW*.44+1,y+2.2);
+    doc.text('PLACA SR1',ML+cW*.63+1,y+2.2);
+    doc.text('PLACA SR2',ML+cW*.81+1,y+2.2);
+    doc.setFont('helvetica','normal');
+    doc.text(gv('motorista'),ML+1,y+4.8);
+    doc.text(gv('placa_cavalo'),ML+cW*.44+1,y+4.8);
+    doc.text(gv('placa_sr1'),ML+cW*.63+1,y+4.8);
+    doc.text(gv('placa_sr2'),ML+cW*.81+1,y+4.8);
+    y+=7.5;
+  }
+
+  function chk(esp=16){if(y>297-esp){doc.addPage();pag++;cabPag(pag,2);}}
+
+  function secTit(t){chk();doc.setFillColor(...AZUL);doc.rect(ML,y,cW,4.8,'F');doc.setFontSize(6.8);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);doc.text(t.toUpperCase(),ML+2.5,y+3.3);y+=5.5;}
+
+  function subTit(t){chk();doc.setFillColor(...CZS);doc.rect(ML,y,cW,3.8,'F');doc.setFontSize(6.2);doc.setFont('helvetica','bold');doc.setTextColor(...AZUL);doc.text(t.toUpperCase(),ML+2.5,y+2.7);y+=4.4;}
+
+  function thRow(){chk();doc.setFillColor(...CZ);doc.rect(ML,y,cW,3.8,'F');doc.setLineWidth(.18);doc.setDrawColor(165);doc.rect(ML,y,cW,3.8);doc.line(ML+9,y,ML+9,y+3.8);doc.line(ML+cW-43,y,ML+cW-43,y+3.8);doc.setFontSize(5.5);doc.setFont('helvetica','bold');doc.setTextColor(40,40,80);doc.text('#',ML+4.5,y+2.6,{align:'center'});doc.text('ITEM',ML+10.5,y+2.6);doc.text('SIM / NAO / NA',ML+cW-42,y+2.6);y+=3.8;}
+
+  function iRow(n,d,par){
+    chk(10);
+    const rh=4.0;
+    if(par){doc.setFillColor(248,249,253);doc.rect(ML,y,cW,rh,'F');}
+    doc.setLineWidth(.13);doc.setDrawColor(200);
+    doc.rect(ML,y,cW,rh);doc.line(ML+9,y,ML+9,y+rh);doc.line(ML+cW-43,y,ML+cW-43,y+rh);
+    doc.setFontSize(5.8);doc.setFont('helvetica','bold');doc.setTextColor(140,140,140);
+    doc.text(String(n),ML+4.5,y+2.7,{align:'center'});
+    doc.setFont('helvetica','normal');doc.setTextColor(15,15,15);
+    doc.text(doc.splitTextToSize(d,cW-54),ML+10.5,y+2.7);
+    const v=gr('i'+n);
+    let mk='( ) Sim  ( ) Nao  ( ) NA';
+    if(v==='SIM')mk='(X) Sim  ( ) Nao  ( ) NA';
+    else if(v==='NAO')mk='( ) Sim  (X) Nao  ( ) NA';
+    else if(v==='NA') mk='( ) Sim  ( ) Nao  (X) NA';
+    doc.setFontSize(5.5);doc.setTextColor(15,15,15);doc.text(mk,ML+cW-42,y+2.7);
+    y+=rh;
+  }
+
+  function grpRender(k){thRow();ITENS[k].forEach(([n,d],i)=>iRow(n,d,i%2===1));}
+
+  function rodape(n,tot){
+    const ry=287;
+    doc.setFillColor(...CZ);doc.rect(ML,ry,cW,4.5,'F');
+    doc.setLineWidth(.2);doc.setDrawColor(145);doc.rect(ML,ry,cW,4.5);
+    const cs=[28,18,48,48,cW-142];let rx=ML;
+    doc.setFontSize(5.8);doc.setFont('helvetica','bold');doc.setTextColor(40,40,80);
+    ['DATA','REVISAO','ELABORADO POR','APROVADO POR','PAGINA'].forEach((h,i)=>{doc.text(h,rx+1,ry+3);rx+=cs[i];if(i<4)doc.line(rx,ry,rx,ry+4.5);});
+    rx=ML;
+    doc.rect(ML,ry+4.5,cW,4.5);
+    const ap=gv('aprovado')||'Andre Cruz';
+    [gv('data'),'00',ap,ap,`${n} de ${tot}`].forEach((v,i)=>{
+      doc.setFont('helvetica','normal');doc.setFontSize(5.8);doc.setTextColor(15);
+      doc.text(v,rx+1,ry+7.8);rx+=cs[i];
+    });
+  }
+
+  // ── BUILD ──
+  cabPag(1,2);
+  secTit('Cavalo Mecanico');
+  subTit('Lubrificacao');grpRender('lub');
+  subTit('Motor');grpRender('motor');
+  subTit('Eletrica');grpRender('eletrica');
+  subTit('Freio');grpRender('freio_cav');
+  subTit('Cabine');grpRender('cabine');
+  subTit('Chassi');grpRender('chassi_cav');
+  subTit('Emissao de Gases');grpRender('gases');
+
+  secTit('Semi-Reboque');
+  subTit('Freio');grpRender('freio_sr');
+  subTit('Outros');grpRender('outros');
+  subTit('Chassi');grpRender('chassi_sr');
+  subTit('Suspensao');grpRender('suspensao');
+  subTit('Compartimento de Carga');grpRender('carga');
+
+  // OBSERVAÇÕES
+  chk(55);y+=2;
+  doc.setFontSize(6.8);doc.setFont('helvetica','bold');doc.setTextColor(15,15,15);
+  doc.text('Observacoes:',ML,y);y+=4;
+  const obs=gv('observacoes');
+  const obsL=obs?doc.splitTextToSize(obs,cW-4):[];
+  const obsH=Math.max(9,obsL.length+2)*3.6;
+  doc.setFillColor(255,255,255);doc.setDrawColor(170);doc.setLineWidth(.2);
+  doc.rect(ML,y,cW,obsH);
+  if(obsL.length){doc.setFont('helvetica','normal');doc.setFontSize(6.8);doc.text(obsL,ML+2,y+3.5);}
+  else{for(let i=1;i<=9;i++){doc.setDrawColor(215);doc.line(ML+2,y+i*3.4,ML+cW-2,y+i*3.4);}}
+  y+=obsH+6;
+
+  // ASSINATURAS — garantir espaço na última página
+  if(y>245){doc.addPage();pag++;cabPag(pag,2);}
+
+  const bW=(cW-8)/2;
+  const bY=y;
+
+  // cabeçalho bloco assinaturas
+  doc.setFillColor(...CZS);doc.rect(ML,bY,cW,4,'F');
+  doc.setFontSize(6.5);doc.setFont('helvetica','bold');doc.setTextColor(...AZUL);
+  doc.text('ASSINATURAS',ML+2.5,bY+2.8);
+
+  const sY=bY+5;
+  const sH=28;
+
+  // caixas
+  doc.setFillColor(252,253,255);doc.setDrawColor(160);doc.setLineWidth(.2);
+  doc.rect(ML,sY,bW,sH);
+  doc.rect(ML+bW+8,sY,bW,sH);
+
+  // imagens das assinaturas
+  const imgConf=document.getElementById('canvas_conf').toDataURL('image/png');
+  const imgMot =document.getElementById('canvas_mot').toDataURL('image/png');
+
+  // só insere se o canvas não estiver vazio (checa pixel central)
+  const confVazio=vazio('canvas_conf'), motVazio=vazio('canvas_mot');
+  if(!confVazio) doc.addImage(imgConf,'PNG',ML+1,sY+1,bW-2,sH-8);
+  if(!motVazio)  doc.addImage(imgMot, 'PNG',ML+bW+9,sY+1,bW-2,sH-8);
+
+  // linha de assinatura
+  doc.setDrawColor(110);doc.setLineWidth(.35);
+  doc.line(ML+2,sY+sH-6,ML+bW-2,sY+sH-6);
+  doc.line(ML+bW+10,sY+sH-6,ML+cW-2,sY+sH-6);
+
+  // labels
+  doc.setFontSize(6.2);doc.setFont('helvetica','normal');doc.setTextColor(55,55,55);
+  doc.text('Conferente / Vistoriador',ML+2,sY+sH-3.5);
+  doc.text('Nome: '+gv('vistoriador'),ML+2,sY+sH-.5);
+  doc.text('Motorista',ML+bW+10,sY+sH-3.5);
+  doc.text('Nome: '+gv('motorista'),ML+bW+10,sY+sH-.5);
+
+  y=sY+sH+2;
+
+  // rodapé em todas as páginas
+  const tot=pag;
+  for(let p=1;p<=tot;p++){doc.setPage(p);rodape(p,tot);}
+
+  fecharModal();
+  doc.save('CheckList_Manutencao_Preventiva_JCE.pdf');
+}
+
+// fechar modal clicando fora
+document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)fecharModal();});
+</script>
+</body>
+</html>
