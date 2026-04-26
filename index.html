@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Check List de Manutenção Preventiva – JCE</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo-box">JCE</div>
+  <div>
+    <h1>Check List de Manutenção Preventiva</h1>
+    <p>Frota / Manutenção — JCE Transporte</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- IDENTIFICAÇÃO -->
+  <div class="card">
+    <div class="card-header">Identificação</div>
+    <div class="fields col4" style="margin-bottom:14px">
+      <label><span>Data</span><input type="date" id="data"></label>
+      <label><span>Revisão</span><input type="text" id="revisao" value="00"></label>
+      <label><span>KM</span><input type="text" id="km" placeholder="Ex: 150.000" oninput="formatarKM(this)"></label>
+      <label><span>Departamento</span><input type="text" id="departamento" value="Frota / Manutenção"></label>
+    </div>
+    <div style="margin-bottom:14px">
+      <span style="font-size:10.5px;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:.5px;">Tipo de Veículo (selecione um ou mais)</span>
+      <div class="tipo-group">
+        <label><input type="checkbox" id="tipo_cavalo"><span>Cavalo</span></label>
+        <label><input type="checkbox" id="tipo_sider"><span>Sider</span></label>
+        <label><input type="checkbox" id="tipo_rodotrem"><span>Rodotrem</span></label>
+      </div>
+    </div>
+    <div class="fields col5">
+      <label><span>Nome do Motorista</span><input type="text" id="motorista"></label>
+      <label><span>Placa Cavalo</span><input type="text" id="placa_cavalo" maxlength="8" oninput="formatarPlaca(this)" placeholder="AAA-1234"></label>
+      <label><span>Placa SR1</span><input type="text" id="placa_sr1" maxlength="8" oninput="formatarPlaca(this)" placeholder="AAA-1234"></label>
+      <label><span>Placa SR2</span><input type="text" id="placa_sr2" maxlength="8" oninput="formatarPlaca(this)" placeholder="AAA-1234"></label>
+    </div>
+  </div>
+
+  <!-- CAVALO MECÂNICO -->
+  <div class="card">
+    <div class="card-header">Cavalo Mecânico</div>
+    <div class="sub-title">Lubrificação</div>
+    <table class="item-table"><tbody id="b_lub"></tbody></table>
+    <div class="sub-title">Motor</div>
+    <table class="item-table"><tbody id="b_motor"></tbody></table>
+    <div class="sub-title">Elétrica</div>
+    <table class="item-table"><tbody id="b_eletrica"></tbody></table>
+    <div class="sub-title">Freio</div>
+    <table class="item-table"><tbody id="b_freio_cav"></tbody></table>
+    <div class="sub-title">Cabine</div>
+    <table class="item-table"><tbody id="b_cabine"></tbody></table>
+    <div class="sub-title">Chassi</div>
+    <table class="item-table"><tbody id="b_chassi_cav"></tbody></table>
+    <div class="sub-title">Emissão de Gases</div>
+    <table class="item-table"><tbody id="b_gases"></tbody></table>
+  </div>
+
+  <!-- SEMI-REBOQUE -->
+  <div class="card">
+    <div class="card-header">Semi-Reboque</div>
+    <div class="sub-title">Freio</div>
+    <table class="item-table"><tbody id="b_freio_sr"></tbody></table>
+    <div class="sub-title">Outros</div>
+    <table class="item-table"><tbody id="b_outros"></tbody></table>
+    <div class="sub-title">Chassi</div>
+    <table class="item-table"><tbody id="b_chassi_sr"></tbody></table>
+    <div class="sub-title">Suspensão</div>
+    <table class="item-table"><tbody id="b_suspensao"></tbody></table>
+    <div class="sub-title">Compartimento de Carga</div>
+    <table class="item-table"><tbody id="b_carga"></tbody></table>
+  </div>
+
+  <!-- OBSERVAÇÕES -->
+  <div class="card">
+    <div class="card-header">Observações</div>
+    <label>
+      <span>Observações gerais</span>
+      <textarea id="observacoes" rows="6"
+        oninput="this.value=aplicarFormatacaoObs(this.value)"
+        placeholder="TEXTO AUTOMÁTICO EM MAIÚSCULO..."></textarea>
+    </label>
+    <div class="fields col2" style="margin-top:12px">
+      <label><span>Conferente / Vistoriador</span><input type="text" id="vistoriador"></label>
+      <label><span>Elaborado / Aprovado por</span><input type="text" id="aprovado" value="Andre Cruz"></label>
+    </div>
+  </div>
+
+  <button class="btn-pdf" onclick="abrirModal()">✍ Assinar e Gerar PDF</button>
+</div>
+
+<footer>JCE Transporte · Check List de Manutenção Preventiva · Rev. 00</footer>
+
+<!-- MODAL ASSINATURA EM ETAPAS -->
+<div id="modal-overlay">
+  <div id="modal">
+
+    <!-- indicador de etapas -->
+    <div class="steps-wrap">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot" id="dot3">✓</div>
+    </div>
+    <div class="steps-labels">
+      <span id="lbl1" class="active">Conferente</span>
+      <span id="lbl2">Motorista</span>
+      <span id="lbl3">Confirmar</span>
+    </div>
+
+    <!-- ETAPA 1: Conferente -->
+    <div id="step1">
+      <h2>Assinatura do Conferente</h2>
+      <p class="modal-sub">Assine no campo abaixo com o dedo ou mouse.</p>
+      <div class="sig-label">Conferente / Vistoriador</div>
+      <div class="sig-wrap"><canvas id="canvas_conf" class="sig-canvas"></canvas></div>
+      <p class="sig-hint">Assine dentro do campo acima</p>
+      <div class="sig-actions">
+        <button class="btn-clear" onclick="limpar('canvas_conf')">✕ Limpar</button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="irEtapa(2)">Próximo →</button>
+      </div>
+    </div>
+
+    <!-- ETAPA 2: Motorista -->
+    <div id="step2" style="display:none">
+      <h2>Assinatura do Motorista</h2>
+      <p class="modal-sub">Assine no campo abaixo com o dedo ou mouse.</p>
+      <div class="sig-label">Motorista</div>
+      <div class="sig-wrap"><canvas id="canvas_mot" class="sig-canvas"></canvas></div>
+      <p class="sig-hint">Assine dentro do campo acima</p>
+      <div class="sig-actions">
+        <button class="btn-clear" onclick="limpar('canvas_mot')">✕ Limpar</button>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="irEtapa(1)">← Voltar</button>
+        <button class="btn-confirm" onclick="irEtapa(3)">Próximo →</button>
+      </div>
+    </div>
+
+    <!-- ETAPA 3: Confirmação final -->
+    <div id="step3" style="display:none">
+      <h2>Confirmar e Gerar PDF</h2>
+      <p class="modal-sub">Verifique as assinaturas abaixo antes de gerar o documento.</p>
+      <div class="confirm-previews">
+        <div class="confirm-box">
+          <div class="confirm-box-label">Conferente / Vistoriador</div>
+          <img id="prev_conf" src="" alt="Assinatura conferente">
+        </div>
+        <div class="confirm-box">
+          <div class="confirm-box-label">Motorista</div>
+          <img id="prev_mot" src="" alt="Assinatura motorista">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="irEtapa(2)">← Voltar</button>
+        <button class="btn-confirm green" onclick="gerarPDF()">✓ Gerar PDF</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS externo — deve ser o último elemento antes de </body> -->
+<script src="app.js"></script>
+</body>
+</html>
