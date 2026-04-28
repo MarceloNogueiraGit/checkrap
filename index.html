@@ -9,39 +9,21 @@
 </head>
 <body>
 
+<!-- imagem oculta do logo para uso no PDF -->
+<img id="logo-img-hidden" src="logo.png" style="display:none" crossorigin="anonymous">
+
 <!-- ── TELA DE LOGIN ─────────────────────────────────────────────────── -->
 <div id="login-overlay">
   <div class="login-bg">
-    <!-- partículas decorativas -->
-    <div class="lp lp1"></div>
-    <div class="lp lp2"></div>
-    <div class="lp lp3"></div>
-    <div class="lp lp4"></div>
+    <div class="lp lp1"></div><div class="lp lp2"></div>
+    <div class="lp lp3"></div><div class="lp lp4"></div>
   </div>
-
   <div class="login-card">
-    <!-- Logo SVG inline -->
     <div class="login-logo">
-      <svg viewBox="0 0 260 120" xmlns="http://www.w3.org/2000/svg" class="logo-svg">
-        <!-- Estrada curvada atrás das letras -->
-        <path d="M 20 90 Q 130 30 240 90" stroke="#222" stroke-width="14" fill="none" stroke-linecap="round"/>
-        <path d="M 20 90 Q 130 30 240 90" stroke="#555" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="8 6"/>
-        <!-- Curva de velocidade à direita -->
-        <path d="M 195 18 Q 240 35 248 70 Q 252 88 240 95" stroke="#444" stroke-width="5" fill="none" stroke-linecap="round"/>
-        <path d="M 205 22 Q 245 40 252 72 Q 255 90 244 97" stroke="#555" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <path d="M 215 27 Q 250 46 256 74 Q 258 92 248 99" stroke="#666" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <!-- Letras JCE -->
-        <text x="30"  y="82" font-family="Arial Black, Arial" font-weight="900" font-size="72" fill="#1e9de0" stroke="#1675b0" stroke-width="1.5">J</text>
-        <text x="90"  y="82" font-family="Arial Black, Arial" font-weight="900" font-size="72" fill="#1e9de0" stroke="#1675b0" stroke-width="1.5">C</text>
-        <text x="162" y="82" font-family="Arial Black, Arial" font-weight="900" font-size="72" fill="#1e9de0" stroke="#1675b0" stroke-width="1.5">E</text>
-        <!-- Subtítulo TRANSPORTE -->
-        <text x="130" y="108" font-family="Arial, sans-serif" font-size="13" fill="#888" text-anchor="middle" letter-spacing="4">TRANSPORTE</text>
-      </svg>
+      <img src="logo.png" alt="JCE Transportes" class="logo-svg">
     </div>
-
     <h2 class="login-title">Acesso ao Sistema</h2>
     <p class="login-sub">Check List de Manutenção Preventiva</p>
-
     <div class="login-form">
       <div class="login-field">
         <span class="login-field-icon">👤</span>
@@ -55,17 +37,16 @@
       <div id="login-erro" class="login-erro"></div>
       <button class="login-btn" onclick="tentarLogin()">Entrar</button>
     </div>
-
-    <p class="login-footer">© JCE Transporte · Uso interno</p>
+    <p class="login-footer">© JCE Transportes · Uso interno</p>
   </div>
 </div>
-<!-- ── FIM LOGIN ──────────────────────────────────────────────────────── -->
 
+<!-- ── HEADER ────────────────────────────────────────────────────────── -->
 <header>
-  <div class="logo-box">JCE</div>
+  <img src="logo.png" alt="JCE Transportes" class="header-logo">
   <div>
     <h1>Check List de Manutenção Preventiva</h1>
-    <p>Frota / Manutenção — JCE Transporte</p>
+    <p>Frota / Manutenção — JCE Transportes</p>
   </div>
 </header>
 
@@ -83,9 +64,9 @@
     <div style="margin-bottom:14px">
       <span style="font-size:10.5px;font-weight:700;color:var(--label);text-transform:uppercase;letter-spacing:.5px;">Tipo de Veículo (selecione um ou mais)</span>
       <div class="tipo-group">
-        <label><input type="checkbox" id="tipo_cavalo"><span>Cavalo</span></label>
-        <label><input type="checkbox" id="tipo_sider"><span>Sider</span></label>
-        <label><input type="checkbox" id="tipo_rodotrem"><span>Rodotrem</span></label>
+        <label><input type="checkbox" id="tipo_cavalo" onchange="atualizarObsNOK()"><span>Cavalo</span></label>
+        <label><input type="checkbox" id="tipo_sider"  onchange="atualizarObsNOK()"><span>Sider</span></label>
+        <label><input type="checkbox" id="tipo_rodotrem" onchange="atualizarObsNOK()"><span>Rodotrem</span></label>
       </div>
     </div>
     <div class="fields col5">
@@ -134,10 +115,9 @@
   <div class="card">
     <div class="card-header">Observações</div>
     <label>
-      <span>Observações gerais</span>
-      <textarea id="observacoes" rows="6"
-        oninput="this.value=aplicarFormatacaoObs(this.value)"
-        placeholder="TEXTO AUTOMÁTICO EM MAIÚSCULO..."></textarea>
+      <span>Observações gerais (itens NOK são adicionados automaticamente)</span>
+      <textarea id="observacoes" rows="8" placeholder="TEXTO AUTOMÁTICO EM MAIÚSCULO..."
+        oninput="this.value=aplicarFormatacaoObs(this.value)"></textarea>
     </label>
     <div class="fields col2" style="margin-top:12px">
       <label><span>Conferente / Vistoriador</span><input type="text" id="vistoriador"></label>
@@ -148,13 +128,11 @@
   <button class="btn-pdf" onclick="abrirModal()">✍ Assinar e Gerar PDF</button>
 </div>
 
-<footer>JCE Transporte · Check List de Manutenção Preventiva · Rev. 00</footer>
+<footer>JCE Transportes · Check List de Manutenção Preventiva · Rev. 00</footer>
 
 <!-- MODAL ASSINATURA EM ETAPAS -->
 <div id="modal-overlay">
   <div id="modal">
-
-    <!-- indicador de etapas -->
     <div class="steps-wrap">
       <div class="step-dot active" id="dot1">1</div>
       <div class="step-line" id="line1"></div>
@@ -168,39 +146,32 @@
       <span id="lbl3">Confirmar</span>
     </div>
 
-    <!-- ETAPA 1: Conferente -->
     <div id="step1">
       <h2>Assinatura do Conferente</h2>
       <p class="modal-sub">Assine no campo abaixo com o dedo ou mouse.</p>
       <div class="sig-label">Conferente / Vistoriador</div>
       <div class="sig-wrap"><canvas id="canvas_conf" class="sig-canvas"></canvas></div>
       <p class="sig-hint">Assine dentro do campo acima</p>
-      <div class="sig-actions">
-        <button class="btn-clear" onclick="limpar('canvas_conf')">✕ Limpar</button>
-      </div>
+      <div class="sig-actions"><button class="btn-clear" onclick="limpar('canvas_conf')">✕ Limpar</button></div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
         <button class="btn-confirm" onclick="irEtapa(2)">Próximo →</button>
       </div>
     </div>
 
-    <!-- ETAPA 2: Motorista -->
     <div id="step2" style="display:none">
       <h2>Assinatura do Motorista</h2>
       <p class="modal-sub">Assine no campo abaixo com o dedo ou mouse.</p>
       <div class="sig-label">Motorista</div>
       <div class="sig-wrap"><canvas id="canvas_mot" class="sig-canvas"></canvas></div>
       <p class="sig-hint">Assine dentro do campo acima</p>
-      <div class="sig-actions">
-        <button class="btn-clear" onclick="limpar('canvas_mot')">✕ Limpar</button>
-      </div>
+      <div class="sig-actions"><button class="btn-clear" onclick="limpar('canvas_mot')">✕ Limpar</button></div>
       <div class="modal-footer">
         <button class="btn-cancel" onclick="irEtapa(1)">← Voltar</button>
         <button class="btn-confirm" onclick="irEtapa(3)">Próximo →</button>
       </div>
     </div>
 
-    <!-- ETAPA 3: Confirmação final -->
     <div id="step3" style="display:none">
       <h2>Confirmar e Gerar PDF</h2>
       <p class="modal-sub">Verifique as assinaturas abaixo antes de gerar o documento.</p>
@@ -219,11 +190,9 @@
         <button class="btn-confirm green" onclick="gerarPDF()">✓ Gerar PDF</button>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- JS externo — deve ser o último elemento antes de </body> -->
 <script src="app.js"></script>
 </body>
 </html>
