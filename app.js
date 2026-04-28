@@ -1,6 +1,5 @@
 // ── LOGIN ───────────────────────────────────────────────────────────────
 (function verificarLogin() {
-  // se já passou pelo login nesta sessão, esconde a tela
   if (sessionStorage.getItem('jce_auth') === '1') {
     const overlay = document.getElementById('login-overlay');
     if (overlay) overlay.style.display = 'none';
@@ -8,10 +7,9 @@
 })();
 
 function tentarLogin() {
-  const user  = (document.getElementById('login-user')?.value || '').trim();
-  const pass  = (document.getElementById('login-pass')?.value || '').trim();
-  const erro  = document.getElementById('login-erro');
-
+  const user = (document.getElementById('login-user')?.value || '').trim();
+  const pass = (document.getElementById('login-pass')?.value || '').trim();
+  const erro = document.getElementById('login-erro');
   if (user === 'jce.adminis' && pass === 'adminis') {
     sessionStorage.setItem('jce_auth', '1');
     const overlay = document.getElementById('login-overlay');
@@ -26,7 +24,10 @@ function tentarLogin() {
 }
 
 // ── DADOS ───────────────────────────────────────────────────────────────
-// ── DADOS ──────────────────────────────────────────────────────────────
+// Tipos especiais de item:
+//   { type:'qty',  label:'Cintas' }   → seletor 1-50
+//   { type:'mes',  label:'Extintor' } → seletor MES/ANO
+//   string normal                     → item padrão
 const ITENS = {
   lub: [
     [1,  "Óleo de Motor (examinar nível)"],
@@ -49,8 +50,7 @@ const ITENS = {
     [10, "Tacógrafo e Computador de Bordo em Perfeito Estado de Funcionamento"],
     [11, "Adesivo de Tara e Lotação"],
     [12, "Para-brisa sem Trincas / Limpadores / esguicho de água"],
-    [13, "Extintor"],
-    [14, "Funilaria e Pintura"]
+    [13, { type:'mes', label:'Extintor' }]
   ],
   chassi_cav: [
     [15, "Longarinas e Travessas (verificar corrosão / trinca / torção / amassado)"],
@@ -60,7 +60,10 @@ const ITENS = {
     [19, "Para-Lama / Para-barro (verificar)"],
     [20, "Quinta-Roda e Gavião (examinar folga) Pino Rei"],
     [21, "Pneus (avaliar acima de 2,5 mm +/- 0,5 mm) inclusive estepe - aperto de parafusos das rodas"],
-    [22, "Alinhamento e Balanceamento"]
+    [22, "Alinhamento e Balanceamento"],
+    [56, "Tanques de combustível sem vazamentos e suporte do tanque"],
+    [57, "Defletor de ar"],
+    [58, "Estofados, capas, cortinas, carpetes e tapetes"]
   ],
   gases: [
     [23, "Verificação opacidade"]
@@ -83,7 +86,13 @@ const ITENS = {
     [36, "Compressor (Fazer Teste)"],
     [37, "Motor da Glucose e seus Componentes (Fazer Teste)"],
     [38, "Bomba Descarga (Fazer Teste)"],
-    [39, "Verificar Parte Elétrica (cabos e caixa elétrica)"]
+    [39, "Verificar Parte Elétrica (cabos e caixa elétrica)"],
+    [59, { type:'qty', label:'Cintas' }],
+    [60, { type:'qty', label:'Catracas' }],
+    [61, { type:'qty', label:'Cantoneiras' }],
+    [62, { type:'qty', label:'Réguas' }],
+    [63, "Lonas laterais, teto e cabo de aço"],
+    [64, { type:'mes', label:'Extintor' }]
   ],
   chassi_sr: [
     [39, "Longarinas e Travessas (verificar corrosão / trinca / torção / amassado)"],
@@ -97,15 +106,12 @@ const ITENS = {
     [47, "Reaperto Rala"],
     [48, "Reaperto Pistão"],
     [49, "Reaperto Pés e Conexões"],
-    [50, "Reajuste Borracha e aneis de vedação da boca de visita"],
     [51, "Alinhamento e Balanceamento"]
   ],
   suspensao: [
     [52, "Molas, Pinos e Estirantes"]
   ],
   carga: [
-    [53, "Condição dos Bocais, Garras, Travas e Tampas"],
-    [54, "Tanques Isentos de Vazamentos, Trincas e com as Bocas Limpas"],
     [55, "Lonas de Forração, Cordas, Madeirite e travas (uso somente para baú)"]
   ]
 };
@@ -125,7 +131,20 @@ const MAP = {
   b_carga:     'carga'
 };
 
+// grupos que pertencem ao cavalo vs semi-reboque
+const GRUPOS_CAVALO = ['lub','motor','eletrica','freio_cav','cabine','chassi_cav','gases'];
+const GRUPOS_SR     = ['freio_sr','outros','chassi_sr','suspensao','carga'];
+
 const PALAVRAS_DESTAQUE = ['CAVALO', 'CARRETA 1', 'CARRETA 2', 'CARRETA'];
+
+// meses para seletor
+const MESES = ['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
+const anoAtual = new Date().getFullYear();
+
+// ── HELPERS DE ITEM ─────────────────────────────────────────────────────
+function descItem(d) {
+  return (typeof d === 'object') ? d.label : d;
+}
 
 // ── RENDERIZAÇÃO DE ITENS ───────────────────────────────────────────────
 (function renderItens() {
@@ -133,14 +152,35 @@ const PALAVRAS_DESTAQUE = ['CAVALO', 'CARRETA 1', 'CARRETA 2', 'CARRETA'];
     const tb = document.getElementById(bid);
     ITENS[grp].forEach(([n, d]) => {
       const tr = document.createElement('tr');
+      const desc = descItem(d);
+      const isObj = typeof d === 'object';
+
+      // célula extra dependendo do tipo
+      let extraHTML = '';
+      if (isObj && d.type === 'qty') {
+        // seletor 1-50
+        let opts = '<option value="">—</option>';
+        for (let i = 1; i <= 50; i++) opts += `<option value="${i}">${i}</option>`;
+        extraHTML = `<select id="i${n}_qty" class="item-select">${opts}</select>`;
+      } else if (isObj && d.type === 'mes') {
+        // seletor MES/ANO
+        let opts = '<option value="">—</option>';
+        for (let a = anoAtual; a <= anoAtual + 5; a++) {
+          MESES.forEach(m => opts += `<option value="${m}/${a}">${m}/${a}</option>`);
+        }
+        extraHTML = `<select id="i${n}_mes" class="item-select">${opts}</select>`;
+      }
+
+      tr.setAttribute('data-item', n);
+      tr.setAttribute('data-grupo', grp);
       tr.innerHTML = `
         <td>${n}</td>
-        <td>${d}</td>
+        <td>${desc}${extraHTML ? '<br><span class="item-extra">' + extraHTML + '</span>' : ''}</td>
         <td>
           <div class="chk-group">
-            <label><input type="checkbox" id="i${n}_sim" value="SIM"> Sim</label>
-            <label><input type="checkbox" id="i${n}_nao" value="NAO"> Não</label>
-            <label><input type="checkbox" id="i${n}_na"  value="NA"> NA</label>
+            <label><input type="checkbox" id="i${n}_ok"  value="OK"  onchange="onCheck(${n},'OK',this)"> OK</label>
+            <label><input type="checkbox" id="i${n}_nok" value="NOK" onchange="onCheck(${n},'NOK',this)" class="chk-nok"> NOK</label>
+            <label><input type="checkbox" id="i${n}_na"  value="NA"  onchange="onCheck(${n},'NA',this)"> NA</label>
           </div>
         </td>`;
       tb.appendChild(tr);
@@ -148,12 +188,88 @@ const PALAVRAS_DESTAQUE = ['CAVALO', 'CARRETA 1', 'CARRETA 2', 'CARRETA'];
   }
 })();
 
+// quando clica num checkbox, atualiza NOK nas observações
+function onCheck(n, val, el) {
+  // localiza grupo do item
+  let grupo = null;
+  for (const [bid, grp] of Object.entries(MAP)) {
+    if (ITENS[grp].some(([num]) => num === n)) { grupo = grp; break; }
+  }
+  atualizarObsNOK();
+}
+
 function getChecks(n) {
   const vals = [];
-  if (document.getElementById(`i${n}_sim`)?.checked) vals.push('SIM');
-  if (document.getElementById(`i${n}_nao`)?.checked) vals.push('NAO');
+  if (document.getElementById(`i${n}_ok`)?.checked)  vals.push('OK');
+  if (document.getElementById(`i${n}_nok`)?.checked) vals.push('NOK');
   if (document.getElementById(`i${n}_na`)?.checked)  vals.push('NA');
   return vals;
+}
+
+function getExtra(n, d) {
+  if (typeof d !== 'object') return '';
+  if (d.type === 'qty') return document.getElementById(`i${n}_qty`)?.value || '';
+  if (d.type === 'mes') return document.getElementById(`i${n}_mes`)?.value || '';
+  return '';
+}
+
+// ── NOK → OBSERVAÇÕES AUTOMÁTICAS ──────────────────────────────────────
+function coletarNOK(grupos) {
+  const linhas = [];
+  for (const grp of grupos) {
+    ITENS[grp].forEach(([n, d]) => {
+      if (document.getElementById(`i${n}_nok`)?.checked) {
+        let txt = descItem(d).toUpperCase();
+        const extra = getExtra(n, d);
+        if (extra) txt += ` — ${extra}`;
+        linhas.push(`${n}. ${txt}`);
+      }
+    });
+  }
+  return linhas;
+}
+
+function atualizarObsNOK() {
+  const cv  = document.getElementById('tipo_cavalo')?.checked;
+  const sd  = document.getElementById('tipo_sider')?.checked;
+  const rt  = document.getElementById('tipo_rodotrem')?.checked;
+
+  const nokCav = coletarNOK(GRUPOS_CAVALO);
+  const nokSR  = coletarNOK(GRUPOS_SR);
+
+  // monta o texto automático de NOK (separado do texto manual)
+  let autoTxt = '';
+
+  if (nokCav.length) {
+    autoTxt += 'CAVALO\n' + nokCav.join('\n') + '\n\n';
+  }
+
+  if (nokSR.length) {
+    // nome do semi-reboque depende do tipo selecionado
+    let nomeCarreta = 'CARRETA';
+    if (rt && !sd) nomeCarreta = 'CARRETA 1'; // rodotrem geralmente tem 2
+    autoTxt += nomeCarreta + '\n' + nokSR.join('\n') + '\n\n';
+  }
+
+  // guarda texto manual (linhas que não foram geradas automaticamente)
+  const obsEl = document.getElementById('observacoes');
+  // separa bloco auto do manual usando marcador
+  const MARCADOR = '--- NOK AUTOMÁTICO ---\n';
+  let textoAtual = obsEl.value;
+  let manual = '';
+  const idx = textoAtual.indexOf(MARCADOR);
+  if (idx !== -1) {
+    manual = textoAtual.substring(0, idx).trimEnd();
+  } else {
+    manual = textoAtual.trimEnd();
+  }
+
+  // monta novo conteúdo
+  let novo = '';
+  if (manual) novo += manual + '\n\n';
+  if (autoTxt.trim()) novo += MARCADOR + autoTxt.trimEnd();
+
+  obsEl.value = novo.trimStart();
 }
 
 // ── FORMATAÇÃO DE CAMPOS ────────────────────────────────────────────────
@@ -182,6 +298,14 @@ function aplicarFormatacaoObs(txt) {
   return txt.toUpperCase();
 }
 
+// data automática ao carregar
+window.addEventListener('DOMContentLoaded', () => {
+  const hoje = new Date();
+  const iso  = hoje.toISOString().split('T')[0];
+  const el   = document.getElementById('data');
+  if (el && !el.value) el.value = iso;
+});
+
 // ── CANVAS ALTA RESOLUÇÃO ───────────────────────────────────────────────
 const DPR   = Math.min(window.devicePixelRatio || 1, 3);
 const SIG_W = Math.round(540 * DPR);
@@ -198,9 +322,7 @@ function initCanvas(id) {
   ctx.lineCap     = 'round';
   ctx.lineJoin    = 'round';
   ctx.strokeStyle = '#0a0a0a';
-
   let dr = false;
-
   const pt = e => {
     const r   = c.getBoundingClientRect();
     const src = e.touches ? e.touches[0] : e;
@@ -209,23 +331,14 @@ function initCanvas(id) {
       y: (src.clientY - r.top)  * (SIG_H / r.height)
     };
   };
-
-  const start = e => {
-    dr = true;
-    const p = pt(e);
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
-  };
-  const move = e => {
+  const start = e => { dr = true; const p = pt(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); };
+  const move  = e => {
     if (!dr) return;
     const p = pt(e);
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(p.x, p.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
   };
   const stop = () => dr = false;
-
   c.addEventListener('mousedown',  start);
   c.addEventListener('mousemove',  move);
   c.addEventListener('mouseup',    stop);
@@ -239,8 +352,7 @@ initCanvas('canvas_mot');
 
 function limpar(id) {
   const c = document.getElementById(id), ctx = c.getContext('2d');
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, c.width, c.height);
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, c.width, c.height);
 }
 
 function temAssinatura(id) {
@@ -273,22 +385,16 @@ function atualizarEtapa() {
   [1, 2, 3].forEach(i => {
     document.getElementById(`step${i}`).style.display = (i === etapaAtual) ? '' : 'none';
   });
-
-  const dots = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3')];
+  const dots  = [document.getElementById('dot1'), document.getElementById('dot2'), document.getElementById('dot3')];
   const lines = [document.getElementById('line1'), document.getElementById('line2')];
   const lbls  = [document.getElementById('lbl1'),  document.getElementById('lbl2'),  document.getElementById('lbl3')];
-
   dots.forEach((d, i) => {
     d.classList.remove('active', 'done');
     lbls[i].classList.remove('active', 'done');
-    if (i + 1 < etapaAtual)      { d.classList.add('done');   lbls[i].classList.add('done'); }
-    else if (i + 1 === etapaAtual){ d.classList.add('active'); lbls[i].classList.add('active'); }
+    if (i + 1 < etapaAtual)       { d.classList.add('done');   lbls[i].classList.add('done'); }
+    else if (i + 1 === etapaAtual) { d.classList.add('active'); lbls[i].classList.add('active'); }
   });
-  lines.forEach((l, i) => {
-    l.classList.remove('done');
-    if (i + 1 < etapaAtual) l.classList.add('done');
-  });
-
+  lines.forEach((l, i) => { l.classList.remove('done'); if (i + 1 < etapaAtual) l.classList.add('done'); });
   if (etapaAtual === 3) {
     document.getElementById('prev_conf').src = document.getElementById('canvas_conf').toDataURL('image/png');
     document.getElementById('prev_mot').src  = document.getElementById('canvas_mot').toDataURL('image/png');
@@ -315,20 +421,37 @@ function gerarPDF() {
   const SIG_Y     = ROD_Y - SIG_H_PDF - 3;
 
   let y = 0, pag = 1;
-  const AZUL = [26, 26, 46], CZ = [228, 232, 242], CZS = [210, 218, 236];
+  const BRANCO = [255, 255, 255];
+  const PRETO  = [20, 20, 20];
+  const CZ     = [228, 232, 242];
+  const CZS    = [210, 218, 236];
+  const AZUL   = [26, 26, 46];
 
   // ── cabeçalho só pg1 ──────────────────────────────────────────────────
   function cabecalho() {
     y = 0;
-    doc.setFillColor(...AZUL); doc.rect(0, 0, W, 15, 'F');
-    doc.setFontSize(11.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(255, 255, 255);
-    doc.text('CHECK LIST DE MANUTENCAO PREVENTIVA', W / 2, 9.5, { align: 'center' });
-    doc.setFillColor(255, 255, 255); doc.roundedRect(W - ML - 22, 1.5, 22, 12, 2, 2, 'F');
-    doc.setFontSize(13); doc.setFont('helvetica', 'bolditalic'); doc.setTextColor(...AZUL);
-    doc.text('JCE', W - ML - 11, 10, { align: 'center' });
+    // fundo BRANCO
+    doc.setFillColor(...BRANCO);
+    doc.rect(0, 0, W, 15, 'F');
+    doc.setDrawColor(200); doc.setLineWidth(.3);
+    doc.line(0, 15, W, 15);
+
+    // título em preto
+    doc.setFontSize(11); doc.setFont('helvetica', 'bold'); doc.setTextColor(...PRETO);
+    doc.text('CHECK LIST DE MANUTENCAO PREVENTIVA', ML + 2, 9.5);
+
+    // logo PNG no canto direito
+    try {
+      const logoImg = document.getElementById('logo-img-hidden');
+      if (logoImg && logoImg.complete) {
+        doc.addImage(logoImg, 'PNG', W - ML - 30, 0.5, 30, 14);
+      }
+    } catch(e) {}
+
     y = 17;
     doc.setLineWidth(.25); doc.setDrawColor(160);
 
+    // linha DATA/REVISAO/PAGINA/DEPTO
     doc.rect(ML, y, cW, 6);
     const c1 = [28, 18, 26, cW - 72]; let x = ML;
     doc.setFontSize(6.2); doc.setFont('helvetica', 'bold'); doc.setTextColor(50, 50, 50);
@@ -341,6 +464,7 @@ function gerarPDF() {
     });
     y += 6.5;
 
+    // TIPO / DATA / KM
     doc.rect(ML, y, cW, 6);
     doc.setFont('helvetica', 'bold'); doc.setFontSize(6.2); doc.setTextColor(50, 50, 50);
     doc.text('TIPO', ML + 1, y + 2.2);
@@ -354,18 +478,19 @@ function gerarPDF() {
     doc.setFont('helvetica', 'normal'); doc.text(gv('km'), ML + cW - 16, y + 2.2);
     y += 6.5;
 
+    // MOTORISTA / PLACAS
     doc.rect(ML, y, cW, 6);
     [cW * .44, cW * .63, cW * .81].forEach(p => doc.line(ML + p, y, ML + p, y + 6));
     doc.setFont('helvetica', 'bold'); doc.setFontSize(6.2);
-    doc.text('NOME MOTORISTA',  ML + 1,           y + 2.2);
-    doc.text('PLACA CAVALO',    ML + cW * .44 + 1, y + 2.2);
-    doc.text('PLACA SR1',       ML + cW * .63 + 1, y + 2.2);
-    doc.text('PLACA SR2',       ML + cW * .81 + 1, y + 2.2);
+    doc.text('NOME MOTORISTA',   ML + 1,            y + 2.2);
+    doc.text('PLACA CAVALO',     ML + cW * .44 + 1, y + 2.2);
+    doc.text('PLACA SR1',        ML + cW * .63 + 1, y + 2.2);
+    doc.text('PLACA SR2',        ML + cW * .81 + 1, y + 2.2);
     doc.setFont('helvetica', 'normal');
-    doc.text(gv('motorista'),      ML + 1,           y + 4.8);
-    doc.text(gv('placa_cavalo'),   ML + cW * .44 + 1, y + 4.8);
-    doc.text(gv('placa_sr1'),      ML + cW * .63 + 1, y + 4.8);
-    doc.text(gv('placa_sr2'),      ML + cW * .81 + 1, y + 4.8);
+    doc.text(gv('motorista'),    ML + 1,            y + 4.8);
+    doc.text(gv('placa_cavalo'), ML + cW * .44 + 1, y + 4.8);
+    doc.text(gv('placa_sr1'),    ML + cW * .63 + 1, y + 4.8);
+    doc.text(gv('placa_sr2'),    ML + cW * .81 + 1, y + 4.8);
     y += 8;
   }
 
@@ -394,17 +519,26 @@ function gerarPDF() {
   function iRow(n, d, par) {
     chk(10);
     const rh = 4.0;
+    const desc  = descItem(d);
+    const extra = getExtra(n, d);
+
     if (par) { doc.setFillColor(248, 249, 253); doc.rect(ML, y, cW, rh, 'F'); }
     doc.setLineWidth(.13); doc.setDrawColor(200);
     doc.rect(ML, y, cW, rh);
     doc.line(ML + 9, y, ML + 9, y + rh);
     doc.line(ML + cW - 50, y, ML + cW - 50, y + rh);
+
     doc.setFontSize(5.8); doc.setFont('helvetica', 'bold'); doc.setTextColor(140, 140, 140);
     doc.text(String(n), ML + 4.5, y + 2.7, { align: 'center' });
+
     doc.setFont('helvetica', 'normal'); doc.setTextColor(15, 15, 15);
-    doc.text(doc.splitTextToSize(d, cW - 62), ML + 10.5, y + 2.7);
+    // descrição + extra (ex: "Cintas — 12") na mesma célula
+    let textoItem = desc;
+    if (extra) textoItem += `  [${extra}]`;
+    doc.text(doc.splitTextToSize(textoItem, cW - 62), ML + 10.5, y + 2.7);
+
     const checks = getChecks(n);
-    const mk = `(${checks.includes('SIM') ? 'X' : ' '}) Sim  (${checks.includes('NAO') ? 'X' : ' '}) Nao  (${checks.includes('NA') ? 'X' : ' '}) NA`;
+    const mk = `(${checks.includes('OK') ? 'X' : ' '}) OK  (${checks.includes('NOK') ? 'X' : ' '}) NOK  (${checks.includes('NA') ? 'X' : ' '}) NA`;
     doc.setFontSize(5.5); doc.setTextColor(15, 15, 15);
     doc.text(mk, ML + cW - 49, y + 2.7);
     y += rh;
@@ -449,10 +583,10 @@ function gerarPDF() {
     doc.line(ML + 2, boxY + boxH - 7, ML + bW - 2, boxY + boxH - 7);
     doc.line(ML + bW + 10, boxY + boxH - 7, ML + cW - 2, boxY + boxH - 7);
     doc.setFontSize(6.2); doc.setFont('helvetica', 'normal'); doc.setTextColor(55, 55, 55);
-    doc.text('Conferente / Vistoriador', ML + 2,        boxY + boxH - 4.5);
-    doc.text('Nome: ' + gv('vistoriador'),ML + 2,        boxY + boxH - 1.5);
-    doc.text('Motorista',                 ML + bW + 10,  boxY + boxH - 4.5);
-    doc.text('Nome: ' + gv('motorista'),  ML + bW + 10,  boxY + boxH - 1.5);
+    doc.text('Conferente / Vistoriador', ML + 2,       boxY + boxH - 4.5);
+    doc.text('Nome: ' + gv('vistoriador'), ML + 2,       boxY + boxH - 1.5);
+    doc.text('Motorista',                  ML + bW + 10, boxY + boxH - 4.5);
+    doc.text('Nome: ' + gv('motorista'),   ML + bW + 10, boxY + boxH - 1.5);
   }
 
   function observacoes() {
@@ -466,7 +600,8 @@ function gerarPDF() {
     for (let i = 1; i * 4 < obsH - 2; i++) {
       doc.setDrawColor(220); doc.line(ML + 2, obsTop + i * 4, ML + cW - 2, obsTop + i * 4);
     }
-    const rawObs = gv('observacoes').toUpperCase();
+    // texto das observações (remove marcador técnico antes de imprimir)
+    const rawObs = gv('observacoes').replace('--- NOK AUTOMÁTICO ---\n', '').toUpperCase().trim();
     if (rawObs) {
       const linhasObs = doc.splitTextToSize(rawObs, cW - 6);
       const palavras  = [...PALAVRAS_DESTAQUE].sort((a, b) => b.length - a.length);
@@ -479,19 +614,16 @@ function gerarPDF() {
     }
   }
 
-  function renderLinhaObs(linha, x, y, palavras) {
+  function renderLinhaObs(linha, x, baseY, palavras) {
     const regex  = new RegExp(`(${palavras.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'g');
     const tokens = linha.split(regex).filter(t => t !== undefined && t !== '');
     let cx = x;
     for (const tok of tokens) {
       const destaque = palavras.includes(tok);
-      if (destaque) {
-        doc.setFont('helvetica', 'bold');   doc.setFontSize(7.5);
-      } else {
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(6.8);
-      }
+      doc.setFont('helvetica', destaque ? 'bold' : 'normal');
+      doc.setFontSize(destaque ? 7.5 : 6.8);
       doc.setTextColor(15, 15, 15);
-      doc.text(tok, cx, y);
+      doc.text(tok, cx, baseY);
       cx += doc.getTextWidth(tok);
     }
     doc.setFont('helvetica', 'normal'); doc.setFontSize(6.8);
@@ -510,11 +642,11 @@ function gerarPDF() {
   subTit('Emissao de Gases'); grpRender('gases');
 
   secTit('Semi-Reboque');
-  subTit('Freio');                    grpRender('freio_sr');
-  subTit('Outros');                   grpRender('outros');
-  subTit('Chassi');                   grpRender('chassi_sr');
-  subTit('Suspensao');                grpRender('suspensao');
-  subTit('Compartimento de Carga');   grpRender('carga');
+  subTit('Freio');                  grpRender('freio_sr');
+  subTit('Outros');                 grpRender('outros');
+  subTit('Chassi');                 grpRender('chassi_sr');
+  subTit('Suspensao');              grpRender('suspensao');
+  subTit('Compartimento de Carga'); grpRender('carga');
 
   if (pag === 1) novaPag();
   y += 6;
@@ -524,9 +656,9 @@ function gerarPDF() {
 
   fecharModal();
 
-  const placas     = [gv('placa_cavalo'), gv('placa_sr1'), gv('placa_sr2')];
-  const placaNome  = (placas.find(p => p.trim() !== '') || 'SEM_PLACA').replace(/-/g, '');
-  const dataStr    = gv('data').replace(/-/g, '') || 'SDATA';
+  const placas      = [gv('placa_cavalo'), gv('placa_sr1'), gv('placa_sr2')];
+  const placaNome   = (placas.find(p => p.trim() !== '') || 'SEM_PLACA').replace(/-/g, '');
+  const dataStr     = gv('data').replace(/-/g, '') || 'SDATA';
   const nomeArquivo = `Checklist_${placaNome}_${dataStr}.pdf`;
 
   const blob = doc.output('blob');
