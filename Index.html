@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist Sider / Rodotrem – JCE</title>
+<style>
+  :root {
+    --azul: #1a3a5c;
+    --azul-claro: #2563a8;
+    --cinza-bg: #f0f2f5;
+    --cinza-borda: #cdd3da;
+    --branco: #ffffff;
+    --ok: #16a34a;
+    --nok: #dc2626;
+    --na: #6b7280;
+    --ok-bg: #dcfce7;
+    --nok-bg: #fee2e2;
+    --na-bg: #f3f4f6;
+    --texto: #1e293b;
+    --sombra: 0 1px 4px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: var(--cinza-bg);
+    color: var(--texto);
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  /* ===== TOPO ===== */
+  .topo {
+    background: var(--azul);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 0;
+  }
+  .topo-logo {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    background: var(--azul-claro);
+    padding: 2px 10px;
+    border-radius: 4px;
+  }
+  .topo-titulo {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .5px;
+  }
+
+  /* ===== CABEÇALHO GLOBAL ===== */
+  .cabecalho-global {
+    background: #fff;
+    border: 1px solid var(--cinza-borda);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 10px 14px 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px 12px;
+    margin-bottom: 14px;
+  }
+  .cabecalho-global label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .cabecalho-global input {
+    width: 100%;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 4px;
+    padding: 5px 8px;
+    font-size: 13px;
+    background: #f8fafc;
+    color: var(--texto);
+    outline: none;
+    transition: border .15s;
+  }
+  .cabecalho-global input:focus { border-color: var(--azul-claro); background: #fff; }
+
+  /* ===== LISTA CONTAINER ===== */
+  #listas { display: flex; flex-direction: column; gap: 14px; }
+
+  /* ===== CARD DE LISTA ===== */
+  .lista-card {
+    background: #fff;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+  }
+  .lista-header {
+    background: var(--azul);
+    color: #fff;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .lista-header .lista-num {
+    font-size: 12px;
+    opacity: .75;
+  }
+  .btn-remover-lista {
+    background: none;
+    border: 1px solid rgba(255,255,255,.4);
+    color: #fff;
+    border-radius: 4px;
+    padding: 2px 8px;
+    cursor: pointer;
+    font-size: 12px;
+    opacity: .8;
+  }
+  .btn-remover-lista:hover { opacity: 1; background: rgba(255,255,255,.15); }
+
+  /* ===== TABELA ===== */
+  .checklist-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .checklist-table th {
+    background: #e8edf3;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    padding: 6px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--cinza-borda);
+  }
+  .checklist-table th.th-status { text-align: center; width: 160px; }
+  .checklist-table th.th-qtd { text-align: center; width: 80px; }
+
+  .checklist-table tr:nth-child(even) td { background: #f8fafc; }
+  .checklist-table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid #e9ecef;
+    vertical-align: middle;
+    font-size: 13px;
+  }
+  .checklist-table tr:last-child td { border-bottom: none; }
+
+  .item-nome { font-weight: 500; }
+  .item-sub { font-size: 11px; color: #64748b; }
+
+  /* ===== BOTÕES OK/NOK/NA ===== */
+  .btn-group { display: flex; gap: 4px; justify-content: center; }
+  .btn-status {
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: #cbd5e1;
+    transition: all .12s;
+    min-width: 38px;
+  }
+  .btn-status:hover { filter: brightness(.93); }
+  .btn-status.ok  { background: var(--ok-bg);  color: var(--ok);  border-color: var(--ok); }
+  .btn-status.nok { background: var(--nok-bg); color: var(--nok); border-color: var(--nok); }
+  .btn-status.na  { background: var(--na-bg);  color: var(--na);  border-color: #9ca3af; }
+
+  /* ===== QUANTIDADE ===== */
+  .input-qtd {
+    width: 56px;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 13px;
+    text-align: center;
+    background: #f8fafc;
+    display: block;
+    margin: 0 auto;
+  }
+  .input-qtd:focus { border-color: var(--azul-claro); outline: none; background: #fff; }
+
+  /* ===== VALIDADE ===== */
+  .input-validade {
+    width: 90px;
+    border: 1px solid var(--cinza-borda);
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+    text-align: center;
+    background: #f8fafc;
+  }
+  .input-validade:focus { border-color: var(--azul-claro); outline: none; background: #fff; }
+  .validade-label { font-size: 10px; color: #94a3b8; text-align: center; display: block; }
+
+  /* ===== GRUPO DE SEÇÃO ===== */
+  .section-row td {
+    background: #dce6f0 !important;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--azul);
+    padding: 4px 10px;
+    border-bottom: 1px solid #b8ccdf !important;
+  }
+
+  /* ===== BOTÃO ADICIONAR ===== */
+  .btn-add-lista {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 10px 32px;
+    background: var(--azul);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: .5px;
+    box-shadow: var(--sombra);
+    transition: background .15s;
+  }
+  .btn-add-lista:hover { background: var(--azul-claro); }
+
+  /* ===== BOTÃO PDF ===== */
+  .btn-pdf {
+    display: block;
+    margin: 0 auto 14px;
+    padding: 10px 32px;
+    background: #b91c1c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: .5px;
+    box-shadow: var(--sombra);
+    transition: background .15s;
+  }
+  .btn-pdf:hover { background: #dc2626; }
+
+  .botoes-fixos {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+
+  /* ===== PRINT / PDF ===== */
+  @media print {
+    body { background: #fff; padding: 4px; font-size: 11px; }
+    .botoes-fixos, .btn-add-lista, .btn-remover-lista { display: none !important; }
+    .topo { border-radius: 4px 4px 0 0; padding: 6px 10px; }
+    .cabecalho-global { grid-template-columns: repeat(4,1fr); gap: 4px 8px; padding: 6px 10px 8px; }
+    .lista-card { box-shadow: none; break-inside: avoid; margin-bottom: 8px; }
+    .lista-header { padding: 4px 8px; }
+    .checklist-table th, .checklist-table td { padding: 3px 7px; font-size: 10px; }
+    .btn-status {
+      padding: 2px 6px;
+      font-size: 9px;
+      min-width: 28px;
+    }
+    .input-qtd, .input-validade { font-size: 10px; padding: 2px 4px; }
+    .section-row td { padding: 2px 7px; font-size: 9px; }
+    .input-validade { width: 70px; }
+    .btn-group { gap: 2px; }
+    #listas { gap: 8px; }
+    .cabecalho-global input { font-size: 11px; padding: 3px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPO -->
+<div class="topo">
+  <span class="topo-logo">JCE</span>
+  <span class="topo-titulo">Checklist de Conferência – Sider / Rodotrem</span>
+</div>
+
+<!-- CABEÇALHO GLOBAL -->
+<div class="cabecalho-global">
+  <div>
+    <label>Placa 1 (Cavalo)</label>
+    <input type="text" id="placa1" placeholder="AAA-0000" maxlength="8"
+      oninput="formatarPlaca(this)">
+  </div>
+  <div>
+    <label>Placa 2 (Reboque)</label>
+    <input type="text" id="placa2" placeholder="AAA-0000" maxlength="8"
+      oninput="formatarPlaca(this)">
+  </div>
+  <div>
+    <label>Conferente</label>
+    <input type="text" id="conferente" placeholder="Nome do conferente">
+  </div>
+  <div>
+    <label>Data</label>
+    <input type="date" id="data">
+  </div>
+</div>
+
+<!-- CONTAINER DAS LISTAS -->
+<div id="listas"></div>
+
+<!-- BOTÕES -->
+<div class="botoes-fixos no-print">
+  <button class="btn-add-lista" onclick="adicionarLista()">＋ Adicionar Lista</button>
+  <button class="btn-pdf" onclick="window.print()">🖨 Gerar PDF / Imprimir</button>
+</div>
+
+<script>
+// ============================================================
+// ESTRUTURA DOS ITENS
+// ============================================================
+const ITENS = [
+  // AMARRAÇÃO
+  { secao: 'Amarração e Fixação' },
+  { id:'cintas',      nome:'Cintas',       qtd:true },
+  { id:'catracas',    nome:'Catracas',     qtd:true },
+  { id:'cantoneiras', nome:'Cantoneiras',  qtd:true },
+  { id:'reguas',      nome:'Réguas',       qtd:true },
+  // SEGURANÇA
+  { secao: 'Segurança' },
+  { id:'estepe1',     nome:'Estepe 1',     qtd:false },
+  { id:'estepe2',     nome:'Estepe 2',     qtd:false },
+  { id:'extintor1',   nome:'Extintor 1',   qtd:false, validade:true },
+  { id:'extintor2',   nome:'Extintor 2',   qtd:false, validade:true },
+  // COBERTURA
+  { secao: 'Cobertura' },
+  { id:'lona_lateral',nome:'Lonas Laterais',  qtd:false },
+  { id:'lona_teto',   nome:'Lona de Teto',    qtd:false },
+  // AMARRAÇÃO EXTRA
+  { secao: 'Acessórios de Carga' },
+  { id:'cabo_aco',    nome:'Cabo de Aço',     qtd:false },
+  { id:'bandana',     nome:'Bandana',         qtd:false },
+  { id:'caixas',      nome:'Caixas',          qtd:false },
+  { id:'prot_lateral',nome:'Protetor Lateral (popularmente "mata cachorro")', qtd:false },
+  // ESTRUTURA
+  { secao: 'Estrutura' },
+  { id:'parachoque',  nome:'Para-choque',     qtd:false },
+  { id:'batente',     nome:'Batente',         qtd:false },
+  // PNEUS
+  { secao: 'Pneus' },
+  { id:'pneu_1eixo',  nome:'1º Eixo',         qtd:false },
+  { id:'pneu_2eixo',  nome:'2º Eixo',         qtd:false },
+  { id:'pneu_3eixo1', nome:'3º Eixo – Lado 1',qtd:false },
+  { id:'pneu_3eixo2', nome:'3º Eixo – Lado 2',qtd:false },
+];
+
+let contadorListas = 0;
+
+// ============================================================
+// FORMATAR PLACA → maiúsculas + hífen automático
+// ============================================================
+function formatarPlaca(input) {
+  let v = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (v.length > 3) v = v.slice(0, 3) + '-' + v.slice(3, 7);
+  input.value = v;
+}
+
+// ============================================================
+// CRIAR UMA LINHA DA TABELA
+// ============================================================
+function criarLinha(item, listaId) {
+  if (item.secao) {
+    return `<tr class="section-row"><td colspan="3">${item.secao}</td></tr>`;
+  }
+
+  const uid = `${listaId}_${item.id}`;
+
+  // Coluna quantidade
+  const colQtd = item.qtd
+    ? `<input class="input-qtd" type="number" min="0" id="qtd_${uid}" placeholder="0">`
+    : `<span style="color:#cbd5e1; display:block; text-align:center;">—</span>`;
+
+  // Coluna status (com validade inline se extintor)
+  const validadeHtml = item.validade
+    ? `<div style="margin-top:4px; text-align:center;">
+         <span class="validade-label">Validade</span>
+         <input class="input-validade" type="text" id="val_${uid}" placeholder="MMM/AAAA" maxlength="8"
+           oninput="this.value=this.value.toUpperCase()">
+       </div>`
+    : '';
+
+  return `
+    <tr id="row_${uid}">
+      <td class="item-nome">${item.nome}</td>
+      <td class="th-qtd" style="text-align:center;">${colQtd}</td>
+      <td>
+        <div class="btn-group">
+          <button class="btn-status" onclick="setStatus('${uid}','ok',this)">OK</button>
+          <button class="btn-status" onclick="setStatus('${uid}','nok',this)">NOK</button>
+          <button class="btn-status" onclick="setStatus('${uid}','na',this)">NA</button>
+        </div>
+        ${validadeHtml}
+      </td>
+    </tr>`;
+}
+
+// ============================================================
+// DEFINIR STATUS
+// ============================================================
+function setStatus(uid, status, btn) {
+  const row = document.getElementById('row_' + uid);
+  const btns = row.querySelectorAll('.btn-status');
+  btns.forEach(b => b.classList.remove('ok', 'nok', 'na'));
+  btn.classList.add(status);
+}
+
+// ============================================================
+// ADICIONAR LISTA
+// ============================================================
+function adicionarLista() {
+  contadorListas++;
+  const listaId = 'L' + contadorListas;
+
+  const linhas = ITENS.map(item => criarLinha(item, listaId)).join('');
+
+  const card = document.createElement('div');
+  card.className = 'lista-card';
+  card.id = 'card_' + listaId;
+  card.innerHTML = `
+    <div class="lista-header">
+      <span>Lista nº ${contadorListas}</span>
+      <button class="btn-remover-lista no-print" onclick="removerLista('${listaId}')">✕ Remover</button>
+    </div>
+    <table class="checklist-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th class="th-qtd">Qtd.</th>
+          <th class="th-status">Status</th>
+        </tr>
+      </thead>
+      <tbody>${linhas}</tbody>
+    </table>`;
+
+  document.getElementById('listas').appendChild(card);
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ============================================================
+// REMOVER LISTA
+// ============================================================
+function removerLista(listaId) {
+  const card = document.getElementById('card_' + listaId);
+  if (card && confirm('Remover esta lista?')) card.remove();
+}
+
+// ============================================================
+// DATA DE HOJE POR PADRÃO
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  const hoje = new Date();
+  const dd = String(hoje.getDate()).padStart(2,'0');
+  const mm = String(hoje.getMonth()+1).padStart(2,'0');
+  const aaaa = hoje.getFullYear();
+  document.getElementById('data').value = `${aaaa}-${mm}-${dd}`;
+
+  // Primeira lista automática
+  adicionarLista();
+});
+</script>
+</body>
+</html>
