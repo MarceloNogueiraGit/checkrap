@@ -4,18 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checklist Sider / Rodotrem – JCE</title>
+<title>Checklist rápido Sider / Rodotrem – </title>
 <style>
 /* =====================================================
-   RESET
+   RESET / BASE
 ===================================================== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 html, body {
-background: #f1f3f6;
-color: #1a1a2e;
-font-family: ‘Segoe UI’, Arial, sans-serif;
-font-size: 14px;
+  background: #f1f3f6; color: #1a1a2e;
+  font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px;
 }
 body { padding: 14px; min-height: 100vh; }
 
@@ -23,35 +20,25 @@ body { padding: 14px; min-height: 100vh; }
 TOPO
 ===================================================== */
 .topo {
-background: #1e3a5f;
-color: #fff;
-padding: 10px 16px;
-border-radius: 7px 7px 0 0;
-display: flex;
-align-items: center;
-gap: 12px;
+background: #1e3a5f; color: #fff;
+padding: 10px 16px; border-radius: 7px 7px 0 0;
+display: flex; align-items: center; gap: 12px;
 }
 .topo-logo {
 font-size: 20px; font-weight: 900; letter-spacing: 1px;
-background: #2563a8;
-padding: 2px 10px; border-radius: 4px;
-color: #fff;
+background: #2563a8; padding: 2px 10px; border-radius: 4px; color: #fff;
 }
-.topo-titulo { font-size: 14px; font-weight: 600; color: #cde; }
+.topo-titulo { font-size: 14px; font-weight: 600; color: #c8daf0; }
 
 /* =====================================================
-CABEÇALHO GLOBAL (só Conferente + Data)
+CABEÇALHO GLOBAL (Conferente + Data)
 ===================================================== */
 .cabecalho-global {
-background: #fff;
-border: 1px solid #d0d7e3;
-border-top: none;
-border-radius: 0 0 7px 7px;
+background: #fff; border: 1px solid #d0d7e3;
+border-top: none; border-radius: 0 0 7px 7px;
 padding: 10px 14px 12px;
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 8px 14px;
-margin-bottom: 16px;
+display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+gap: 8px 14px; margin-bottom: 16px;
 }
 .cabecalho-global label {
 font-size: 10px; font-weight: 700; color: #5a6a80;
@@ -59,40 +46,27 @@ text-transform: uppercase; letter-spacing: .5px;
 display: block; margin-bottom: 4px;
 }
 .cabecalho-global input {
-width: 100%;
-border: 1px solid #c4cdd8;
-border-radius: 5px;
-padding: 6px 9px;
-font-size: 13px;
-background: #f8fafc;
-color: #1a1a2e;
-outline: none;
-transition: border .15s;
+width: 100%; border: 1px solid #c4cdd8; border-radius: 5px;
+padding: 6px 9px; font-size: 13px;
+background: #f8fafc; color: #1a1a2e; outline: none;
 }
 .cabecalho-global input:focus { border-color: #2563a8; background: #fff; }
 
 /* =====================================================
-CONTAINER LISTAS
+LISTAS
 ===================================================== */
 #listas { display: flex; flex-direction: column; gap: 14px; }
 
-/* =====================================================
-CARD
-===================================================== */
 .lista-card {
-background: #fff;
-border: 1px solid #d0d7e3;
-border-radius: 7px;
-overflow: hidden;
+background: #fff; border: 1px solid #d0d7e3;
+border-radius: 7px; overflow: hidden;
 box-shadow: 0 1px 4px rgba(0,0,0,.08);
 }
 
-/* –– Header do card –– */
+/* Header */
 .lista-header {
-background: #1e3a5f;
-color: #fff;
-padding: 7px 13px;
-font-size: 13px; font-weight: 700;
+background: #1e3a5f; color: #fff;
+padding: 7px 13px; font-size: 13px; font-weight: 700;
 display: flex; align-items: center; justify-content: space-between;
 gap: 10px; flex-wrap: wrap;
 }
@@ -100,76 +74,49 @@ gap: 10px; flex-wrap: wrap;
 display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex: 1;
 }
 .lista-header-left span { font-size: 13px; font-weight: 700; white-space: nowrap; }
-.lista-placa-group {
-display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-}
+.lista-placa-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .lista-placa-group label {
 font-size: 10px; font-weight: 700; color: #aac4e8;
-text-transform: uppercase; letter-spacing: .4px;
-white-space: nowrap;
+text-transform: uppercase; letter-spacing: .4px; white-space: nowrap;
 }
 .lista-placa-group input {
-width: 88px;
-border: 1px solid rgba(255,255,255,.3);
-border-radius: 4px;
-padding: 3px 6px;
-font-size: 12px;
-background: rgba(255,255,255,.12);
-color: #fff;
-outline: none;
-text-transform: uppercase;
-letter-spacing: .5px;
+width: 88px; border: 1px solid rgba(255,255,255,.3);
+border-radius: 4px; padding: 3px 6px; font-size: 12px;
+background: rgba(255,255,255,.12); color: #fff;
+outline: none; text-transform: uppercase; letter-spacing: .5px;
 }
-.lista-placa-group input::placeholder { color: rgba(255,255,255,.4); }
+.lista-placa-group input::placeholder { color: rgba(255,255,255,.35); }
 .lista-placa-group input:focus { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.2); }
-
 .btn-remover-lista {
-background: transparent;
-border: 1px solid rgba(255,255,255,.3);
-color: rgba(255,255,255,.8);
-border-radius: 4px; padding: 2px 9px;
-cursor: pointer; font-size: 11px;
-white-space: nowrap;
--webkit-appearance: none;
+background: transparent; border: 1px solid rgba(255,255,255,.3);
+color: rgba(255,255,255,.8); border-radius: 4px; padding: 2px 9px;
+cursor: pointer; font-size: 11px; white-space: nowrap; -webkit-appearance: none;
 }
-.btn-remover-lista:active { background: rgba(220,38,38,.4); }
 
 /* =====================================================
-LAYOUT DE ITENS NA TELA (tabela normal)
+TABELA TELA
 ===================================================== */
 .checklist-table { width: 100%; border-collapse: collapse; }
-
 .checklist-table th {
-background: #edf0f5;
-color: #5a6a80;
-font-size: 10px; font-weight: 800;
-text-transform: uppercase; letter-spacing: .4px;
-padding: 5px 8px; text-align: left;
-border-bottom: 1px solid #d0d7e3;
+background: #edf0f5; color: #5a6a80;
+font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px;
+padding: 5px 8px; text-align: left; border-bottom: 1px solid #d0d7e3;
 }
 .checklist-table th.th-status { text-align: center; }
 .checklist-table th.th-qtd    { text-align: center; width: 60px; }
-
 .checklist-table tr.par td { background: #f7f9fc; }
 .checklist-table td {
-padding: 5px 8px;
-border-bottom: 1px solid #e8ecf1;
-vertical-align: middle;
-font-size: 12.5px;
-color: #1a1a2e;
-background: #fff;
+padding: 5px 8px; border-bottom: 1px solid #e8ecf1;
+vertical-align: middle; font-size: 12.5px; color: #1a1a2e; background: #fff;
 }
 .checklist-table tr:last-child td { border-bottom: none; }
 .item-nome { font-weight: 500; }
 
-/* –– Seção –– */
+/* Seção */
 .section-row td {
-background: #dce8f5 !important;
-font-size: 10px; font-weight: 800;
-text-transform: uppercase; letter-spacing: .6px;
-color: #1e3a5f;
-padding: 3px 8px;
-border-bottom: 1px solid #b8cfe8 !important;
+background: #dce8f5 !important; font-size: 10px; font-weight: 800;
+text-transform: uppercase; letter-spacing: .6px; color: #1e3a5f;
+padding: 3px 8px; border-bottom: 1px solid #b8cfe8 !important;
 }
 .sec-inner { display: flex; align-items: center; justify-content: space-between; }
 
@@ -177,28 +124,20 @@ border-bottom: 1px solid #b8cfe8 !important;
 CHECKBOXES OK / NOK / NA
 ===================================================== */
 .check-group {
-display: flex; gap: 4px;
-justify-content: center; align-items: center;
-flex-wrap: nowrap;
+display: flex; gap: 4px; justify-content: center;
+align-items: center; flex-wrap: nowrap;
 }
 .check-group label {
-display: inline-flex; align-items: center; gap: 3px;
-cursor: pointer;
-font-size: 11px; font-weight: 700;
-padding: 4px 8px; border-radius: 5px;
-border: 1.5px solid #c4cdd8;
-background: #f1f3f6;
-color: #6b7a8d;
--webkit-tap-highlight-color: transparent;
-user-select: none; white-space: nowrap;
+display: inline-flex; align-items: center; gap: 3px; cursor: pointer;
+font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 5px;
+border: 1.5px solid #c4cdd8; background: #f1f3f6; color: #6b7a8d;
+-webkit-tap-highlight-color: transparent; user-select: none; white-space: nowrap;
 transition: background .12s, color .12s, border-color .12s;
 min-width: 42px; justify-content: center;
 }
 .check-group input[type=“checkbox”] {
-position: absolute; opacity: 0;
-width: 0; height: 0;
-pointer-events: none;
--webkit-appearance: none; appearance: none;
+position: absolute; opacity: 0; width: 0; height: 0;
+pointer-events: none; -webkit-appearance: none; appearance: none;
 }
 .check-group label.ativo-ok  { background: #dcfce7; color: #166534; border-color: #22c55e; font-weight: 900; }
 .check-group label.ativo-nok { background: #fee2e2; color: #991b1b; border-color: #ef4444; font-weight: 900; }
@@ -212,18 +151,14 @@ pointer-events: none;
 QUANTIDADE / VALIDADE
 ===================================================== */
 .input-qtd {
-width: 50px; border: 1px solid #c4cdd8;
-border-radius: 4px; padding: 3px 5px;
-font-size: 12px; text-align: center;
-background: #f8fafc; color: #1a1a2e;
-display: block; margin: 0 auto;
+width: 50px; border: 1px solid #c4cdd8; border-radius: 4px;
+padding: 3px 5px; font-size: 12px; text-align: center;
+background: #f8fafc; color: #1a1a2e; display: block; margin: 0 auto;
 }
 .input-qtd:focus { border-color: #2563a8; outline: none; }
-
 .input-validade {
-width: 88px; border: 1px solid #c4cdd8;
-border-radius: 4px; padding: 3px 5px;
-font-size: 11px; text-transform: uppercase; text-align: center;
+width: 88px; border: 1px solid #c4cdd8; border-radius: 4px;
+padding: 3px 5px; font-size: 11px; text-transform: uppercase; text-align: center;
 background: #f8fafc; color: #1a1a2e;
 }
 .input-validade:focus { border-color: #2563a8; outline: none; }
@@ -232,45 +167,19 @@ background: #f8fafc; color: #1a1a2e;
 .sem-qtd { color: #c4cdd8; display: block; text-align: center; }
 
 /* =====================================================
-PNEUS — layout lado a lado (Esquerdo | Direito)
+PNEUS TELA — lado a lado Esq | Dir
 ===================================================== */
-.pneus-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 0;
-}
 .pneus-col-header {
-background: #dce8f5;
-font-size: 10px; font-weight: 800;
-text-transform: uppercase; letter-spacing: .5px;
-color: #1e3a5f;
-padding: 3px 8px;
-border-bottom: 1px solid #b8cfe8;
+background: #dce8f5; font-size: 10px; font-weight: 800;
+text-transform: uppercase; letter-spacing: .5px; color: #1e3a5f;
+padding: 3px 8px; border-bottom: 1px solid #b8cfe8;
 }
-.pneus-col-header:first-child { border-right: 1px solid #b8cfe8; }
-
-.pneus-col { display: contents; }
-.pneus-row {
-display: grid;
-grid-template-columns: 1fr 1fr;
-}
-.pneus-row td {
-padding: 4px 8px;
-border-bottom: 1px solid #e8ecf1;
-vertical-align: middle;
-font-size: 12px;
-color: #1a1a2e;
-background: #fff;
-}
-.pneus-row td:first-child { border-right: 1px solid #e8ecf1; }
-.pneus-row.par td { background: #f7f9fc; }
 
 /* =====================================================
 BOTÃO DUPLICAR PNEUS
 ===================================================== */
 .btn-add-pneus {
-background: #2563a8; color: #fff;
-border: none; border-radius: 4px;
+background: #2563a8; color: #fff; border: none; border-radius: 4px;
 padding: 2px 9px; font-size: 10px; font-weight: 700;
 cursor: pointer; -webkit-appearance: none;
 }
@@ -293,10 +202,12 @@ border: none; border-radius: 7px; font-size: 14px; font-weight: 700;
 cursor: pointer; -webkit-appearance: none;
 }
 
+/* pdf-cols oculto na tela */
+.pdf-cols  { display: none; }
+.pneus-wrapper { display: block; }
+
 /* =====================================================
-IMPRESSÃO / PDF
-Layout: cada lista = 1 faixa horizontal com 3 colunas
-3 listas por página A4 portrait
+IMPRESSÃO / PDF — P&B, ultra compacto, 3 col por lista
 ===================================================== */
 @media print {
 
@@ -307,209 +218,186 @@ Layout: cada lista = 1 faixa horizontal com 3 colunas
 .botoes-fixos, .btn-remover-lista, .btn-add-pneus, .no-print { display: none !important; }
 
 html, body {
-background: #fff !important;
-color: #111 !important;
+background: #fff !important; color: #000 !important;
 padding: 0 !important; margin: 0 !important;
-font-size: 7pt !important;
 }
 
-/* Topo */
+/* Topo P&B */
 .topo {
-background: #1e3a5f !important; color: #fff !important;
-padding: 2px 8px !important; border-radius: 0 !important;
+background: #000 !important; color: #fff !important;
+padding: 2px 6px !important; border-radius: 0 !important;
 margin-bottom: 0 !important; display: block !important;
 }
-.topo-logo { font-size: 8pt !important; padding: 1px 5px !important; background: #2563a8 !important; display: inline-block !important; }
-.topo-titulo { font-size: 7pt !important; color: #cde !important; }
+.topo-logo {
+font-size: 8pt !important; padding: 0 4px !important;
+background: #444 !important; color: #fff !important;
+display: inline-block !important;
+}
+.topo-titulo { font-size: 7pt !important; color: #ddd !important; }
 
-/* Cabeçalho global: só conferente + data, 1 linha */
+/* Cabeçalho global: só conferente + data */
 .cabecalho-global {
-background: #f5f7fa !important;
-border: 0.4pt solid #b0bcc8 !important;
+background: #f5f5f5 !important; border: 0.5pt solid #999 !important;
 border-top: none !important; border-radius: 0 !important;
-padding: 2px 6px !important; margin-bottom: 2mm !important;
+padding: 2px 6px !important; margin-bottom: 1.5mm !important;
 display: flex !important; gap: 0 !important;
+grid-template-columns: unset !important;
 }
-.cabecalho-global > div { flex: 1 !important; padding: 0 4px !important; }
-.cabecalho-global label { font-size: 5pt !important; margin-bottom: 1px !important; color: #556 !important; display: block !important; }
-.cabecalho-global input {
-width: 100% !important; background: #fff !important; color: #111 !important;
--webkit-text-fill-color: #111 !important;
-border: 0.4pt solid #99a !important; font-size: 6pt !important; padding: 1px 3px !important; display: block !important;
-}
-/* Oculta Placa 1 e Placa 2 do cabeçalho global */
 .cabecalho-global .placa-global { display: none !important; }
-
-/* Container: empilha listas verticalmente */
-#listas {
-display: block !important;
-width: 100% !important;
+.cabecalho-global > div { flex: 1 !important; padding: 0 4px !important; }
+.cabecalho-global label {
+font-size: 5pt !important; margin-bottom: 1px !important;
+color: #333 !important; display: block !important;
+}
+.cabecalho-global input {
+width: 100% !important; background: #fff !important; color: #000 !important;
+-webkit-text-fill-color: #000 !important;
+border: 0.4pt solid #888 !important; font-size: 6pt !important;
+padding: 0 2px !important; display: block !important;
 }
 
-/* Cada lista: faixa horizontal, não quebra */
+/* Listas empilhadas */
+#listas { display: block !important; width: 100% !important; }
+
 .lista-card {
-display: block !important;
-width: 100% !important;
-border: 0.5pt solid #9aabb8 !important;
-border-radius: 0 !important;
-box-shadow: none !important;
-overflow: visible !important;
-margin-bottom: 2mm !important;
-page-break-inside: avoid !important;
-break-inside: avoid !important;
+display: block !important; width: 100% !important;
+border: 0.6pt solid #555 !important; border-radius: 0 !important;
+box-shadow: none !important; overflow: visible !important;
+margin-bottom: 1.5mm !important;
+page-break-inside: avoid !important; break-inside: avoid !important;
 float: none !important;
 }
-
-/* Força nova página a cada 3 listas */
 .lista-card:nth-child(3n+1):not(:first-child) {
-page-break-before: always !important;
-break-before: page !important;
+page-break-before: always !important; break-before: page !important;
 }
 
-/* Header do card: placa 1 e 2 embutidos, compacto */
+/* Header P&B com placas */
 .lista-header {
-background: #1e3a5f !important; color: #fff !important;
-padding: 2px 5px !important; font-size: 6pt !important;
+background: #000 !important; color: #fff !important;
+padding: 1.5px 5px !important; font-size: 5.5pt !important;
 display: flex !important; align-items: center !important;
-gap: 6px !important; flex-wrap: nowrap !important;
+gap: 5px !important; flex-wrap: nowrap !important;
 }
-.lista-header-left { display: flex !important; align-items: center !important; gap: 6px !important; flex: 1 !important; }
-.lista-header-left span { font-size: 6pt !important; }
-.lista-placa-group label { font-size: 5pt !important; color: #aac4e8 !important; }
+.lista-header-left {
+display: flex !important; align-items: center !important;
+gap: 5px !important; flex: 1 !important;
+}
+.lista-header-left span { font-size: 5.5pt !important; }
+.lista-placa-group label { font-size: 4.5pt !important; color: #ccc !important; }
 .lista-placa-group input {
-width: 55pt !important; font-size: 5.5pt !important;
+width: 45pt !important; font-size: 5pt !important;
 background: rgba(255,255,255,.15) !important; color: #fff !important;
 -webkit-text-fill-color: #fff !important;
-border: 0.4pt solid rgba(255,255,255,.4) !important;
-padding: 0 3px !important; border-radius: 2px !important;
+border: 0.4pt solid rgba(255,255,255,.5) !important;
+padding: 0 2px !important; border-radius: 1px !important;
 }
 
-/* –– CORPO DA LISTA: 3 colunas via tabelas inline-block –– */
-/* Esconde a tabela normal */
+/* Esconde tabela tela e pneus tela */
 .checklist-table { display: none !important; }
 .pneus-wrapper   { display: none !important; }
 
-/* Mostra a versão PDF de 3 colunas */
-.pdf-cols { display: block !important; }
+/* Mostra pdf-cols */
+.pdf-cols { display: block !important; overflow: hidden !important; }
 
-/* –– Estilos das colunas PDF –– */
-.pdf-cols {
-width: 100% !important;
-overflow: hidden !important; /* clearfix */
-}
+/* 3 colunas flutuantes */
 .pdf-col {
 float: left !important;
-width: 32.8% !important;
-margin-right: 0.8% !important;
+width: 32.6% !important;
+margin-right: 1.1% !important;
 vertical-align: top !important;
-border-right: 0.4pt solid #d0d7e3 !important;
+border-right: 0.4pt solid #bbb !important;
 padding: 0 2px !important;
 }
-.pdf-col:last-child {
-margin-right: 0 !important;
-border-right: none !important;
-}
+.pdf-col:last-child { margin-right: 0 !important; border-right: none !important; }
 
+/* Seção P&B */
 .pdf-secao {
-background: #dce8f5 !important;
-color: #1e3a5f !important;
-font-size: 4.5pt !important; font-weight: 800 !important;
-text-transform: uppercase !important;
-padding: 1px 2px !important;
-letter-spacing: 0 !important;
-border-bottom: 0.4pt solid #b8cfe8 !important;
+background: #ddd !important; color: #000 !important;
+font-size: 4pt !important; font-weight: 900 !important;
+text-transform: uppercase !important; letter-spacing: 0 !important;
+padding: 0.5px 2px !important;
+border-bottom: 0.4pt solid #999 !important;
 margin-top: 1px !important;
 }
 .pdf-secao:first-child { margin-top: 0 !important; }
 
-.pdf-item {
+/* Item: só aparece se tiver .pdf-item-visible */
+.pdf-item { display: none !important; }
+.pdf-item.pdf-item-visible {
 display: flex !important;
-align-items: center !important;
-justify-content: space-between !important;
-padding: 0.8px 2px !important;
-border-bottom: 0.3pt solid #e8ecf1 !important;
+align-items: baseline !important;
+padding: 0.4px 2px !important;
+border-bottom: 0.3pt solid #ddd !important;
 gap: 2px !important;
+line-height: 1.1 !important;
 }
 .pdf-item-nome {
-font-size: 4.8pt !important;
-color: #111 !important;
-white-space: nowrap !important;
-overflow: hidden !important;
+font-size: 4.5pt !important; color: #000 !important;
+white-space: nowrap !important; overflow: hidden !important;
 text-overflow: ellipsis !important;
-flex: 1 !important;
-min-width: 0 !important;
+flex: 1 !important; min-width: 0 !important;
 }
 .pdf-item-qtd {
-font-size: 4.5pt !important;
-color: #111 !important;
-white-space: nowrap !important;
-margin: 0 2px !important;
+font-size: 4pt !important; color: #000 !important;
+white-space: nowrap !important; margin: 0 1px !important;
 }
-.pdf-checks {
-display: flex !important;
-gap: 1px !important;
-flex-shrink: 0 !important;
-align-items: center !important;
-}
-.pdf-chk {
-display: inline-flex !important;
-align-items: center !important;
-gap: 1px !important;
-font-size: 4.5pt !important; font-weight: 700 !important;
-padding: 0.5px 2.5px !important;
-border: 0.4pt solid #aab !important;
+/* Só o marcado aparece — via classe .visible aplicada pelo JS */
+.pdf-chk { display: none !important; }
+.pdf-chk.visible {
+display: inline-block !important;
+font-size: 4.5pt !important; font-weight: 900 !important;
+padding: 0 2px !important;
+border: 0.4pt solid #000 !important;
 border-radius: 1pt !important;
-background: #f5f5f5 !important;
-color: #444 !important;
-white-space: nowrap !important;
+background: #fff !important; color: #000 !important;
 }
-.pdf-chk.ok  { background: #dcfce7 !important; color: #166534 !important; border-color: #22c55e !important; font-weight: 900 !important; }
-.pdf-chk.nok { background: #fee2e2 !important; color: #991b1b !important; border-color: #ef4444 !important; font-weight: 900 !important; }
-.pdf-chk.na  { background: #f1f5f9 !important; color: #475569 !important; border-color: #94a3b8 !important; font-weight: 900 !important; }
-
 .pdf-val {
-font-size: 4pt !important; color: #556 !important;
+font-size: 4pt !important; color: #000 !important;
 white-space: nowrap !important; margin-left: 1px !important;
 }
 
-/* Pneus: 2 sub-colunas E/D dentro de cada coluna PDF */
+/* Pneus PDF P&B */
 .pdf-pneus-header {
 display: flex !important;
-background: #dce8f5 !important; color: #1e3a5f !important;
-font-size: 4.5pt !important; font-weight: 800 !important;
+background: #ddd !important; color: #000 !important;
+font-size: 4pt !important; font-weight: 900 !important;
 text-transform: uppercase !important;
-border-bottom: 0.4pt solid #b8cfe8 !important;
+border-bottom: 0.4pt solid #999 !important;
 margin-top: 1px !important;
 }
 .pdf-pneus-header span {
-flex: 1 !important; padding: 1px 2px !important;
-font-size: 4.5pt !important;
+flex: 1 !important; padding: 0.5px 2px !important; font-size: 4pt !important;
 }
-.pdf-pneus-header span:first-child { border-right: 0.4pt solid #b8cfe8 !important; }
+.pdf-pneus-header span:first-child { border-right: 0.4pt solid #999 !important; }
 
-.pdf-pneus-row {
+/* Linha de pneu: oculta se nada marcado */
+.pdf-pneus-row { display: none !important; }
+.pdf-pneus-row.pdf-item-visible {
 display: flex !important;
 align-items: center !important;
-border-bottom: 0.3pt solid #e8ecf1 !important;
+border-bottom: 0.3pt solid #ddd !important;
 }
 .pdf-pneus-cell {
-flex: 1 !important;
-display: flex !important;
-align-items: center !important;
-justify-content: space-between !important;
-padding: 0.8px 2px !important;
-gap: 2px !important;
+flex: 1 !important; display: flex !important;
+align-items: center !important; justify-content: space-between !important;
+padding: 0.4px 2px !important; gap: 2px !important;
 }
-.pdf-pneus-cell:first-child { border-right: 0.4pt solid #e8ecf1 !important; }
+.pdf-pneus-cell:first-child { border-right: 0.4pt solid #ccc !important; }
 .pdf-pneus-eixo {
-font-size: 4.5pt !important; color: #111 !important;
+font-size: 4.5pt !important; color: #000 !important;
 white-space: nowrap !important; flex-shrink: 0 !important;
 }
+.pdf-pneus-marcado {
+font-size: 4.5pt !important; font-weight: 900 !important;
+color: #000 !important; white-space: nowrap !important;
+border: 0.4pt solid #000 !important;
+padding: 0 2px !important; border-radius: 1pt !important;
+background: #fff !important;
 }
-
-/* pdf-cols oculto na tela */
-.pdf-cols { display: none; }
-.pneus-wrapper { display: block; }
+/* Seção pneus: ocultar se todas as linhas estiverem ocultas */
+.pdf-pneus-bloco { display: none !important; }
+.pdf-pneus-bloco.tem-marcado { display: block !important; }
+}
 </style>
 
 </head>
@@ -547,34 +435,64 @@ white-space: nowrap !important; flex-shrink: 0 !important;
 </div>
 
 <script>
-var ITENS = [
-  { secao: 'Amarração e Fixação' },
-  { id:'cintas',       nome:'Cintas',          qtd:true  },
-  { id:'catracas',     nome:'Catracas',        qtd:true  },
-  { id:'cantoneiras',  nome:'Cantoneiras',     qtd:true  },
-  { id:'reguas',       nome:'Réguas',          qtd:true  },
-  { secao: 'Segurança' },
-  { id:'estepe1',      nome:'Estepe 1',        qtd:false },
-  { id:'estepe2',      nome:'Estepe 2',        qtd:false },
-  { id:'extintor1',    nome:'Extintor 1',      qtd:false, validade:true },
-  { id:'extintor2',    nome:'Extintor 2',      qtd:false, validade:true },
-  { secao: 'Cobertura' },
-  { id:'lona_lateral', nome:'Lonas Laterais',  qtd:false },
-  { id:'lona_teto',    nome:'Lona de Teto',    qtd:false },
-  { id:'cabo_aco',     nome:'Cabo de Aço',     qtd:false },
-  { secao: 'Estrutura' },
-  { id:'bandana',      nome:'Bandana',         qtd:false },
-  { id:'caixas',       nome:'Caixas',          qtd:false },
-  { id:'prot_lateral', nome:'Protetor Lateral',qtd:false },
-  { id:'parachoque',   nome:'Para-choque',     qtd:false },
-  { id:'batente',      nome:'Batente',         qtd:false }
+/* ============================================================
+   DADOS
+   Col 1: Amarração (4) + Segurança (4) = 8
+   Col 2: Cobertura (3) + Estrutura início (3) = 6 — bandana, caixas, prot_lateral
+   Col 3: Estrutura resto (2) = parachoque, batente
+   (Estrutura completa fica distribuída entre col2 e col3,
+    mas parachoque e batente ficam em col3 como pedido)
+============================================================ */
+var COL1 = [
+  { secao:'Amarração e Fixação' },
+  { id:'cintas',       nome:'Cintas',         qtd:true  },
+  { id:'catracas',     nome:'Catracas',       qtd:true  },
+  { id:'cantoneiras',  nome:'Cantoneiras',    qtd:true  },
+  { id:'reguas',       nome:'Réguas',         qtd:true  },
+  { secao:'Segurança' },
+  { id:'estepe1',      nome:'Estepe 1',       qtd:false },
+  { id:'estepe2',      nome:'Estepe 2',       qtd:false },
+  { id:'extintor1',    nome:'Extintor 1',     qtd:false, validade:true },
+  { id:'extintor2',    nome:'Extintor 2',     qtd:false, validade:true }
+];
+var COL2 = [
+  { secao:'Cobertura' },
+  { id:'lona_lateral', nome:'Lonas Laterais', qtd:false },
+  { id:'lona_teto',    nome:'Lona de Teto',   qtd:false },
+  { id:'cabo_aco',     nome:'Cabo de Aço',    qtd:false },
+  { secao:'Estrutura' },
+  { id:'bandana',      nome:'Bandana',        qtd:false },
+  { id:'caixas',       nome:'Caixas',         qtd:false },
+  { id:'prot_lateral', nome:'Protetor Lateral',qtd:false }
+];
+var COL3 = [
+  { secao:'Estrutura' },
+  { id:'parachoque',   nome:'Para-choque',    qtd:false },
+  { id:'batente',      nome:'Batente',        qtd:false }
 ];
 
-/* Pneus organizados por eixo: par [esquerdo, direito] */
+/* todos os itens juntos para a tabela de tela */
+var ITENS_TELA = COL1.concat(COL2.slice(0)).concat([
+  { id:'parachoque', nome:'Para-choque', qtd:false },
+  { id:'batente',    nome:'Batente',     qtd:false }
+]);
+/* Remover duplicata de Estrutura secao */
+var ITENS_TELA = [];
+var secVistas = {};
+function addItens(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    var it = arr[i];
+    if (it.secao) {
+      if (!secVistas[it.secao]) { ITENS_TELA.push(it); secVistas[it.secao] = true; }
+    } else { ITENS_TELA.push(it); }
+  }
+}
+addItens(COL1); addItens(COL2); addItens(COL3);
+
 var EIXOS = [
-  { eixo:'1º Eixo', esq:{ id:'p_1e' }, dir:{ id:'p_1d' } },
-  { eixo:'2º Eixo', esq:{ id:'p_2e' }, dir:{ id:'p_2d' } },
-  { eixo:'3º Eixo', esq:{ id:'p_3e' }, dir:{ id:'p_3d' } }
+  { eixo:'1º Eixo', esq:'p_1e', dir:'p_1d' },
+  { eixo:'2º Eixo', esq:'p_2e', dir:'p_2d' },
+  { eixo:'3º Eixo', esq:'p_3e', dir:'p_3d' }
 ];
 
 var contadorListas = 0;
@@ -582,7 +500,7 @@ var pneusCount = {};
 
 /* ---- Utilitários ---- */
 function formatarPlaca(input) {
-  var v = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  var v = input.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
   if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3,7);
   input.value = v;
 }
@@ -601,11 +519,8 @@ function toggleCheck(uid, tipo) {
       lbl.classList.remove('ativo-' + t);
     }
   }
-  /* Atualiza o estado no PDF-col correspondente */
-  atualizarPdfItem(uid);
 }
 
-/* ---- Check group HTML ---- */
 function criarCheckGroup(uid) {
   return '<div class="check-group">'
     + '<label><input type="checkbox" id="chk_ok_'  + uid + '" onchange="toggleCheck(\'' + uid + '\',\'ok\')"><span class="chk-mark">✓</span>OK</label>'
@@ -614,43 +529,7 @@ function criarCheckGroup(uid) {
     + '</div>';
 }
 
-/* ---- Atualiza visualmente os pdf-chk quando o usuário marca ---- */
-function atualizarPdfItem(uid) {
-  var tipos = ['ok','nok','na'];
-  for (var i = 0; i < tipos.length; i++) {
-    var t = tipos[i];
-    var chk = document.getElementById('chk_' + t + '_' + uid);
-    var pdfChk = document.getElementById('pdf_' + t + '_' + uid);
-    if (!chk || !pdfChk) continue;
-    if (chk.checked) {
-      pdfChk.classList.add(t);
-    } else {
-      pdfChk.classList.remove(t);
-    }
-  }
-  /* validade */
-  var valInput = document.getElementById('val_' + uid);
-  var pdfVal   = document.getElementById('pdfval_' + uid);
-  if (valInput && pdfVal) pdfVal.textContent = valInput.value || '';
-}
-
-/* sincroniza validade ao digitar */
-function syncVal(uid) {
-  var valInput = document.getElementById('val_' + uid);
-  var pdfVal   = document.getElementById('pdfval_' + uid);
-  if (valInput && pdfVal) pdfVal.textContent = valInput.value;
-  /* forçar uppercase */
-  if (valInput) valInput.value = valInput.value.toUpperCase();
-}
-
-/* sincroniza qtd */
-function syncQtd(uid) {
-  var qtdInput = document.getElementById('qtd_' + uid);
-  var pdfQtd   = document.getElementById('pdfqtd_' + uid);
-  if (qtdInput && pdfQtd) pdfQtd.textContent = qtdInput.value ? 'x' + qtdInput.value : '';
-}
-
-/* ---- Linha da tabela de tela ---- */
+/* ---- Linhas tela ---- */
 function criarLinha(item, listaId, isPar) {
   if (item.secao) {
     return '<tr class="section-row"><td colspan="3"><div class="sec-inner"><span>' + item.secao + '</span></div></td></tr>';
@@ -658,11 +537,11 @@ function criarLinha(item, listaId, isPar) {
   var uid = listaId + '_' + item.id;
   var cls = isPar ? ' class="par"' : '';
   var colQtd = item.qtd
-    ? '<input class="input-qtd" type="number" min="0" id="qtd_' + uid + '" placeholder="0" oninput="syncQtd(\'' + uid + '\')">'
+    ? '<input class="input-qtd" type="number" min="0" id="qtd_' + uid + '" placeholder="0">'
     : '<span class="sem-qtd">—</span>';
   var valHtml = item.validade
     ? '<div class="validade-wrap"><span class="validade-label">Validade</span>'
-      + '<input class="input-validade" type="text" id="val_' + uid + '" placeholder="MMM/AAAA" maxlength="8" oninput="syncVal(\'' + uid + '\')"></div>'
+      + '<input class="input-validade" type="text" id="val_' + uid + '" placeholder="MMM/AAAA" maxlength="8" oninput="this.value=this.value.toUpperCase()"></div>'
     : '';
   return '<tr' + cls + ' id="row_' + uid + '">'
     + '<td class="item-nome">' + item.nome + '</td>'
@@ -671,151 +550,93 @@ function criarLinha(item, listaId, isPar) {
     + '</tr>';
 }
 
-/* ---- Item PDF (aparece só no print) ---- */
-function criarPdfItem(uid, nome, temQtd, temVal) {
-  var qtdSpan = temQtd
-    ? '<span class="pdf-item-qtd" id="pdfqtd_' + uid + '"></span>'
-    : '';
-  var valSpan = temVal
-    ? '<span class="pdf-val" id="pdfval_' + uid + '"></span>'
-    : '';
-  return '<div class="pdf-item" id="pdfrow_' + uid + '">'
-    + '<span class="pdf-item-nome">' + nome + '</span>'
-    + qtdSpan
-    + '<div class="pdf-checks">'
-    +   '<span class="pdf-chk" id="pdf_ok_'  + uid + '">OK</span>'
-    +   '<span class="pdf-chk" id="pdf_nok_' + uid + '">NOK</span>'
-    +   '<span class="pdf-chk" id="pdf_na_'  + uid + '">NA</span>'
-    + '</div>'
-    + valSpan
-    + '</div>';
+/* ---- Gera HTML de coluna PDF a partir de array de itens ---- */
+function gerarColPdf(arr, listaId) {
+  var html = '';
+  var secaoAtual = null;
+  for (var i = 0; i < arr.length; i++) {
+    var it = arr[i];
+    if (it.secao) {
+      if (it.secao !== secaoAtual) {
+        html += '<div class="pdf-secao">' + it.secao + '</div>';
+        secaoAtual = it.secao;
+      }
+      continue;
+    }
+    var uid = listaId + '_' + it.id;
+    var qtdSpan = it.qtd ? '<span class="pdf-item-qtd" id="pdfqtd_' + uid + '"></span>' : '';
+    var valSpan = it.validade ? '<span class="pdf-val" id="pdfval_' + uid + '"></span>' : '';
+    html += '<div class="pdf-item" id="pdfrow_' + uid + '">'
+      + '<span class="pdf-item-nome">' + it.nome + '</span>'
+      + qtdSpan
+      + '<span class="pdf-chk" id="pdf_ok_'  + uid + '">OK</span>'
+      + '<span class="pdf-chk" id="pdf_nok_' + uid + '">NOK</span>'
+      + '<span class="pdf-chk" id="pdf_na_'  + uid + '">NA</span>'
+      + valSpan
+      + '</div>';
+  }
+  return html;
 }
 
-/* ---- Pneus: tabela tela (lado a lado E/D) ---- */
+/* ---- Pneus tela ---- */
 function criarPneusWrapper(listaId, idx) {
   var label = idx === 1 ? 'Pneus' : 'Pneus – Módulo ' + idx;
-  var wrapperId = 'pneus_wrapper_' + listaId + '_' + idx;
-  var html = '<div id="' + wrapperId + '" class="pneus-wrapper">';
-
-  /* cabeçalho de seção com botão duplicar */
-  html += '<div class="section-row" style="display:table;width:100%;">'
-    + '<div style="display:table-cell;background:#dce8f5;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#1e3a5f;padding:3px 8px;border-bottom:1px solid #b8cfe8;">'
+  var html = '<div id="pw_' + listaId + '_' + idx + '" class="pneus-wrapper">';
+  /* header seção */
+  html += '<div style="background:#dce8f5;font-size:10px;font-weight:800;text-transform:uppercase;'
+    + 'letter-spacing:.6px;color:#1e3a5f;padding:3px 8px;border-bottom:1px solid #b8cfe8;">'
     + '<div class="sec-inner"><span>' + label + '</span>'
     + '<button class="btn-add-pneus no-print" onclick="adicionarPneus(\'' + listaId + '\')">＋ Duplicar</button>'
-    + '</div></div></div>';
-
-  /* cabeçalhos E / D */
+    + '</div></div>';
+  /* cabeçalhos E/D */
   html += '<div style="display:grid;grid-template-columns:1fr 1fr;">'
     + '<div class="pneus-col-header" style="border-right:1px solid #b8cfe8;">◀ Esquerdo</div>'
     + '<div class="pneus-col-header">Direito ▶</div>'
     + '</div>';
-
-  /* linhas por eixo */
+  /* eixos */
   for (var i = 0; i < EIXOS.length; i++) {
     var e = EIXOS[i];
-    var uidE = listaId + '_pn' + idx + '_' + e.esq.id;
-    var uidD = listaId + '_pn' + idx + '_' + e.dir.id;
-    var par  = i % 2 === 1;
-
-    html += '<div style="display:grid;grid-template-columns:1fr 1fr;">';
-
-    /* célula esquerda */
-    html += '<div style="padding:4px 8px;border-bottom:1px solid #e8ecf1;border-right:1px solid #e8ecf1;vertical-align:middle;'
-      + (par ? 'background:#f7f9fc;' : 'background:#fff;') + '">'
-      + '<div style="font-size:11px;font-weight:600;margin-bottom:2px;color:#1a1a2e;">' + e.eixo + '</div>'
-      + criarCheckGroup(uidE)
+    var uidE = listaId + '_pn' + idx + '_' + e.esq;
+    var uidD = listaId + '_pn' + idx + '_' + e.dir;
+    var bg   = i % 2 === 1 ? '#f7f9fc' : '#fff';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;">'
+      + '<div style="padding:4px 8px;border-bottom:1px solid #e8ecf1;border-right:1px solid #e8ecf1;background:' + bg + ';">'
+      + '<div style="font-size:11px;font-weight:600;margin-bottom:2px;">' + e.eixo + '</div>'
+      + criarCheckGroup(uidE) + '</div>'
+      + '<div style="padding:4px 8px;border-bottom:1px solid #e8ecf1;background:' + bg + ';">'
+      + '<div style="font-size:11px;font-weight:600;margin-bottom:2px;">' + e.eixo + '</div>'
+      + criarCheckGroup(uidD) + '</div>'
       + '</div>';
-
-    /* célula direita */
-    html += '<div style="padding:4px 8px;border-bottom:1px solid #e8ecf1;vertical-align:middle;'
-      + (par ? 'background:#f7f9fc;' : 'background:#fff;') + '">'
-      + '<div style="font-size:11px;font-weight:600;margin-bottom:2px;color:#1a1a2e;">' + e.eixo + '</div>'
-      + criarCheckGroup(uidD)
-      + '</div>';
-
-    html += '</div>';
   }
-
   html += '</div>';
   return html;
 }
 
-/* ---- Pneus: bloco PDF ---- */
-function criarPneusSecaoPdf(listaId, idx) {
+/* ---- Pneus PDF ---- */
+function criarPdfPneus(listaId, idx) {
   var label = idx === 1 ? 'Pneus' : 'Pneus – Módulo ' + idx;
-  var html = '<div class="pdf-pneus-header"><span>◀ ' + label + ' – Esq.</span><span>Dir. ▶</span></div>';
+  var html = '<div class="pdf-pneus-bloco" id="pdf_pbloco_' + listaId + '_' + idx + '">'
+    + '<div class="pdf-pneus-header"><span>◀ ' + label + ' – Esq.</span><span>Dir. ▶</span></div>';
   for (var i = 0; i < EIXOS.length; i++) {
     var e = EIXOS[i];
-    var uidE = listaId + '_pn' + idx + '_' + e.esq.id;
-    var uidD = listaId + '_pn' + idx + '_' + e.dir.id;
-    html += '<div class="pdf-pneus-row">'
-      /* esquerdo */
+    var uidE = listaId + '_pn' + idx + '_' + e.esq;
+    var uidD = listaId + '_pn' + idx + '_' + e.dir;
+    html += '<div class="pdf-pneus-row" id="pdf_prow_' + uidE + '">'
       + '<div class="pdf-pneus-cell">'
       + '<span class="pdf-pneus-eixo">' + e.eixo + '</span>'
-      + '<div class="pdf-checks">'
-      + '<span class="pdf-chk" id="pdf_ok_'  + uidE + '">OK</span>'
-      + '<span class="pdf-chk" id="pdf_nok_' + uidE + '">NOK</span>'
-      + '<span class="pdf-chk" id="pdf_na_'  + uidE + '">NA</span>'
-      + '</div></div>'
-      /* direito */
+      + '<span class="pdf-pneus-marcado" id="pdf_pmarcado_' + uidE + '"></span>'
+      + '</div>'
       + '<div class="pdf-pneus-cell">'
       + '<span class="pdf-pneus-eixo">' + e.eixo + '</span>'
-      + '<div class="pdf-checks">'
-      + '<span class="pdf-chk" id="pdf_ok_'  + uidD + '">OK</span>'
-      + '<span class="pdf-chk" id="pdf_nok_' + uidD + '">NOK</span>'
-      + '<span class="pdf-chk" id="pdf_na_'  + uidD + '">NA</span>'
-      + '</div></div>'
+      + '<span class="pdf-pneus-marcado" id="pdf_pmarcado_' + uidD + '"></span>'
+      + '</div>'
       + '</div>';
-  }
-  return html;
-}
-
-/* ---- Distribui itens em 3 colunas para PDF ---- */
-function distribuirEmColunas(listaId) {
-  /* Monta lista plana de itens + seções */
-  var flat = [];
-  var secaoAtual = null;
-  for (var i = 0; i < ITENS.length; i++) {
-    var it = ITENS[i];
-    if (it.secao) { secaoAtual = it.secao; }
-    else { flat.push({ nome: it.nome, id: it.id, qtd: it.qtd, validade: it.validade, secao: secaoAtual }); }
-  }
-
-  /* Divide em 3 grupos */
-  var total = flat.length;
-  var por_col = Math.ceil(total / 3);
-  var grupos = [ flat.slice(0, por_col), flat.slice(por_col, por_col*2), flat.slice(por_col*2) ];
-
-  var html = '';
-  for (var c = 0; c < 3; c++) {
-    html += '<div class="pdf-col">';
-    var secaoAnt = null;
-    for (var j = 0; j < grupos[c].length; j++) {
-      var item = grupos[c][j];
-      if (item.secao !== secaoAnt) {
-        html += '<div class="pdf-secao">' + item.secao + '</div>';
-        secaoAnt = item.secao;
-      }
-      var uid = listaId + '_' + item.id;
-      html += criarPdfItem(uid, item.nome, item.qtd, item.validade);
-    }
-    html += '</div>';
-  }
-  return html;
-}
-
-/* ---- Monta coluna de pneus no PDF ---- */
-function pdfColunasPneus(listaId) {
-  var total = pneusCount[listaId] || 1;
-  var html = '<div class="pdf-col" style="grid-column: 1 / -1; padding: 0;">';
-  for (var idx = 1; idx <= total; idx++) {
-    html += criarPneusSecaoPdf(listaId, idx);
   }
   html += '</div>';
   return html;
 }
 
-/* ---- Adicionar pneus extras ---- */
+/* ---- Adicionar pneus ---- */
 function adicionarPneus(listaId) {
   pneusCount[listaId] = (pneusCount[listaId] || 1) + 1;
   var idx = pneusCount[listaId];
@@ -823,10 +644,13 @@ function adicionarPneus(listaId) {
   var tmp = document.createElement('div');
   tmp.innerHTML = criarPneusWrapper(listaId, idx);
   while (tmp.firstChild) wrapper.appendChild(tmp.firstChild);
-
-  /* Atualiza pdf-cols pneus */
-  var pdfPneusDiv = document.getElementById('pdf_pneus_' + listaId);
-  if (pdfPneusDiv) pdfPneusDiv.innerHTML = pdfColunasPneus(listaId).replace(/<div class="pdf-col"[^>]*>|<\/div>$/g,'');
+  /* adiciona bloco pdf de pneus */
+  var pdfP = document.getElementById('pdf_pneus_area_' + listaId);
+  if (pdfP) {
+    var tmp2 = document.createElement('div');
+    tmp2.innerHTML = criarPdfPneus(listaId, idx);
+    while (tmp2.firstChild) pdfP.appendChild(tmp2.firstChild);
+  }
 }
 
 /* ---- Adicionar lista ---- */
@@ -835,59 +659,55 @@ function adicionarLista() {
   var listaId = 'L' + contadorListas;
   pneusCount[listaId] = 1;
 
-  /* Tabela de tela */
+  /* Tabela tela */
   var linhas = '';
   var parIdx = 0;
-  for (var i = 0; i < ITENS.length; i++) {
-    var it = ITENS[i];
+  for (var i = 0; i < ITENS_TELA.length; i++) {
+    var it = ITENS_TELA[i];
     if (it.secao) { linhas += criarLinha(it, listaId, false); }
     else { linhas += criarLinha(it, listaId, parIdx % 2 === 1); parIdx++; }
   }
 
-  /* PDF cols (itens) */
-  var pdfItens = distribuirEmColunas(listaId);
-
-  /* PDF cols (pneus) – serão atualizados dinamicamente */
-  var pdfPneusHtml = criarPneusSecaoPdf(listaId, 1);
+  /* PDF 3 colunas */
+  var pdfCol1 = gerarColPdf(COL1, listaId);
+  var pdfCol2 = gerarColPdf(COL2, listaId);
+  var pdfCol3 = gerarColPdf(COL3, listaId);
 
   var card = document.createElement('div');
   card.className = 'lista-card';
   card.id = 'card_' + listaId;
   card.innerHTML =
-    /* Header */
+    /* Header com placas */
     '<div class="lista-header">'
     + '<div class="lista-header-left">'
     + '<span>Lista nº ' + contadorListas + '</span>'
     + '<div class="lista-placa-group">'
-    + '<label>Placa 1</label>'
-    + '<input type="text" id="lp1_' + listaId + '" placeholder="AAA-0000" maxlength="8" oninput="formatarPlaca(this)">'
-    + '<label>Placa 2</label>'
-    + '<input type="text" id="lp2_' + listaId + '" placeholder="AAA-0000" maxlength="8" oninput="formatarPlaca(this)">'
+    + '<label>Placa 1</label><input type="text" id="lp1_' + listaId + '" placeholder="AAA-0000" maxlength="8" oninput="formatarPlaca(this)">'
+    + '<label>Placa 2</label><input type="text" id="lp2_' + listaId + '" placeholder="AAA-0000" maxlength="8" oninput="formatarPlaca(this)">'
     + '</div></div>'
     + '<button class="btn-remover-lista no-print" onclick="removerLista(\'' + listaId + '\')">✕ Remover</button>'
     + '</div>'
-
-    /* Tabela tela (escondida no print) */
-    + '<table class="checklist-table">'
-    + '<thead><tr><th>Item</th><th class="th-qtd">Qtd.</th><th class="th-status">Status</th></tr></thead>'
-    + '<tbody>' + linhas + '</tbody>'
-    + '</table>'
-
+    /* Tabela tela */
+    + '<table class="checklist-table"><thead><tr>'
+    + '<th>Item</th><th class="th-qtd">Qtd.</th><th class="th-status">Status</th>'
+    + '</tr></thead><tbody>' + linhas + '</tbody></table>'
     /* Pneus tela */
-    + '<div id="pneus_main_' + listaId + '" class="pneus-wrapper">'
+    + '<div id="pneus_main_' + listaId + '">'
     + criarPneusWrapper(listaId, 1)
     + '</div>'
-
-    /* PDF cols – visível só no print */
+    /* PDF cols */
     + '<div class="pdf-cols" id="pdf_cols_' + listaId + '">'
-    + pdfItens
-    + '<div class="pdf-col" style="width:100%;float:none;clear:both;border:none;padding:0;" id="pdf_pneus_' + listaId + '">'
-    + pdfPneusHtml
+    + '<div class="pdf-col">' + pdfCol1 + '</div>'
+    + '<div class="pdf-col">' + pdfCol2 + '</div>'
+    + '<div class="pdf-col">' + pdfCol3
+    +   '<div id="pdf_pneus_area_' + listaId + '">'
+    +     criarPdfPneus(listaId, 1)
+    +   '</div>'
     + '</div>'
     + '</div>';
 
   document.getElementById('listas').appendChild(card);
-  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  card.scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
 /* ---- Remover lista ---- */
@@ -896,42 +716,89 @@ function removerLista(listaId) {
   if (card && confirm('Remover esta lista?')) card.remove();
 }
 
-/* ---- Antes de imprimir: sincroniza todos os estados ---- */
+/* ---- GERAR PDF: sincroniza e aplica visibilidade ---- */
 function gerarPDF() {
-  /* Sincroniza todos os checks e campos para os elementos PDF */
   var cards = document.querySelectorAll('.lista-card');
+
   for (var c = 0; c < cards.length; c++) {
     var card = cards[c];
-    var checks = card.querySelectorAll('input[type="checkbox"]');
-    for (var i = 0; i < checks.length; i++) {
-      var chk = checks[i];
-      var idParts = chk.id.split('_'); /* chk_ok_L1_cintas */
-      if (idParts.length < 3) continue;
-      var tipo = idParts[1];
-      var uid  = idParts.slice(2).join('_');
-      var pdfChk = document.getElementById('pdf_' + tipo + '_' + uid);
-      if (pdfChk) {
-        if (chk.checked) pdfChk.classList.add(tipo);
-        else pdfChk.classList.remove(tipo);
+
+    /* --- Itens normais --- */
+    var pdfItems = card.querySelectorAll('.pdf-item');
+    for (var i = 0; i < pdfItems.length; i++) {
+      var row = pdfItems[i];
+      var uid = row.id.replace('pdfrow_', '');
+      var marcado = null;
+
+      /* descobre o que foi marcado */
+      var tipos = ['ok','nok','na'];
+      for (var t = 0; t < tipos.length; t++) {
+        var chk = document.getElementById('chk_' + tipos[t] + '_' + uid);
+        var pdfChk = document.getElementById('pdf_' + tipos[t] + '_' + uid);
+        if (pdfChk) pdfChk.classList.remove('visible');
+        if (chk && chk.checked) {
+          marcado = tipos[t];
+          if (pdfChk) pdfChk.classList.add('visible');
+        }
+      }
+
+      /* qtd */
+      var qtdEl = document.getElementById('qtd_' + uid);
+      var pdfQtd = document.getElementById('pdfqtd_' + uid);
+      if (pdfQtd) pdfQtd.textContent = (qtdEl && qtdEl.value) ? 'x' + qtdEl.value : '';
+
+      /* validade */
+      var valEl = document.getElementById('val_' + uid);
+      var pdfVal = document.getElementById('pdfval_' + uid);
+      if (pdfVal) pdfVal.textContent = (valEl && valEl.value) ? valEl.value : '';
+
+      /* mostra linha só se algo foi marcado */
+      if (marcado !== null) {
+        row.classList.add('pdf-item-visible');
+      } else {
+        row.classList.remove('pdf-item-visible');
       }
     }
-    /* validades */
-    var vals = card.querySelectorAll('.input-validade');
-    for (var v = 0; v < vals.length; v++) {
-      var el = vals[v];
-      var uid2 = el.id.replace('val_','');
-      var pdfV = document.getElementById('pdfval_' + uid2);
-      if (pdfV) pdfV.textContent = el.value || '';
+
+    /* --- Pneus --- */
+    var pRows = card.querySelectorAll('.pdf-pneus-row');
+    for (var p = 0; p < pRows.length; p++) {
+      var pRow = pRows[p];
+      var uidE = pRow.id.replace('pdf_prow_', '');
+      /* uidE é o esquerdo; derive direito trocando _e por _d ou _esq/_dir */
+      /* O id do lado direito é o uidE com último char trocado e→d */
+      var uidD = uidE.slice(0, -1) + 'd';
+
+      var marcadoE = null, marcadoD = null;
+      var tiposP = ['ok','nok','na'];
+      for (var tp = 0; tp < tiposP.length; tp++) {
+        var chkE = document.getElementById('chk_' + tiposP[tp] + '_' + uidE);
+        var chkD = document.getElementById('chk_' + tiposP[tp] + '_' + uidD);
+        if (chkE && chkE.checked) marcadoE = tiposP[tp].toUpperCase();
+        if (chkD && chkD.checked) marcadoD = tiposP[tp].toUpperCase();
+      }
+
+      var spanE = document.getElementById('pdf_pmarcado_' + uidE);
+      var spanD = document.getElementById('pdf_pmarcado_' + uidD);
+      if (spanE) spanE.textContent = marcadoE || '';
+      if (spanD) spanD.textContent = marcadoD || '';
+
+      if (marcadoE !== null || marcadoD !== null) {
+        pRow.classList.add('pdf-item-visible');
+      } else {
+        pRow.classList.remove('pdf-item-visible');
+      }
     }
-    /* quantidades */
-    var qtds = card.querySelectorAll('.input-qtd');
-    for (var q = 0; q < qtds.length; q++) {
-      var elq = qtds[q];
-      var uid3 = elq.id.replace('qtd_','');
-      var pdfQ = document.getElementById('pdfqtd_' + uid3);
-      if (pdfQ) pdfQ.textContent = elq.value ? 'x' + elq.value : '';
+
+    /* Mostra/oculta bloco de pneus */
+    var pblocos = card.querySelectorAll('.pdf-pneus-bloco');
+    for (var pb = 0; pb < pblocos.length; pb++) {
+      var bloco = pblocos[pb];
+      var temMarcado = bloco.querySelectorAll('.pdf-pneus-row.pdf-item-visible').length > 0;
+      bloco.classList[temMarcado ? 'add' : 'remove']('tem-marcado');
     }
   }
+
   window.print();
 }
 
@@ -940,7 +807,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var h = new Date();
   document.getElementById('data').value =
     h.getFullYear() + '-'
-    + String(h.getMonth() + 1).padStart(2,'0') + '-'
+    + String(h.getMonth()+1).padStart(2,'0') + '-'
     + String(h.getDate()).padStart(2,'0');
   adicionarLista();
 });
