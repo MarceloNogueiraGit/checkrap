@@ -7,174 +7,169 @@
 <title>Checklist Sider / Rodotrem – JCE</title>
 <style>
 /* =====================================================
-   DARK MODE – TELA
+   RESET
 ===================================================== */
-:root {
-  --bg:         #0f1117;
-  --bg2:        #1a1d27;
-  --bg3:        #22263a;
-  --borda:      #2e3348;
-  --borda2:     #3a4060;
-  --texto:      #dde1f0;
-  --texto2:     #8b93b5;
-  --azul:       #1e4080;
-  --azul-h:     #2563c8;
-  --azul-topo:  #162d60;
-  --secao-bg:   #1c2540;
-  --secao-txt:  #7eb3f5;
-  --row-par:    #1e2135;
-  --ok:         #22c55e;
-  --ok-bg:      #052e16;
-  --ok-borda:   #166534;
-  --nok:        #ef4444;
-  --nok-bg:     #2d0b0b;
-  --nok-borda:  #7f1d1d;
-  --na:         #94a3b8;
-  --na-bg:      #1e2233;
-  --na-borda:   #3a4060;
-  --input-bg:   #141720;
-  --sombra:     0 2px 8px rgba(0,0,0,.5);
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-- { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
+html, body {
+background: #f1f3f6;
+color: #1a1a2e;
 font-family: ‘Segoe UI’, Arial, sans-serif;
-background: var(–bg);
-color: var(–texto);
 font-size: 14px;
-padding: 14px;
-min-height: 100vh;
 }
+body { padding: 14px; min-height: 100vh; }
 
 /* =====================================================
 TOPO
 ===================================================== */
 .topo {
-background: var(–azul-topo);
+background: #1e3a5f;
 color: #fff;
 padding: 10px 16px;
 border-radius: 7px 7px 0 0;
 display: flex;
 align-items: center;
 gap: 12px;
-border-bottom: 2px solid var(–azul-h);
 }
 .topo-logo {
-font-size: 21px; font-weight: 900; letter-spacing: 1px;
-background: var(–azul-h);
-padding: 2px 11px; border-radius: 5px;
+font-size: 20px; font-weight: 900; letter-spacing: 1px;
+background: #2563a8;
+padding: 2px 10px; border-radius: 4px;
 color: #fff;
 }
-.topo-titulo { font-size: 15px; font-weight: 600; color: #c9d8f5; }
+.topo-titulo { font-size: 14px; font-weight: 600; color: #cde; }
 
 /* =====================================================
-CABEÇALHO
+CABEÇALHO GLOBAL (só Conferente + Data)
 ===================================================== */
 .cabecalho-global {
-background: var(–bg2);
-border: 1px solid var(–borda);
+background: #fff;
+border: 1px solid #d0d7e3;
 border-top: none;
 border-radius: 0 0 7px 7px;
 padding: 10px 14px 12px;
 display: grid;
-grid-template-columns: 1fr 1fr 1fr 1fr;
+grid-template-columns: 1fr 1fr;
 gap: 8px 14px;
 margin-bottom: 16px;
 }
 .cabecalho-global label {
-font-size: 10px; font-weight: 700; color: var(–texto2);
+font-size: 10px; font-weight: 700; color: #5a6a80;
 text-transform: uppercase; letter-spacing: .5px;
 display: block; margin-bottom: 4px;
 }
 .cabecalho-global input {
 width: 100%;
-border: 1px solid var(–borda2);
+border: 1px solid #c4cdd8;
 border-radius: 5px;
 padding: 6px 9px;
 font-size: 13px;
-background: var(–input-bg);
-color: var(–texto);
+background: #f8fafc;
+color: #1a1a2e;
 outline: none;
 transition: border .15s;
 }
-.cabecalho-global input:focus { border-color: var(–azul-h); }
-.cabecalho-global input::placeholder { color: var(–texto2); opacity: .5; }
-
-/* date input no dark */
-input[type=“date”]::-webkit-calendar-picker-indicator { filter: invert(.7); }
+.cabecalho-global input:focus { border-color: #2563a8; background: #fff; }
 
 /* =====================================================
-CONTAINER LISTAS (tela)
+CONTAINER LISTAS
 ===================================================== */
-#listas { display: flex; flex-direction: column; gap: 16px; }
+#listas { display: flex; flex-direction: column; gap: 14px; }
 
 /* =====================================================
 CARD
 ===================================================== */
 .lista-card {
-background: var(–bg2);
-border: 1px solid var(–borda);
+background: #fff;
+border: 1px solid #d0d7e3;
 border-radius: 7px;
 overflow: hidden;
-box-shadow: var(–sombra);
+box-shadow: 0 1px 4px rgba(0,0,0,.08);
 }
+
+/* –– Header do card –– */
 .lista-header {
-background: var(–azul);
+background: #1e3a5f;
 color: #fff;
 padding: 7px 13px;
 font-size: 13px; font-weight: 700;
 display: flex; align-items: center; justify-content: space-between;
-letter-spacing: .3px;
+gap: 10px; flex-wrap: wrap;
 }
+.lista-header-left {
+display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex: 1;
+}
+.lista-header-left span { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.lista-placa-group {
+display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+}
+.lista-placa-group label {
+font-size: 10px; font-weight: 700; color: #aac4e8;
+text-transform: uppercase; letter-spacing: .4px;
+white-space: nowrap;
+}
+.lista-placa-group input {
+width: 88px;
+border: 1px solid rgba(255,255,255,.3);
+border-radius: 4px;
+padding: 3px 6px;
+font-size: 12px;
+background: rgba(255,255,255,.12);
+color: #fff;
+outline: none;
+text-transform: uppercase;
+letter-spacing: .5px;
+}
+.lista-placa-group input::placeholder { color: rgba(255,255,255,.4); }
+.lista-placa-group input:focus { border-color: rgba(255,255,255,.7); background: rgba(255,255,255,.2); }
+
 .btn-remover-lista {
-background: none;
+background: transparent;
 border: 1px solid rgba(255,255,255,.3);
 color: rgba(255,255,255,.8);
 border-radius: 4px; padding: 2px 9px;
 cursor: pointer; font-size: 11px;
-transition: all .12s;
+white-space: nowrap;
+-webkit-appearance: none;
 }
-.btn-remover-lista:hover { background: rgba(255,0,0,.25); border-color: #ef4444; color: #fff; }
+.btn-remover-lista:active { background: rgba(220,38,38,.4); }
 
 /* =====================================================
-TABELA
+LAYOUT DE ITENS NA TELA (tabela normal)
 ===================================================== */
 .checklist-table { width: 100%; border-collapse: collapse; }
 
 .checklist-table th {
-background: var(–bg3);
-color: var(–texto2);
+background: #edf0f5;
+color: #5a6a80;
 font-size: 10px; font-weight: 800;
 text-transform: uppercase; letter-spacing: .4px;
-padding: 5px 9px; text-align: left;
-border-bottom: 1px solid var(–borda2);
+padding: 5px 8px; text-align: left;
+border-bottom: 1px solid #d0d7e3;
 }
-.checklist-table th.th-status { text-align: center; width: 136px; }
-.checklist-table th.th-qtd    { text-align: center; width: 64px; }
+.checklist-table th.th-status { text-align: center; }
+.checklist-table th.th-qtd    { text-align: center; width: 60px; }
 
-.checklist-table tr:nth-child(even):not(.section-row) td { background: var(–row-par); }
-
+.checklist-table tr.par td { background: #f7f9fc; }
 .checklist-table td {
-padding: 4px 9px;
-border-bottom: 1px solid var(–borda);
+padding: 5px 8px;
+border-bottom: 1px solid #e8ecf1;
 vertical-align: middle;
 font-size: 12.5px;
-color: var(–texto);
+color: #1a1a2e;
+background: #fff;
 }
 .checklist-table tr:last-child td { border-bottom: none; }
 .item-nome { font-weight: 500; }
 
-/* =====================================================
-SEÇÃO
-===================================================== */
+/* –– Seção –– */
 .section-row td {
-background: var(–secao-bg) !important;
+background: #dce8f5 !important;
 font-size: 10px; font-weight: 800;
 text-transform: uppercase; letter-spacing: .6px;
-color: var(–secao-txt) !important;
-padding: 4px 9px;
-border-bottom: 1px solid var(–borda2) !important;
+color: #1e3a5f;
+padding: 3px 8px;
+border-bottom: 1px solid #b8cfe8 !important;
 }
 .sec-inner { display: flex; align-items: center; justify-content: space-between; }
 
@@ -182,316 +177,355 @@ border-bottom: 1px solid var(–borda2) !important;
 CHECKBOXES OK / NOK / NA
 ===================================================== */
 .check-group {
-display: flex; gap: 5px;
+display: flex; gap: 4px;
 justify-content: center; align-items: center;
+flex-wrap: nowrap;
 }
 .check-group label {
 display: inline-flex; align-items: center; gap: 3px;
 cursor: pointer;
 font-size: 11px; font-weight: 700;
-padding: 3px 8px; border-radius: 4px;
-border: 1.5px solid var(–borda2);
-background: var(–bg3); color: var(–texto2);
-transition: all .1s; user-select: none; white-space: nowrap;
+padding: 4px 8px; border-radius: 5px;
+border: 1.5px solid #c4cdd8;
+background: #f1f3f6;
+color: #6b7a8d;
+-webkit-tap-highlight-color: transparent;
+user-select: none; white-space: nowrap;
+transition: background .12s, color .12s, border-color .12s;
+min-width: 42px; justify-content: center;
 }
-.check-group input[type=“checkbox”] { display: none; }
-
-/* classes aplicadas via JS – compatível Safari iOS */
-.check-group label.ativo-ok  {
-background: var(–ok-bg);  color: var(–ok);  border-color: var(–ok-borda);  font-weight: 900;
+.check-group input[type=“checkbox”] {
+position: absolute; opacity: 0;
+width: 0; height: 0;
+pointer-events: none;
+-webkit-appearance: none; appearance: none;
 }
-.check-group label.ativo-nok {
-background: var(–nok-bg); color: var(–nok); border-color: var(–nok-borda); font-weight: 900;
-}
-.check-group label.ativo-na  {
-background: var(–na-bg);  color: var(–na);  border-color: var(–na-borda);  font-weight: 900;
-}
-
-.chk-box {
-width: 11px; height: 11px;
-border: 1.5px solid currentColor;
-border-radius: 2px;
-display: inline-block; flex-shrink: 0; position: relative;
-}
-.check-group label.ativo-ok .chk-box::after,
-.check-group label.ativo-nok .chk-box::after,
-.check-group label.ativo-na  .chk-box::after {
-content: ‘✓’; position: absolute;
-top: -2px; left: 0; font-size: 10px; line-height: 1;
-}
+.check-group label.ativo-ok  { background: #dcfce7; color: #166534; border-color: #22c55e; font-weight: 900; }
+.check-group label.ativo-nok { background: #fee2e2; color: #991b1b; border-color: #ef4444; font-weight: 900; }
+.check-group label.ativo-na  { background: #f1f5f9; color: #475569; border-color: #94a3b8; font-weight: 900; }
+.chk-mark { display: none; font-size: 10px; }
+.check-group label.ativo-ok  .chk-mark,
+.check-group label.ativo-nok .chk-mark,
+.check-group label.ativo-na  .chk-mark { display: inline; }
 
 /* =====================================================
 QUANTIDADE / VALIDADE
 ===================================================== */
 .input-qtd {
-width: 50px;
-border: 1px solid var(–borda2);
+width: 50px; border: 1px solid #c4cdd8;
 border-radius: 4px; padding: 3px 5px;
 font-size: 12px; text-align: center;
-background: var(–input-bg); color: var(–texto);
+background: #f8fafc; color: #1a1a2e;
 display: block; margin: 0 auto;
 }
-.input-qtd:focus { border-color: var(–azul-h); outline: none; }
+.input-qtd:focus { border-color: #2563a8; outline: none; }
 
 .input-validade {
-width: 80px;
-border: 1px solid var(–borda2);
+width: 88px; border: 1px solid #c4cdd8;
 border-radius: 4px; padding: 3px 5px;
 font-size: 11px; text-transform: uppercase; text-align: center;
-background: var(–input-bg); color: var(–texto);
+background: #f8fafc; color: #1a1a2e;
 }
-.input-validade:focus { border-color: var(–azul-h); outline: none; }
-.input-validade::placeholder { color: var(–texto2); opacity: .5; }
-
+.input-validade:focus { border-color: #2563a8; outline: none; }
 .validade-wrap { margin-top: 3px; text-align: center; }
-.validade-label { font-size: 9px; color: var(–texto2); display: block; }
+.validade-label { font-size: 9px; color: #8a9ab0; display: block; }
+.sem-qtd { color: #c4cdd8; display: block; text-align: center; }
+
+/* =====================================================
+PNEUS — layout lado a lado (Esquerdo | Direito)
+===================================================== */
+.pneus-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 0;
+}
+.pneus-col-header {
+background: #dce8f5;
+font-size: 10px; font-weight: 800;
+text-transform: uppercase; letter-spacing: .5px;
+color: #1e3a5f;
+padding: 3px 8px;
+border-bottom: 1px solid #b8cfe8;
+}
+.pneus-col-header:first-child { border-right: 1px solid #b8cfe8; }
+
+.pneus-col { display: contents; }
+.pneus-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+}
+.pneus-row td {
+padding: 4px 8px;
+border-bottom: 1px solid #e8ecf1;
+vertical-align: middle;
+font-size: 12px;
+color: #1a1a2e;
+background: #fff;
+}
+.pneus-row td:first-child { border-right: 1px solid #e8ecf1; }
+.pneus-row.par td { background: #f7f9fc; }
 
 /* =====================================================
 BOTÃO DUPLICAR PNEUS
 ===================================================== */
 .btn-add-pneus {
-background: var(–azul-h); color: #fff;
+background: #2563a8; color: #fff;
 border: none; border-radius: 4px;
 padding: 2px 9px; font-size: 10px; font-weight: 700;
-cursor: pointer; letter-spacing: 0;
-transition: background .12s;
+cursor: pointer; -webkit-appearance: none;
 }
-.btn-add-pneus:hover { background: #1a4da8; }
 
 /* =====================================================
 BOTÕES INFERIORES
 ===================================================== */
 .botoes-fixos {
 display: flex; justify-content: center; gap: 12px;
-margin: 10px 0 18px;
+margin: 10px 0 18px; flex-wrap: wrap;
 }
 .btn-add-lista {
-padding: 10px 30px;
-background: var(–azul); color: #fff;
-border: 1px solid var(–azul-h);
-border-radius: 7px; font-size: 14px; font-weight: 700;
-cursor: pointer; box-shadow: var(–sombra);
-transition: background .15s;
+padding: 10px 28px; background: #1e3a5f; color: #fff;
+border: none; border-radius: 7px; font-size: 14px; font-weight: 700;
+cursor: pointer; -webkit-appearance: none;
 }
-.btn-add-lista:hover { background: var(–azul-h); }
-
 .btn-pdf {
-padding: 10px 30px;
-background: #7f1d1d; color: #fff;
-border: 1px solid #b91c1c;
-border-radius: 7px; font-size: 14px; font-weight: 700;
-cursor: pointer; box-shadow: var(–sombra);
-transition: background .15s;
+padding: 10px 28px; background: #b91c1c; color: #fff;
+border: none; border-radius: 7px; font-size: 14px; font-weight: 700;
+cursor: pointer; -webkit-appearance: none;
 }
-.btn-pdf:hover { background: #b91c1c; }
 
 /* =====================================================
 IMPRESSÃO / PDF
-Layout: A4 landscape, 3 colunas, cada lista = 1 col
-3 listas por página; 4ª lista → nova página
+Layout: cada lista = 1 faixa horizontal com 3 colunas
+3 listas por página A4 portrait
 ===================================================== */
 @media print {
 
-@page {
-size: A4 portrait;
-margin: 6mm 5mm 6mm 5mm;
-}
-
-/* Reset cores para branco no print */
+@page { size: A4 portrait; margin: 5mm 4mm; }
 
 - { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-/* Ocultar controles */
-.botoes-fixos, .btn-remover-lista, .btn-add-pneus, .no-print {
-display: none !important;
-}
+.botoes-fixos, .btn-remover-lista, .btn-add-pneus, .no-print { display: none !important; }
 
-body {
+html, body {
 background: #fff !important;
 color: #111 !important;
-padding: 0;
-font-size: 7pt;
+padding: 0 !important; margin: 0 !important;
+font-size: 7pt !important;
 }
 
-/* –– Topo –– */
+/* Topo */
 .topo {
-background: #1a3060 !important;
-color: #fff !important;
-padding: 3px 8px;
-border-radius: 2px 2px 0 0;
-border-bottom: 1.5pt solid #3060c0 !important;
-margin-bottom: 0;
+background: #1e3a5f !important; color: #fff !important;
+padding: 2px 8px !important; border-radius: 0 !important;
+margin-bottom: 0 !important; display: block !important;
 }
-.topo-logo  { font-size: 9pt !important; padding: 1px 5px !important; background: #2563a8 !important; }
-.topo-titulo { font-size: 7.5pt !important; color: #c0d0f0 !important; }
+.topo-logo { font-size: 8pt !important; padding: 1px 5px !important; background: #2563a8 !important; display: inline-block !important; }
+.topo-titulo { font-size: 7pt !important; color: #cde !important; }
 
-/* –– Cabeçalho campos –– */
+/* Cabeçalho global: só conferente + data, 1 linha */
 .cabecalho-global {
 background: #f5f7fa !important;
-border: 0.4pt solid #aab !important;
-border-top: none !important;
-border-radius: 0 0 2px 2px !important;
-padding: 3px 8px 4px !important;
-gap: 2px 8px !important;
-margin-bottom: 3mm !important;
+border: 0.4pt solid #b0bcc8 !important;
+border-top: none !important; border-radius: 0 !important;
+padding: 2px 6px !important; margin-bottom: 2mm !important;
+display: flex !important; gap: 0 !important;
 }
-.cabecalho-global label {
-color: #445 !important;
-font-size: 5.5pt !important;
-margin-bottom: 1px !important;
-}
+.cabecalho-global > div { flex: 1 !important; padding: 0 4px !important; }
+.cabecalho-global label { font-size: 5pt !important; margin-bottom: 1px !important; color: #556 !important; display: block !important; }
 .cabecalho-global input {
-background: #fff !important;
-color: #111 !important;
-border: 0.4pt solid #99a !important;
-font-size: 6.5pt !important;
-padding: 1px 3px !important;
+width: 100% !important; background: #fff !important; color: #111 !important;
+-webkit-text-fill-color: #111 !important;
+border: 0.4pt solid #99a !important; font-size: 6pt !important; padding: 1px 3px !important; display: block !important;
 }
+/* Oculta Placa 1 e Placa 2 do cabeçalho global */
+.cabecalho-global .placa-global { display: none !important; }
 
-/* –– Grade 3 colunas –– */
+/* Container: empilha listas verticalmente */
 #listas {
-display: grid !important;
-grid-template-columns: repeat(3, 1fr) !important;
-gap: 2.5mm !important;
-align-items: start !important;
+display: block !important;
+width: 100% !important;
 }
 
-/* –– Card –– */
+/* Cada lista: faixa horizontal, não quebra */
 .lista-card {
-background: #fff !important;
+display: block !important;
+width: 100% !important;
 border: 0.5pt solid #9aabb8 !important;
-border-radius: 2px !important;
+border-radius: 0 !important;
 box-shadow: none !important;
-overflow: hidden !important;
-break-inside: avoid !important;
+overflow: visible !important;
+margin-bottom: 2mm !important;
 page-break-inside: avoid !important;
+break-inside: avoid !important;
+float: none !important;
 }
 
-/* 4ª lista (índice 1 de nova fileira de 3) → nova página */
-.lista-card:nth-child(3n + 1):not(:first-child) {
-break-before: page !important;
+/* Força nova página a cada 3 listas */
+.lista-card:nth-child(3n+1):not(:first-child) {
 page-break-before: always !important;
+break-before: page !important;
 }
 
-/* –– Header do card –– */
+/* Header do card: placa 1 e 2 embutidos, compacto */
 .lista-header {
-background: #1a3060 !important;
-color: #fff !important;
-padding: 2px 5px !important;
-font-size: 6.5pt !important;
+background: #1e3a5f !important; color: #fff !important;
+padding: 2px 5px !important; font-size: 6pt !important;
+display: flex !important; align-items: center !important;
+gap: 6px !important; flex-wrap: nowrap !important;
+}
+.lista-header-left { display: flex !important; align-items: center !important; gap: 6px !important; flex: 1 !important; }
+.lista-header-left span { font-size: 6pt !important; }
+.lista-placa-group label { font-size: 5pt !important; color: #aac4e8 !important; }
+.lista-placa-group input {
+width: 55pt !important; font-size: 5.5pt !important;
+background: rgba(255,255,255,.15) !important; color: #fff !important;
+-webkit-text-fill-color: #fff !important;
+border: 0.4pt solid rgba(255,255,255,.4) !important;
+padding: 0 3px !important; border-radius: 2px !important;
 }
 
-/* –– Tabela –– */
-.checklist-table th {
-background: #dde3ec !important;
-color: #334 !important;
-font-size: 5pt !important;
-padding: 1.5px 3px !important;
+/* –– CORPO DA LISTA: 3 colunas via tabelas inline-block –– */
+/* Esconde a tabela normal */
+.checklist-table { display: none !important; }
+.pneus-wrapper   { display: none !important; }
+
+/* Mostra a versão PDF de 3 colunas */
+.pdf-cols { display: block !important; }
+
+/* –– Estilos das colunas PDF –– */
+.pdf-cols {
+width: 100% !important;
+overflow: hidden !important; /* clearfix */
+}
+.pdf-col {
+float: left !important;
+width: 32.8% !important;
+margin-right: 0.8% !important;
+vertical-align: top !important;
+border-right: 0.4pt solid #d0d7e3 !important;
+padding: 0 2px !important;
+}
+.pdf-col:last-child {
+margin-right: 0 !important;
+border-right: none !important;
+}
+
+.pdf-secao {
+background: #dce8f5 !important;
+color: #1e3a5f !important;
+font-size: 4.5pt !important; font-weight: 800 !important;
+text-transform: uppercase !important;
+padding: 1px 2px !important;
 letter-spacing: 0 !important;
-border-bottom: 0.5pt solid #aab !important;
+border-bottom: 0.4pt solid #b8cfe8 !important;
+margin-top: 1px !important;
 }
-.checklist-table th.th-status { width: auto !important; }
-.checklist-table th.th-qtd    { width: auto !important; }
+.pdf-secao:first-child { margin-top: 0 !important; }
 
-.checklist-table tr:nth-child(even):not(.section-row) td {
-background: #f5f8fc !important;
-}
-.checklist-table td {
-background: #fff;
-color: #111 !important;
-font-size: 5.5pt !important;
-padding: 1px 3px !important;
-border-bottom: 0.3pt solid #d0d8e4 !important;
-vertical-align: middle !important;
-}
-.checklist-table tr:last-child td { border-bottom: none !important; }
-
-/* –– Seção –– */
-.section-row td {
-background: #dbe6f5 !important;
-color: #1a3060 !important;
-font-size: 5pt !important;
-padding: 1.5px 3px !important;
-border-bottom: 0.5pt solid #aabbd0 !important;
-letter-spacing: 0 !important;
-}
-
-/* –– Checkboxes –– */
-.check-group { gap: 2px !important; }
-.check-group label {
-background: #f0f3f7 !important;
-color: #445 !important;
-border: 0.4pt solid #99a !important;
-padding: 1px 3px !important;
-font-size: 5pt !important;
-border-radius: 2px !important;
+.pdf-item {
+display: flex !important;
+align-items: center !important;
+justify-content: space-between !important;
+padding: 0.8px 2px !important;
+border-bottom: 0.3pt solid #e8ecf1 !important;
 gap: 2px !important;
 }
-.check-group label.ativo-ok {
-background: #d1fae5 !important;
-color: #065f46 !important;
-border-color: #059669 !important;
-font-weight: 900 !important;
+.pdf-item-nome {
+font-size: 4.8pt !important;
+color: #111 !important;
+white-space: nowrap !important;
+overflow: hidden !important;
+text-overflow: ellipsis !important;
+flex: 1 !important;
+min-width: 0 !important;
 }
-.check-group label.ativo-nok {
-background: #fee2e2 !important;
-color: #991b1b !important;
-border-color: #dc2626 !important;
-font-weight: 900 !important;
+.pdf-item-qtd {
+font-size: 4.5pt !important;
+color: #111 !important;
+white-space: nowrap !important;
+margin: 0 2px !important;
 }
-.check-group label.ativo-na {
-background: #f1f5f9 !important;
-color: #475569 !important;
-border-color: #94a3b8 !important;
-font-weight: 900 !important;
+.pdf-checks {
+display: flex !important;
+gap: 1px !important;
+flex-shrink: 0 !important;
+align-items: center !important;
+}
+.pdf-chk {
+display: inline-flex !important;
+align-items: center !important;
+gap: 1px !important;
+font-size: 4.5pt !important; font-weight: 700 !important;
+padding: 0.5px 2.5px !important;
+border: 0.4pt solid #aab !important;
+border-radius: 1pt !important;
+background: #f5f5f5 !important;
+color: #444 !important;
+white-space: nowrap !important;
+}
+.pdf-chk.ok  { background: #dcfce7 !important; color: #166534 !important; border-color: #22c55e !important; font-weight: 900 !important; }
+.pdf-chk.nok { background: #fee2e2 !important; color: #991b1b !important; border-color: #ef4444 !important; font-weight: 900 !important; }
+.pdf-chk.na  { background: #f1f5f9 !important; color: #475569 !important; border-color: #94a3b8 !important; font-weight: 900 !important; }
+
+.pdf-val {
+font-size: 4pt !important; color: #556 !important;
+white-space: nowrap !important; margin-left: 1px !important;
 }
 
-.chk-box {
-width: 6px !important; height: 6px !important;
-border-width: 0.5pt !important;
+/* Pneus: 2 sub-colunas E/D dentro de cada coluna PDF */
+.pdf-pneus-header {
+display: flex !important;
+background: #dce8f5 !important; color: #1e3a5f !important;
+font-size: 4.5pt !important; font-weight: 800 !important;
+text-transform: uppercase !important;
+border-bottom: 0.4pt solid #b8cfe8 !important;
+margin-top: 1px !important;
 }
-.check-group label.ativo-ok  .chk-box::after,
-.check-group label.ativo-nok .chk-box::after,
-.check-group label.ativo-na  .chk-box::after {
-font-size: 6px !important; top: -1px !important;
+.pdf-pneus-header span {
+flex: 1 !important; padding: 1px 2px !important;
+font-size: 4.5pt !important;
+}
+.pdf-pneus-header span:first-child { border-right: 0.4pt solid #b8cfe8 !important; }
+
+.pdf-pneus-row {
+display: flex !important;
+align-items: center !important;
+border-bottom: 0.3pt solid #e8ecf1 !important;
+}
+.pdf-pneus-cell {
+flex: 1 !important;
+display: flex !important;
+align-items: center !important;
+justify-content: space-between !important;
+padding: 0.8px 2px !important;
+gap: 2px !important;
+}
+.pdf-pneus-cell:first-child { border-right: 0.4pt solid #e8ecf1 !important; }
+.pdf-pneus-eixo {
+font-size: 4.5pt !important; color: #111 !important;
+white-space: nowrap !important; flex-shrink: 0 !important;
+}
 }
 
-/* –– Quantidade / Validade –– */
-.input-qtd {
-width: 20pt !important;
-background: #fff !important; color: #111 !important;
-border: 0.4pt solid #99a !important;
-font-size: 5pt !important; padding: 0 2px !important;
-}
-.input-validade {
-width: 34pt !important;
-background: #fff !important; color: #111 !important;
-border: 0.4pt solid #99a !important;
-font-size: 5pt !important; padding: 0 2px !important;
-}
-.validade-label { font-size: 4.5pt !important; color: #778 !important; }
-.validade-wrap  { margin-top: 1px !important; }
-}
+/* pdf-cols oculto na tela */
+.pdf-cols { display: none; }
+.pneus-wrapper { display: block; }
 </style>
 
 </head>
 <body>
-
-<!-- TOPO -->
 
 <div class="topo">
   <span class="topo-logo">JCE</span>
   <span class="topo-titulo">Checklist de Conferência – Sider / Rodotrem</span>
 </div>
 
-<!-- CABEÇALHO -->
-
 <div class="cabecalho-global">
-  <div>
+  <div class="placa-global">
     <label>Placa 1</label>
     <input type="text" id="placa1" placeholder="AAA-0000" maxlength="8" oninput="formatarPlaca(this)">
   </div>
-  <div>
+  <div class="placa-global">
     <label>Placa 2</label>
     <input type="text" id="placa2" placeholder="AAA-0000" maxlength="8" oninput="formatarPlaca(this)">
   </div>
@@ -505,207 +539,409 @@ font-size: 5pt !important; padding: 0 2px !important;
   </div>
 </div>
 
-<!-- LISTAS -->
-
 <div id="listas"></div>
-
-<!-- BOTÕES -->
 
 <div class="botoes-fixos no-print">
   <button class="btn-add-lista" onclick="adicionarLista()">＋ Adicionar Lista</button>
-  <button class="btn-pdf" onclick="window.print()">🖨 Gerar PDF / Imprimir</button>
+  <button class="btn-pdf" onclick="gerarPDF()">🖨 Gerar PDF</button>
 </div>
 
 <script>
-/* ============================================================
-   DADOS
-============================================================ */
-const ITENS = [
+var ITENS = [
   { secao: 'Amarração e Fixação' },
-  { id:'cintas',       nome:'Cintas',         qtd:true  },
-  { id:'catracas',     nome:'Catracas',       qtd:true  },
-  { id:'cantoneiras',  nome:'Cantoneiras',    qtd:true  },
-  { id:'reguas',       nome:'Réguas',         qtd:true  },
-
+  { id:'cintas',       nome:'Cintas',          qtd:true  },
+  { id:'catracas',     nome:'Catracas',        qtd:true  },
+  { id:'cantoneiras',  nome:'Cantoneiras',     qtd:true  },
+  { id:'reguas',       nome:'Réguas',          qtd:true  },
   { secao: 'Segurança' },
-  { id:'estepe1',      nome:'Estepe 1',       qtd:false },
-  { id:'estepe2',      nome:'Estepe 2',       qtd:false },
-  { id:'extintor1',    nome:'Extintor 1',     qtd:false, validade:true },
-  { id:'extintor2',    nome:'Extintor 2',     qtd:false, validade:true },
-
+  { id:'estepe1',      nome:'Estepe 1',        qtd:false },
+  { id:'estepe2',      nome:'Estepe 2',        qtd:false },
+  { id:'extintor1',    nome:'Extintor 1',      qtd:false, validade:true },
+  { id:'extintor2',    nome:'Extintor 2',      qtd:false, validade:true },
   { secao: 'Cobertura' },
-  { id:'lona_lateral', nome:'Lonas Laterais', qtd:false },
-  { id:'lona_teto',    nome:'Lona de Teto',   qtd:false },
-  { id:'cabo_aco',     nome:'Cabo de Aço',    qtd:false },
-
+  { id:'lona_lateral', nome:'Lonas Laterais',  qtd:false },
+  { id:'lona_teto',    nome:'Lona de Teto',    qtd:false },
+  { id:'cabo_aco',     nome:'Cabo de Aço',     qtd:false },
   { secao: 'Estrutura' },
-  { id:'bandana',      nome:'Bandana',        qtd:false },
-  { id:'caixas',       nome:'Caixas',         qtd:false },
-  { id:'prot_lateral', nome:'Protetor Lateral ("mata cachorro")', qtd:false },
-  { id:'parachoque',   nome:'Para-choque',    qtd:false },
-  { id:'batente',      nome:'Batente',        qtd:false },
+  { id:'bandana',      nome:'Bandana',         qtd:false },
+  { id:'caixas',       nome:'Caixas',          qtd:false },
+  { id:'prot_lateral', nome:'Protetor Lateral',qtd:false },
+  { id:'parachoque',   nome:'Para-choque',     qtd:false },
+  { id:'batente',      nome:'Batente',         qtd:false }
 ];
 
-const PNEUS = [
-  { id:'p_1e', nome:'1º Eixo – Esquerdo' },
-  { id:'p_1d', nome:'1º Eixo – Direito'  },
-  { id:'p_2e', nome:'2º Eixo – Esquerdo' },
-  { id:'p_2d', nome:'2º Eixo – Direito'  },
-  { id:'p_3e', nome:'3º Eixo – Esquerdo' },
-  { id:'p_3d', nome:'3º Eixo – Direito'  },
+/* Pneus organizados por eixo: par [esquerdo, direito] */
+var EIXOS = [
+  { eixo:'1º Eixo', esq:{ id:'p_1e' }, dir:{ id:'p_1d' } },
+  { eixo:'2º Eixo', esq:{ id:'p_2e' }, dir:{ id:'p_2d' } },
+  { eixo:'3º Eixo', esq:{ id:'p_3e' }, dir:{ id:'p_3d' } }
 ];
 
-let contadorListas = 0;
-const pneusCount = {};
+var contadorListas = 0;
+var pneusCount = {};
 
-/* ============================================================
-   PLACA
-============================================================ */
+/* ---- Utilitários ---- */
 function formatarPlaca(input) {
-  let v = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  var v = input.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
   if (v.length > 3) v = v.slice(0,3) + '-' + v.slice(3,7);
   input.value = v;
 }
 
-/* ============================================================
-   TOGGLE CHECK – só um marcado por vez
-============================================================ */
 function toggleCheck(uid, tipo) {
   var tipos = ['ok','nok','na'];
-  tipos.forEach(function(t) {
+  for (var i = 0; i < tipos.length; i++) {
+    var t = tipos[i];
     var chk = document.getElementById('chk_' + t + '_' + uid);
-    if (!chk) return;
-    var lbl = chk.closest('label') || chk.parentElement;
+    if (!chk) continue;
+    var lbl = chk.parentElement;
     if (t === tipo) {
-      // o browser já fez o toggle do checked; sincroniza a classe
-      if (chk.checked) {
-        lbl.classList.add('ativo-' + t);
-      } else {
-        lbl.classList.remove('ativo-' + t);
-      }
+      lbl.classList[chk.checked ? 'add' : 'remove']('ativo-' + t);
     } else {
-      // desmarca os outros
       chk.checked = false;
       lbl.classList.remove('ativo-' + t);
     }
-  });
+  }
+  /* Atualiza o estado no PDF-col correspondente */
+  atualizarPdfItem(uid);
 }
 
-/* ============================================================
-   CHECK GROUP HTML
-============================================================ */
+/* ---- Check group HTML ---- */
 function criarCheckGroup(uid) {
   return '<div class="check-group">'
-    + '<label><input type="checkbox" class="chk-ok"  id="chk_ok_'  + uid + '" onchange="toggleCheck(\'' + uid + '\',\'ok\')"><span class="chk-box"></span>OK</label>'
-    + '<label><input type="checkbox" class="chk-nok" id="chk_nok_' + uid + '" onchange="toggleCheck(\'' + uid + '\',\'nok\')"><span class="chk-box"></span>NOK</label>'
-    + '<label><input type="checkbox" class="chk-na"  id="chk_na_'  + uid + '" onchange="toggleCheck(\'' + uid + '\',\'na\')"><span class="chk-box"></span>NA</label>'
+    + '<label><input type="checkbox" id="chk_ok_'  + uid + '" onchange="toggleCheck(\'' + uid + '\',\'ok\')"><span class="chk-mark">✓</span>OK</label>'
+    + '<label><input type="checkbox" id="chk_nok_' + uid + '" onchange="toggleCheck(\'' + uid + '\',\'nok\')"><span class="chk-mark">✓</span>NOK</label>'
+    + '<label><input type="checkbox" id="chk_na_'  + uid + '" onchange="toggleCheck(\'' + uid + '\',\'na\')"><span class="chk-mark">✓</span>NA</label>'
     + '</div>';
 }
 
-/* ============================================================
-   LINHA
-============================================================ */
-function criarLinha(item, listaId) {
-  if (item.secao) {
-    return '<tr class="section-row"><td colspan="3"><span>' + item.secao + '</span></td></tr>';
+/* ---- Atualiza visualmente os pdf-chk quando o usuário marca ---- */
+function atualizarPdfItem(uid) {
+  var tipos = ['ok','nok','na'];
+  for (var i = 0; i < tipos.length; i++) {
+    var t = tipos[i];
+    var chk = document.getElementById('chk_' + t + '_' + uid);
+    var pdfChk = document.getElementById('pdf_' + t + '_' + uid);
+    if (!chk || !pdfChk) continue;
+    if (chk.checked) {
+      pdfChk.classList.add(t);
+    } else {
+      pdfChk.classList.remove(t);
+    }
   }
-  const uid = listaId + '_' + item.id;
+  /* validade */
+  var valInput = document.getElementById('val_' + uid);
+  var pdfVal   = document.getElementById('pdfval_' + uid);
+  if (valInput && pdfVal) pdfVal.textContent = valInput.value || '';
+}
 
-  const colQtd = item.qtd
-    ? '<input class="input-qtd" type="number" min="0" id="qtd_' + uid + '" placeholder="0">'
-    : '<span style="color:#3a4060;display:block;text-align:center;">—</span>';
+/* sincroniza validade ao digitar */
+function syncVal(uid) {
+  var valInput = document.getElementById('val_' + uid);
+  var pdfVal   = document.getElementById('pdfval_' + uid);
+  if (valInput && pdfVal) pdfVal.textContent = valInput.value;
+  /* forçar uppercase */
+  if (valInput) valInput.value = valInput.value.toUpperCase();
+}
 
-  const valHtml = item.validade
+/* sincroniza qtd */
+function syncQtd(uid) {
+  var qtdInput = document.getElementById('qtd_' + uid);
+  var pdfQtd   = document.getElementById('pdfqtd_' + uid);
+  if (qtdInput && pdfQtd) pdfQtd.textContent = qtdInput.value ? 'x' + qtdInput.value : '';
+}
+
+/* ---- Linha da tabela de tela ---- */
+function criarLinha(item, listaId, isPar) {
+  if (item.secao) {
+    return '<tr class="section-row"><td colspan="3"><div class="sec-inner"><span>' + item.secao + '</span></div></td></tr>';
+  }
+  var uid = listaId + '_' + item.id;
+  var cls = isPar ? ' class="par"' : '';
+  var colQtd = item.qtd
+    ? '<input class="input-qtd" type="number" min="0" id="qtd_' + uid + '" placeholder="0" oninput="syncQtd(\'' + uid + '\')">'
+    : '<span class="sem-qtd">—</span>';
+  var valHtml = item.validade
     ? '<div class="validade-wrap"><span class="validade-label">Validade</span>'
-      + '<input class="input-validade" type="text" id="val_' + uid + '" placeholder="MMM/AAAA" maxlength="8" oninput="this.value=this.value.toUpperCase()"></div>'
+      + '<input class="input-validade" type="text" id="val_' + uid + '" placeholder="MMM/AAAA" maxlength="8" oninput="syncVal(\'' + uid + '\')"></div>'
     : '';
-
-  return '<tr id="row_' + uid + '">'
+  return '<tr' + cls + ' id="row_' + uid + '">'
     + '<td class="item-nome">' + item.nome + '</td>'
     + '<td style="text-align:center;">' + colQtd + '</td>'
     + '<td>' + criarCheckGroup(uid) + valHtml + '</td>'
     + '</tr>';
 }
 
-/* ============================================================
-   SEÇÃO PNEUS
-============================================================ */
-function renderPneusSecao(listaId, idx) {
-  const label = idx === 1 ? 'Pneus' : 'Pneus – Módulo ' + idx;
-  const linhas = PNEUS.map(function(p) {
-    const uid = listaId + '_pn' + idx + '_' + p.id;
-    return '<tr id="row_' + uid + '">'
-      + '<td class="item-nome">' + p.nome + '</td>'
-      + '<td style="text-align:center;"><span style="color:#3a4060;display:block;text-align:center;">—</span></td>'
-      + '<td>' + criarCheckGroup(uid) + '</td>'
-      + '</tr>';
-  }).join('');
-
-  return '<tr class="section-row" id="secpneus_' + listaId + '_' + idx + '">'
-    + '<td colspan="3"><div class="sec-inner"><span>' + label + '</span>'
-    + '<button class="btn-add-pneus no-print" onclick="adicionarPneus(\'' + listaId + '\')">＋ Duplicar</button>'
-    + '</div></td></tr>'
-    + linhas;
+/* ---- Item PDF (aparece só no print) ---- */
+function criarPdfItem(uid, nome, temQtd, temVal) {
+  var qtdSpan = temQtd
+    ? '<span class="pdf-item-qtd" id="pdfqtd_' + uid + '"></span>'
+    : '';
+  var valSpan = temVal
+    ? '<span class="pdf-val" id="pdfval_' + uid + '"></span>'
+    : '';
+  return '<div class="pdf-item" id="pdfrow_' + uid + '">'
+    + '<span class="pdf-item-nome">' + nome + '</span>'
+    + qtdSpan
+    + '<div class="pdf-checks">'
+    +   '<span class="pdf-chk" id="pdf_ok_'  + uid + '">OK</span>'
+    +   '<span class="pdf-chk" id="pdf_nok_' + uid + '">NOK</span>'
+    +   '<span class="pdf-chk" id="pdf_na_'  + uid + '">NA</span>'
+    + '</div>'
+    + valSpan
+    + '</div>';
 }
 
+/* ---- Pneus: tabela tela (lado a lado E/D) ---- */
+function criarPneusWrapper(listaId, idx) {
+  var label = idx === 1 ? 'Pneus' : 'Pneus – Módulo ' + idx;
+  var wrapperId = 'pneus_wrapper_' + listaId + '_' + idx;
+  var html = '<div id="' + wrapperId + '" class="pneus-wrapper">';
+
+  /* cabeçalho de seção com botão duplicar */
+  html += '<div class="section-row" style="display:table;width:100%;">'
+    + '<div style="display:table-cell;background:#dce8f5;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#1e3a5f;padding:3px 8px;border-bottom:1px solid #b8cfe8;">'
+    + '<div class="sec-inner"><span>' + label + '</span>'
+    + '<button class="btn-add-pneus no-print" onclick="adicionarPneus(\'' + listaId + '\')">＋ Duplicar</button>'
+    + '</div></div></div>';
+
+  /* cabeçalhos E / D */
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;">'
+    + '<div class="pneus-col-header" style="border-right:1px solid #b8cfe8;">◀ Esquerdo</div>'
+    + '<div class="pneus-col-header">Direito ▶</div>'
+    + '</div>';
+
+  /* linhas por eixo */
+  for (var i = 0; i < EIXOS.length; i++) {
+    var e = EIXOS[i];
+    var uidE = listaId + '_pn' + idx + '_' + e.esq.id;
+    var uidD = listaId + '_pn' + idx + '_' + e.dir.id;
+    var par  = i % 2 === 1;
+
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr;">';
+
+    /* célula esquerda */
+    html += '<div style="padding:4px 8px;border-bottom:1px solid #e8ecf1;border-right:1px solid #e8ecf1;vertical-align:middle;'
+      + (par ? 'background:#f7f9fc;' : 'background:#fff;') + '">'
+      + '<div style="font-size:11px;font-weight:600;margin-bottom:2px;color:#1a1a2e;">' + e.eixo + '</div>'
+      + criarCheckGroup(uidE)
+      + '</div>';
+
+    /* célula direita */
+    html += '<div style="padding:4px 8px;border-bottom:1px solid #e8ecf1;vertical-align:middle;'
+      + (par ? 'background:#f7f9fc;' : 'background:#fff;') + '">'
+      + '<div style="font-size:11px;font-weight:600;margin-bottom:2px;color:#1a1a2e;">' + e.eixo + '</div>'
+      + criarCheckGroup(uidD)
+      + '</div>';
+
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+/* ---- Pneus: bloco PDF ---- */
+function criarPneusSecaoPdf(listaId, idx) {
+  var label = idx === 1 ? 'Pneus' : 'Pneus – Módulo ' + idx;
+  var html = '<div class="pdf-pneus-header"><span>◀ ' + label + ' – Esq.</span><span>Dir. ▶</span></div>';
+  for (var i = 0; i < EIXOS.length; i++) {
+    var e = EIXOS[i];
+    var uidE = listaId + '_pn' + idx + '_' + e.esq.id;
+    var uidD = listaId + '_pn' + idx + '_' + e.dir.id;
+    html += '<div class="pdf-pneus-row">'
+      /* esquerdo */
+      + '<div class="pdf-pneus-cell">'
+      + '<span class="pdf-pneus-eixo">' + e.eixo + '</span>'
+      + '<div class="pdf-checks">'
+      + '<span class="pdf-chk" id="pdf_ok_'  + uidE + '">OK</span>'
+      + '<span class="pdf-chk" id="pdf_nok_' + uidE + '">NOK</span>'
+      + '<span class="pdf-chk" id="pdf_na_'  + uidE + '">NA</span>'
+      + '</div></div>'
+      /* direito */
+      + '<div class="pdf-pneus-cell">'
+      + '<span class="pdf-pneus-eixo">' + e.eixo + '</span>'
+      + '<div class="pdf-checks">'
+      + '<span class="pdf-chk" id="pdf_ok_'  + uidD + '">OK</span>'
+      + '<span class="pdf-chk" id="pdf_nok_' + uidD + '">NOK</span>'
+      + '<span class="pdf-chk" id="pdf_na_'  + uidD + '">NA</span>'
+      + '</div></div>'
+      + '</div>';
+  }
+  return html;
+}
+
+/* ---- Distribui itens em 3 colunas para PDF ---- */
+function distribuirEmColunas(listaId) {
+  /* Monta lista plana de itens + seções */
+  var flat = [];
+  var secaoAtual = null;
+  for (var i = 0; i < ITENS.length; i++) {
+    var it = ITENS[i];
+    if (it.secao) { secaoAtual = it.secao; }
+    else { flat.push({ nome: it.nome, id: it.id, qtd: it.qtd, validade: it.validade, secao: secaoAtual }); }
+  }
+
+  /* Divide em 3 grupos */
+  var total = flat.length;
+  var por_col = Math.ceil(total / 3);
+  var grupos = [ flat.slice(0, por_col), flat.slice(por_col, por_col*2), flat.slice(por_col*2) ];
+
+  var html = '';
+  for (var c = 0; c < 3; c++) {
+    html += '<div class="pdf-col">';
+    var secaoAnt = null;
+    for (var j = 0; j < grupos[c].length; j++) {
+      var item = grupos[c][j];
+      if (item.secao !== secaoAnt) {
+        html += '<div class="pdf-secao">' + item.secao + '</div>';
+        secaoAnt = item.secao;
+      }
+      var uid = listaId + '_' + item.id;
+      html += criarPdfItem(uid, item.nome, item.qtd, item.validade);
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+/* ---- Monta coluna de pneus no PDF ---- */
+function pdfColunasPneus(listaId) {
+  var total = pneusCount[listaId] || 1;
+  var html = '<div class="pdf-col" style="grid-column: 1 / -1; padding: 0;">';
+  for (var idx = 1; idx <= total; idx++) {
+    html += criarPneusSecaoPdf(listaId, idx);
+  }
+  html += '</div>';
+  return html;
+}
+
+/* ---- Adicionar pneus extras ---- */
 function adicionarPneus(listaId) {
   pneusCount[listaId] = (pneusCount[listaId] || 1) + 1;
-  const idx   = pneusCount[listaId];
-  const tbody = document.querySelector('#card_' + listaId + ' .checklist-table tbody');
-  const tmp   = document.createElement('tbody');
-  tmp.innerHTML = renderPneusSecao(listaId, idx);
-  while (tmp.firstChild) tbody.appendChild(tmp.firstChild);
+  var idx = pneusCount[listaId];
+  var wrapper = document.getElementById('pneus_main_' + listaId);
+  var tmp = document.createElement('div');
+  tmp.innerHTML = criarPneusWrapper(listaId, idx);
+  while (tmp.firstChild) wrapper.appendChild(tmp.firstChild);
+
+  /* Atualiza pdf-cols pneus */
+  var pdfPneusDiv = document.getElementById('pdf_pneus_' + listaId);
+  if (pdfPneusDiv) pdfPneusDiv.innerHTML = pdfColunasPneus(listaId).replace(/<div class="pdf-col"[^>]*>|<\/div>$/g,'');
 }
 
-/* ============================================================
-   ADICIONAR LISTA
-============================================================ */
+/* ---- Adicionar lista ---- */
 function adicionarLista() {
   contadorListas++;
-  const listaId = 'L' + contadorListas;
+  var listaId = 'L' + contadorListas;
   pneusCount[listaId] = 1;
 
-  const linhas    = ITENS.map(function(item){ return criarLinha(item, listaId); }).join('');
-  const pneusHtml = renderPneusSecao(listaId, 1);
+  /* Tabela de tela */
+  var linhas = '';
+  var parIdx = 0;
+  for (var i = 0; i < ITENS.length; i++) {
+    var it = ITENS[i];
+    if (it.secao) { linhas += criarLinha(it, listaId, false); }
+    else { linhas += criarLinha(it, listaId, parIdx % 2 === 1); parIdx++; }
+  }
 
-  const card = document.createElement('div');
+  /* PDF cols (itens) */
+  var pdfItens = distribuirEmColunas(listaId);
+
+  /* PDF cols (pneus) – serão atualizados dinamicamente */
+  var pdfPneusHtml = criarPneusSecaoPdf(listaId, 1);
+
+  var card = document.createElement('div');
   card.className = 'lista-card';
   card.id = 'card_' + listaId;
   card.innerHTML =
+    /* Header */
     '<div class="lista-header">'
+    + '<div class="lista-header-left">'
     + '<span>Lista nº ' + contadorListas + '</span>'
+    + '<div class="lista-placa-group">'
+    + '<label>Placa 1</label>'
+    + '<input type="text" id="lp1_' + listaId + '" placeholder="AAA-0000" maxlength="8" oninput="formatarPlaca(this)">'
+    + '<label>Placa 2</label>'
+    + '<input type="text" id="lp2_' + listaId + '" placeholder="AAA-0000" maxlength="8" oninput="formatarPlaca(this)">'
+    + '</div></div>'
     + '<button class="btn-remover-lista no-print" onclick="removerLista(\'' + listaId + '\')">✕ Remover</button>'
     + '</div>'
+
+    /* Tabela tela (escondida no print) */
     + '<table class="checklist-table">'
-    + '<thead><tr>'
-    + '<th>Item</th>'
-    + '<th class="th-qtd">Qtd.</th>'
-    + '<th class="th-status">Status</th>'
-    + '</tr></thead>'
-    + '<tbody>' + linhas + pneusHtml + '</tbody>'
-    + '</table>';
+    + '<thead><tr><th>Item</th><th class="th-qtd">Qtd.</th><th class="th-status">Status</th></tr></thead>'
+    + '<tbody>' + linhas + '</tbody>'
+    + '</table>'
+
+    /* Pneus tela */
+    + '<div id="pneus_main_' + listaId + '" class="pneus-wrapper">'
+    + criarPneusWrapper(listaId, 1)
+    + '</div>'
+
+    /* PDF cols – visível só no print */
+    + '<div class="pdf-cols" id="pdf_cols_' + listaId + '">'
+    + pdfItens
+    + '<div class="pdf-col" style="width:100%;float:none;clear:both;border:none;padding:0;" id="pdf_pneus_' + listaId + '">'
+    + pdfPneusHtml
+    + '</div>'
+    + '</div>';
 
   document.getElementById('listas').appendChild(card);
   card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-/* ============================================================
-   REMOVER LISTA
-============================================================ */
+/* ---- Remover lista ---- */
 function removerLista(listaId) {
-  const card = document.getElementById('card_' + listaId);
+  var card = document.getElementById('card_' + listaId);
   if (card && confirm('Remover esta lista?')) card.remove();
 }
 
-/* ============================================================
-   INIT
-============================================================ */
+/* ---- Antes de imprimir: sincroniza todos os estados ---- */
+function gerarPDF() {
+  /* Sincroniza todos os checks e campos para os elementos PDF */
+  var cards = document.querySelectorAll('.lista-card');
+  for (var c = 0; c < cards.length; c++) {
+    var card = cards[c];
+    var checks = card.querySelectorAll('input[type="checkbox"]');
+    for (var i = 0; i < checks.length; i++) {
+      var chk = checks[i];
+      var idParts = chk.id.split('_'); /* chk_ok_L1_cintas */
+      if (idParts.length < 3) continue;
+      var tipo = idParts[1];
+      var uid  = idParts.slice(2).join('_');
+      var pdfChk = document.getElementById('pdf_' + tipo + '_' + uid);
+      if (pdfChk) {
+        if (chk.checked) pdfChk.classList.add(tipo);
+        else pdfChk.classList.remove(tipo);
+      }
+    }
+    /* validades */
+    var vals = card.querySelectorAll('.input-validade');
+    for (var v = 0; v < vals.length; v++) {
+      var el = vals[v];
+      var uid2 = el.id.replace('val_','');
+      var pdfV = document.getElementById('pdfval_' + uid2);
+      if (pdfV) pdfV.textContent = el.value || '';
+    }
+    /* quantidades */
+    var qtds = card.querySelectorAll('.input-qtd');
+    for (var q = 0; q < qtds.length; q++) {
+      var elq = qtds[q];
+      var uid3 = elq.id.replace('qtd_','');
+      var pdfQ = document.getElementById('pdfqtd_' + uid3);
+      if (pdfQ) pdfQ.textContent = elq.value ? 'x' + elq.value : '';
+    }
+  }
+  window.print();
+}
+
+/* ---- Init ---- */
 document.addEventListener('DOMContentLoaded', function() {
-  const h = new Date();
+  var h = new Date();
   document.getElementById('data').value =
     h.getFullYear() + '-'
-    + String(h.getMonth() + 1).padStart(2, '0') + '-'
-    + String(h.getDate()).padStart(2, '0');
+    + String(h.getMonth() + 1).padStart(2,'0') + '-'
+    + String(h.getDate()).padStart(2,'0');
   adicionarLista();
 });
 </script>
