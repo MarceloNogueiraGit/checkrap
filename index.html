@@ -196,17 +196,15 @@ transition: all .1s; user-select: none; white-space: nowrap;
 }
 .check-group input[type=“checkbox”] { display: none; }
 
-.check-group label:has(.chk-ok:checked) {
-background: var(–ok-bg); color: var(–ok);
-border-color: var(–ok-borda); font-weight: 900;
+/* classes aplicadas via JS – compatível Safari iOS */
+.check-group label.ativo-ok  {
+background: var(–ok-bg);  color: var(–ok);  border-color: var(–ok-borda);  font-weight: 900;
 }
-.check-group label:has(.chk-nok:checked) {
-background: var(–nok-bg); color: var(–nok);
-border-color: var(–nok-borda); font-weight: 900;
+.check-group label.ativo-nok {
+background: var(–nok-bg); color: var(–nok); border-color: var(–nok-borda); font-weight: 900;
 }
-.check-group label:has(.chk-na:checked) {
-background: var(–na-bg); color: var(–na);
-border-color: var(–na-borda); font-weight: 900;
+.check-group label.ativo-na  {
+background: var(–na-bg);  color: var(–na);  border-color: var(–na-borda);  font-weight: 900;
 }
 
 .chk-box {
@@ -215,7 +213,9 @@ border: 1.5px solid currentColor;
 border-radius: 2px;
 display: inline-block; flex-shrink: 0; position: relative;
 }
-.check-group label:has(:checked) .chk-box::after {
+.check-group label.ativo-ok .chk-box::after,
+.check-group label.ativo-nok .chk-box::after,
+.check-group label.ativo-na  .chk-box::after {
 content: ‘✓’; position: absolute;
 top: -2px; left: 0; font-size: 10px; line-height: 1;
 }
@@ -427,19 +427,19 @@ font-size: 5pt !important;
 border-radius: 2px !important;
 gap: 2px !important;
 }
-.check-group label:has(.chk-ok:checked) {
+.check-group label.ativo-ok {
 background: #d1fae5 !important;
 color: #065f46 !important;
 border-color: #059669 !important;
 font-weight: 900 !important;
 }
-.check-group label:has(.chk-nok:checked) {
+.check-group label.ativo-nok {
 background: #fee2e2 !important;
 color: #991b1b !important;
 border-color: #dc2626 !important;
 font-weight: 900 !important;
 }
-.check-group label:has(.chk-na:checked) {
+.check-group label.ativo-na {
 background: #f1f5f9 !important;
 color: #475569 !important;
 border-color: #94a3b8 !important;
@@ -450,7 +450,9 @@ font-weight: 900 !important;
 width: 6px !important; height: 6px !important;
 border-width: 0.5pt !important;
 }
-.check-group label:has(:checked) .chk-box::after {
+.check-group label.ativo-ok  .chk-box::after,
+.check-group label.ativo-nok .chk-box::after,
+.check-group label.ativo-na  .chk-box::after {
 font-size: 6px !important; top: -1px !important;
 }
 
@@ -569,10 +571,22 @@ function formatarPlaca(input) {
    TOGGLE CHECK – só um marcado por vez
 ============================================================ */
 function toggleCheck(uid, tipo) {
-  ['ok','nok','na'].forEach(t => {
-    if (t !== tipo) {
-      const c = document.getElementById('chk_' + t + '_' + uid);
-      if (c) c.checked = false;
+  var tipos = ['ok','nok','na'];
+  tipos.forEach(function(t) {
+    var chk = document.getElementById('chk_' + t + '_' + uid);
+    if (!chk) return;
+    var lbl = chk.closest('label') || chk.parentElement;
+    if (t === tipo) {
+      // o browser já fez o toggle do checked; sincroniza a classe
+      if (chk.checked) {
+        lbl.classList.add('ativo-' + t);
+      } else {
+        lbl.classList.remove('ativo-' + t);
+      }
+    } else {
+      // desmarca os outros
+      chk.checked = false;
+      lbl.classList.remove('ativo-' + t);
     }
   });
 }
