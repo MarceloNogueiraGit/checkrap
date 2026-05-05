@@ -6,142 +6,213 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Checklist Sider / Rodotrem – JCE</title>
 <style>
-/* ====================================================
-   VARIÁVEIS
-==================================================== */
+/* =====================================================
+   DARK MODE – TELA
+===================================================== */
 :root {
-  --azul:       #1a3a5c;
-  --azul-claro: #2563a8;
-  --cinza-bg:   #f0f2f5;
-  --cinza-borda:#cdd3da;
-  --texto:      #1e293b;
-  --sombra:     0 1px 4px rgba(0,0,0,0.12);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: var(--cinza-bg);
-  color: var(--texto);
-  font-size: 14px;
-  padding: 12px;
+  --bg:         #0f1117;
+  --bg2:        #1a1d27;
+  --bg3:        #22263a;
+  --borda:      #2e3348;
+  --borda2:     #3a4060;
+  --texto:      #dde1f0;
+  --texto2:     #8b93b5;
+  --azul:       #1e4080;
+  --azul-h:     #2563c8;
+  --azul-topo:  #162d60;
+  --secao-bg:   #1c2540;
+  --secao-txt:  #7eb3f5;
+  --row-par:    #1e2135;
+  --ok:         #22c55e;
+  --ok-bg:      #052e16;
+  --ok-borda:   #166534;
+  --nok:        #ef4444;
+  --nok-bg:     #2d0b0b;
+  --nok-borda:  #7f1d1d;
+  --na:         #94a3b8;
+  --na-bg:      #1e2233;
+  --na-borda:   #3a4060;
+  --input-bg:   #141720;
+  --sombra:     0 2px 8px rgba(0,0,0,.5);
 }
 
-/* ====================================================
+- { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+font-family: ‘Segoe UI’, Arial, sans-serif;
+background: var(–bg);
+color: var(–texto);
+font-size: 14px;
+padding: 14px;
+min-height: 100vh;
+}
+
+/* =====================================================
 TOPO
-==================================================== */
+===================================================== */
 .topo {
-background: var(–azul); color: #fff;
-padding: 10px 16px; border-radius: 6px 6px 0 0;
-display: flex; align-items: center; gap: 12px;
+background: var(–azul-topo);
+color: #fff;
+padding: 10px 16px;
+border-radius: 7px 7px 0 0;
+display: flex;
+align-items: center;
+gap: 12px;
+border-bottom: 2px solid var(–azul-h);
 }
 .topo-logo {
-font-size: 22px; font-weight: 800; letter-spacing: 1px;
-background: var(–azul-claro); padding: 2px 10px; border-radius: 4px;
+font-size: 21px; font-weight: 900; letter-spacing: 1px;
+background: var(–azul-h);
+padding: 2px 11px; border-radius: 5px;
+color: #fff;
 }
-.topo-titulo { font-size: 15px; font-weight: 600; }
+.topo-titulo { font-size: 15px; font-weight: 600; color: #c9d8f5; }
 
-/* ====================================================
+/* =====================================================
 CABEÇALHO
-==================================================== */
+===================================================== */
 .cabecalho-global {
-background: #fff; border: 1px solid var(–cinza-borda);
-border-top: none; border-radius: 0 0 6px 6px;
+background: var(–bg2);
+border: 1px solid var(–borda);
+border-top: none;
+border-radius: 0 0 7px 7px;
 padding: 10px 14px 12px;
-display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
-gap: 8px 12px; margin-bottom: 14px;
+display: grid;
+grid-template-columns: 1fr 1fr 1fr 1fr;
+gap: 8px 14px;
+margin-bottom: 16px;
 }
 .cabecalho-global label {
-font-size: 11px; font-weight: 600; color: #475569;
-text-transform: uppercase; letter-spacing: .4px;
-display: block; margin-bottom: 3px;
+font-size: 10px; font-weight: 700; color: var(–texto2);
+text-transform: uppercase; letter-spacing: .5px;
+display: block; margin-bottom: 4px;
 }
 .cabecalho-global input {
-width: 100%; border: 1px solid var(–cinza-borda);
-border-radius: 4px; padding: 5px 8px; font-size: 13px;
-background: #f8fafc; color: var(–texto);
-outline: none; transition: border .15s;
+width: 100%;
+border: 1px solid var(–borda2);
+border-radius: 5px;
+padding: 6px 9px;
+font-size: 13px;
+background: var(–input-bg);
+color: var(–texto);
+outline: none;
+transition: border .15s;
 }
-.cabecalho-global input:focus { border-color: var(–azul-claro); background: #fff; }
+.cabecalho-global input:focus { border-color: var(–azul-h); }
+.cabecalho-global input::placeholder { color: var(–texto2); opacity: .5; }
 
-/* ====================================================
-LISTAS
-==================================================== */
-#listas { display: flex; flex-direction: column; gap: 14px; }
+/* date input no dark */
+input[type=“date”]::-webkit-calendar-picker-indicator { filter: invert(.7); }
 
+/* =====================================================
+CONTAINER LISTAS (tela)
+===================================================== */
+#listas { display: flex; flex-direction: column; gap: 16px; }
+
+/* =====================================================
+CARD
+===================================================== */
 .lista-card {
-background: #fff; border: 1px solid var(–cinza-borda);
-border-radius: 6px; overflow: hidden; box-shadow: var(–sombra);
+background: var(–bg2);
+border: 1px solid var(–borda);
+border-radius: 7px;
+overflow: hidden;
+box-shadow: var(–sombra);
 }
 .lista-header {
-background: var(–azul); color: #fff;
-padding: 7px 12px; font-size: 13px; font-weight: 600;
+background: var(–azul);
+color: #fff;
+padding: 7px 13px;
+font-size: 13px; font-weight: 700;
 display: flex; align-items: center; justify-content: space-between;
+letter-spacing: .3px;
 }
 .btn-remover-lista {
-background: none; border: 1px solid rgba(255,255,255,.4);
-color: #fff; border-radius: 4px; padding: 2px 8px;
-cursor: pointer; font-size: 12px; opacity: .8;
+background: none;
+border: 1px solid rgba(255,255,255,.3);
+color: rgba(255,255,255,.8);
+border-radius: 4px; padding: 2px 9px;
+cursor: pointer; font-size: 11px;
+transition: all .12s;
 }
-.btn-remover-lista:hover { opacity: 1; background: rgba(255,255,255,.15); }
+.btn-remover-lista:hover { background: rgba(255,0,0,.25); border-color: #ef4444; color: #fff; }
 
-/* ====================================================
+/* =====================================================
 TABELA
-==================================================== */
+===================================================== */
 .checklist-table { width: 100%; border-collapse: collapse; }
-.checklist-table th {
-background: #e8edf3; color: #334155;
-font-size: 11px; font-weight: 700;
-text-transform: uppercase; letter-spacing: .3px;
-padding: 5px 8px; text-align: left;
-border-bottom: 1px solid var(–cinza-borda);
-}
-.checklist-table th.th-status { text-align: center; width: 130px; }
-.checklist-table th.th-qtd    { text-align: center; width: 65px; }
 
-.checklist-table tr:nth-child(even):not(.section-row) td { background: #f8fafc; }
+.checklist-table th {
+background: var(–bg3);
+color: var(–texto2);
+font-size: 10px; font-weight: 800;
+text-transform: uppercase; letter-spacing: .4px;
+padding: 5px 9px; text-align: left;
+border-bottom: 1px solid var(–borda2);
+}
+.checklist-table th.th-status { text-align: center; width: 136px; }
+.checklist-table th.th-qtd    { text-align: center; width: 64px; }
+
+.checklist-table tr:nth-child(even):not(.section-row) td { background: var(–row-par); }
+
 .checklist-table td {
-padding: 4px 8px; border-bottom: 1px solid #e9ecef;
-vertical-align: middle; font-size: 13px;
+padding: 4px 9px;
+border-bottom: 1px solid var(–borda);
+vertical-align: middle;
+font-size: 12.5px;
+color: var(–texto);
 }
 .checklist-table tr:last-child td { border-bottom: none; }
 .item-nome { font-weight: 500; }
 
-/* ====================================================
+/* =====================================================
 SEÇÃO
-==================================================== */
+===================================================== */
 .section-row td {
-background: #dce6f0 !important;
-font-size: 10px; font-weight: 700;
-text-transform: uppercase; letter-spacing: .5px;
-color: var(–azul); padding: 3px 8px;
-border-bottom: 1px solid #b8ccdf !important;
+background: var(–secao-bg) !important;
+font-size: 10px; font-weight: 800;
+text-transform: uppercase; letter-spacing: .6px;
+color: var(–secao-txt) !important;
+padding: 4px 9px;
+border-bottom: 1px solid var(–borda2) !important;
 }
 .sec-inner { display: flex; align-items: center; justify-content: space-between; }
 
-/* ====================================================
+/* =====================================================
 CHECKBOXES OK / NOK / NA
-==================================================== */
+===================================================== */
 .check-group {
-display: flex; gap: 4px;
+display: flex; gap: 5px;
 justify-content: center; align-items: center;
 }
 .check-group label {
 display: inline-flex; align-items: center; gap: 3px;
-cursor: pointer; font-size: 11px; font-weight: 700;
-padding: 3px 7px; border-radius: 4px;
-border: 1.5px solid #cbd5e1;
-background: #f1f5f9; color: #64748b;
+cursor: pointer;
+font-size: 11px; font-weight: 700;
+padding: 3px 8px; border-radius: 4px;
+border: 1.5px solid var(–borda2);
+background: var(–bg3); color: var(–texto2);
 transition: all .1s; user-select: none; white-space: nowrap;
 }
 .check-group input[type=“checkbox”] { display: none; }
 
-.check-group label:has(.chk-ok:checked)  { background:#dcfce7; color:#16a34a; border-color:#16a34a; font-weight:800; }
-.check-group label:has(.chk-nok:checked) { background:#fee2e2; color:#dc2626; border-color:#dc2626; font-weight:800; }
-.check-group label:has(.chk-na:checked)  { background:#f3f4f6; color:#6b7280; border-color:#9ca3af; font-weight:800; }
+.check-group label:has(.chk-ok:checked) {
+background: var(–ok-bg); color: var(–ok);
+border-color: var(–ok-borda); font-weight: 900;
+}
+.check-group label:has(.chk-nok:checked) {
+background: var(–nok-bg); color: var(–nok);
+border-color: var(–nok-borda); font-weight: 900;
+}
+.check-group label:has(.chk-na:checked) {
+background: var(–na-bg); color: var(–na);
+border-color: var(–na-borda); font-weight: 900;
+}
 
 .chk-box {
 width: 11px; height: 11px;
-border: 1.5px solid currentColor; border-radius: 2px;
+border: 1.5px solid currentColor;
+border-radius: 2px;
 display: inline-block; flex-shrink: 0; position: relative;
 }
 .check-group label:has(:checked) .chk-box::after {
@@ -149,157 +220,255 @@ content: ‘✓’; position: absolute;
 top: -2px; left: 0; font-size: 10px; line-height: 1;
 }
 
-/* ====================================================
+/* =====================================================
 QUANTIDADE / VALIDADE
-==================================================== */
+===================================================== */
 .input-qtd {
-width: 50px; border: 1px solid var(–cinza-borda);
+width: 50px;
+border: 1px solid var(–borda2);
 border-radius: 4px; padding: 3px 5px;
 font-size: 12px; text-align: center;
-background: #f8fafc; display: block; margin: 0 auto;
+background: var(–input-bg); color: var(–texto);
+display: block; margin: 0 auto;
 }
-.input-qtd:focus { border-color: var(–azul-claro); outline: none; background: #fff; }
+.input-qtd:focus { border-color: var(–azul-h); outline: none; }
 
 .input-validade {
-width: 80px; border: 1px solid var(–cinza-borda);
+width: 80px;
+border: 1px solid var(–borda2);
 border-radius: 4px; padding: 3px 5px;
 font-size: 11px; text-transform: uppercase; text-align: center;
-background: #f8fafc;
+background: var(–input-bg); color: var(–texto);
 }
-.input-validade:focus { border-color: var(–azul-claro); outline: none; background: #fff; }
-.validade-wrap { margin-top: 3px; text-align: center; }
-.validade-label { font-size: 9px; color: #94a3b8; display: block; }
+.input-validade:focus { border-color: var(–azul-h); outline: none; }
+.input-validade::placeholder { color: var(–texto2); opacity: .5; }
 
-/* ====================================================
+.validade-wrap { margin-top: 3px; text-align: center; }
+.validade-label { font-size: 9px; color: var(–texto2); display: block; }
+
+/* =====================================================
 BOTÃO DUPLICAR PNEUS
-==================================================== */
+===================================================== */
 .btn-add-pneus {
-background: var(–azul-claro); color: #fff;
+background: var(–azul-h); color: #fff;
 border: none; border-radius: 4px;
-padding: 1px 8px; font-size: 10px; font-weight: 700;
-cursor: pointer; text-transform: none; letter-spacing: 0;
+padding: 2px 9px; font-size: 10px; font-weight: 700;
+cursor: pointer; letter-spacing: 0;
 transition: background .12s;
 }
-.btn-add-pneus:hover { background: var(–azul); }
+.btn-add-pneus:hover { background: #1a4da8; }
 
-/* ====================================================
-BOTÕES DE AÇÃO
-==================================================== */
+/* =====================================================
+BOTÕES INFERIORES
+===================================================== */
 .botoes-fixos {
-display: flex; justify-content: center; gap: 10px;
-margin: 8px 0 16px;
+display: flex; justify-content: center; gap: 12px;
+margin: 10px 0 18px;
 }
 .btn-add-lista {
-padding: 9px 28px; background: var(–azul); color: #fff;
-border: none; border-radius: 6px; font-size: 14px; font-weight: 700;
-cursor: pointer; box-shadow: var(–sombra); transition: background .15s;
+padding: 10px 30px;
+background: var(–azul); color: #fff;
+border: 1px solid var(–azul-h);
+border-radius: 7px; font-size: 14px; font-weight: 700;
+cursor: pointer; box-shadow: var(–sombra);
+transition: background .15s;
 }
-.btn-add-lista:hover { background: var(–azul-claro); }
-.btn-pdf {
-padding: 9px 28px; background: #b91c1c; color: #fff;
-border: none; border-radius: 6px; font-size: 14px; font-weight: 700;
-cursor: pointer; box-shadow: var(–sombra); transition: background .15s;
-}
-.btn-pdf:hover { background: #dc2626; }
+.btn-add-lista:hover { background: var(–azul-h); }
 
-/* ====================================================
-IMPRESSÃO
-• Cada lista ocupa exatamente 1 coluna de 3
-• 3 listas = 1 página; 4ª lista inicia página 2
-==================================================== */
+.btn-pdf {
+padding: 10px 30px;
+background: #7f1d1d; color: #fff;
+border: 1px solid #b91c1c;
+border-radius: 7px; font-size: 14px; font-weight: 700;
+cursor: pointer; box-shadow: var(–sombra);
+transition: background .15s;
+}
+.btn-pdf:hover { background: #b91c1c; }
+
+/* =====================================================
+IMPRESSÃO / PDF
+Layout: A4 landscape, 3 colunas, cada lista = 1 col
+3 listas por página; 4ª lista → nova página
+===================================================== */
 @media print {
 
-@page { size: A4 portrait; margin: 5mm 4mm; }
+@page {
+size: A4 portrait;
+margin: 6mm 5mm 6mm 5mm;
+}
+
+/* Reset cores para branco no print */
+
+- { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
 /* Ocultar controles */
-.botoes-fixos, .btn-remover-lista,
-.btn-add-pneus, .no-print { display: none !important; }
+.botoes-fixos, .btn-remover-lista, .btn-add-pneus, .no-print {
+display: none !important;
+}
 
-body { background: #fff; padding: 0; color: #000; }
+body {
+background: #fff !important;
+color: #111 !important;
+padding: 0;
+font-size: 7pt;
+}
 
-/* Cabeçalho de página */
+/* –– Topo –– */
 .topo {
-padding: 3px 8px; border-radius: 2px 2px 0 0;
--webkit-print-color-adjust: exact; print-color-adjust: exact;
+background: #1a3060 !important;
+color: #fff !important;
+padding: 3px 8px;
+border-radius: 2px 2px 0 0;
+border-bottom: 1.5pt solid #3060c0 !important;
+margin-bottom: 0;
 }
-.topo-logo  { font-size: 10pt; padding: 1px 5px; }
-.topo-titulo { font-size: 8pt; }
+.topo-logo  { font-size: 9pt !important; padding: 1px 5px !important; background: #2563a8 !important; }
+.topo-titulo { font-size: 7.5pt !important; color: #c0d0f0 !important; }
 
+/* –– Cabeçalho campos –– */
 .cabecalho-global {
-padding: 3px 8px 4px; gap: 2px 6px; margin-bottom: 3mm;
-border-radius: 0 0 2px 2px;
+background: #f5f7fa !important;
+border: 0.4pt solid #aab !important;
+border-top: none !important;
+border-radius: 0 0 2px 2px !important;
+padding: 3px 8px 4px !important;
+gap: 2px 8px !important;
+margin-bottom: 3mm !important;
 }
-.cabecalho-global label { font-size: 5.5pt; margin-bottom: 1px; }
-.cabecalho-global input { font-size: 6.5pt; padding: 1px 3px; }
+.cabecalho-global label {
+color: #445 !important;
+font-size: 5.5pt !important;
+margin-bottom: 1px !important;
+}
+.cabecalho-global input {
+background: #fff !important;
+color: #111 !important;
+border: 0.4pt solid #99a !important;
+font-size: 6.5pt !important;
+padding: 1px 3px !important;
+}
 
-/* –– Grade de listas: 3 colunas –– */
+/* –– Grade 3 colunas –– */
 #listas {
 display: grid !important;
-grid-template-columns: repeat(3, 1fr);
-grid-auto-rows: auto;
-gap: 2mm;
-align-items: start;
+grid-template-columns: repeat(3, 1fr) !important;
+gap: 2.5mm !important;
+align-items: start !important;
 }
 
-/* Cada card: não quebra internamente */
+/* –– Card –– */
 .lista-card {
-box-shadow: none;
-border: 0.4pt solid #9aabb8;
-border-radius: 2px;
-break-inside: avoid;
-page-break-inside: avoid;
--webkit-print-color-adjust: exact;
-print-color-adjust: exact;
+background: #fff !important;
+border: 0.5pt solid #9aabb8 !important;
+border-radius: 2px !important;
+box-shadow: none !important;
+overflow: hidden !important;
+break-inside: avoid !important;
+page-break-inside: avoid !important;
 }
 
-/* A 4ª lista (posição 1 da segunda “fileira”) força nova página */
+/* 4ª lista (índice 1 de nova fileira de 3) → nova página */
 .lista-card:nth-child(3n + 1):not(:first-child) {
-break-before: page;
-page-break-before: always;
+break-before: page !important;
+page-break-before: always !important;
 }
 
+/* –– Header do card –– */
 .lista-header {
-padding: 2px 5px; font-size: 6.5pt;
-background: var(–azul); color: #fff;
+background: #1a3060 !important;
+color: #fff !important;
+padding: 2px 5px !important;
+font-size: 6.5pt !important;
 }
 
-/* Tabela supercompacta */
+/* –– Tabela –– */
 .checklist-table th {
-font-size: 5pt; padding: 1px 3px; letter-spacing: 0;
+background: #dde3ec !important;
+color: #334 !important;
+font-size: 5pt !important;
+padding: 1.5px 3px !important;
+letter-spacing: 0 !important;
+border-bottom: 0.5pt solid #aab !important;
 }
-.checklist-table th.th-status { width: 72pt; }
-.checklist-table th.th-qtd    { width: 22pt; }
+.checklist-table th.th-status { width: auto !important; }
+.checklist-table th.th-qtd    { width: auto !important; }
 
+.checklist-table tr:nth-child(even):not(.section-row) td {
+background: #f5f8fc !important;
+}
 .checklist-table td {
-font-size: 5.5pt; padding: 1px 3px;
-border-bottom: 0.3pt solid #d8dde4;
-vertical-align: middle;
+background: #fff;
+color: #111 !important;
+font-size: 5.5pt !important;
+padding: 1px 3px !important;
+border-bottom: 0.3pt solid #d0d8e4 !important;
+vertical-align: middle !important;
 }
+.checklist-table tr:last-child td { border-bottom: none !important; }
 
+/* –– Seção –– */
 .section-row td {
-font-size: 5pt; padding: 1px 3px;
+background: #dbe6f5 !important;
+color: #1a3060 !important;
+font-size: 5pt !important;
+padding: 1.5px 3px !important;
+border-bottom: 0.5pt solid #aabbd0 !important;
+letter-spacing: 0 !important;
 }
 
-/* Checkboxes impressos */
-.check-group { gap: 2px; }
+/* –– Checkboxes –– */
+.check-group { gap: 2px !important; }
 .check-group label {
-padding: 1px 3px; font-size: 5pt;
-border-width: 0.4pt; border-radius: 2px; gap: 2px;
+background: #f0f3f7 !important;
+color: #445 !important;
+border: 0.4pt solid #99a !important;
+padding: 1px 3px !important;
+font-size: 5pt !important;
+border-radius: 2px !important;
+gap: 2px !important;
 }
-.chk-box { width: 6px; height: 6px; border-width: 0.4pt; }
-.check-group label:has(:checked) .chk-box::after {
-font-size: 6px; top: -1px; left: 0;
+.check-group label:has(.chk-ok:checked) {
+background: #d1fae5 !important;
+color: #065f46 !important;
+border-color: #059669 !important;
+font-weight: 900 !important;
+}
+.check-group label:has(.chk-nok:checked) {
+background: #fee2e2 !important;
+color: #991b1b !important;
+border-color: #dc2626 !important;
+font-weight: 900 !important;
+}
+.check-group label:has(.chk-na:checked) {
+background: #f1f5f9 !important;
+color: #475569 !important;
+border-color: #94a3b8 !important;
+font-weight: 900 !important;
 }
 
-/* Quantidade e Validade */
+.chk-box {
+width: 6px !important; height: 6px !important;
+border-width: 0.5pt !important;
+}
+.check-group label:has(:checked) .chk-box::after {
+font-size: 6px !important; top: -1px !important;
+}
+
+/* –– Quantidade / Validade –– */
 .input-qtd {
-width: 20pt; font-size: 5pt; padding: 0 2px;
+width: 20pt !important;
+background: #fff !important; color: #111 !important;
+border: 0.4pt solid #99a !important;
+font-size: 5pt !important; padding: 0 2px !important;
 }
 .input-validade {
-width: 36pt; font-size: 5pt; padding: 0 2px;
+width: 34pt !important;
+background: #fff !important; color: #111 !important;
+border: 0.4pt solid #99a !important;
+font-size: 5pt !important; padding: 0 2px !important;
 }
-.validade-label { font-size: 4.5pt; }
-.validade-wrap { margin-top: 1px; }
+.validade-label { font-size: 4.5pt !important; color: #778 !important; }
+.validade-wrap  { margin-top: 1px !important; }
 }
 </style>
 
@@ -313,7 +482,7 @@ width: 36pt; font-size: 5pt; padding: 0 2px;
   <span class="topo-titulo">Checklist de Conferência – Sider / Rodotrem</span>
 </div>
 
-<!-- CABEÇALHO GLOBAL -->
+<!-- CABEÇALHO -->
 
 <div class="cabecalho-global">
   <div>
@@ -397,102 +566,79 @@ function formatarPlaca(input) {
 }
 
 /* ============================================================
-   TOGGLE CHECK (comportamento de radio com checkbox)
+   TOGGLE CHECK – só um marcado por vez
 ============================================================ */
 function toggleCheck(uid, tipo) {
   ['ok','nok','na'].forEach(t => {
     if (t !== tipo) {
-      const c = document.getElementById(`chk_${t}_${uid}`);
+      const c = document.getElementById('chk_' + t + '_' + uid);
       if (c) c.checked = false;
     }
   });
 }
 
 /* ============================================================
-   GRUPO DE CHECKBOXES
+   CHECK GROUP HTML
 ============================================================ */
 function criarCheckGroup(uid) {
-  return `<div class="check-group">
-    <label>
-      <input type="checkbox" class="chk-ok"  id="chk_ok_${uid}"
-        onchange="toggleCheck('${uid}','ok')">
-      <span class="chk-box"></span>OK
-    </label>
-    <label>
-      <input type="checkbox" class="chk-nok" id="chk_nok_${uid}"
-        onchange="toggleCheck('${uid}','nok')">
-      <span class="chk-box"></span>NOK
-    </label>
-    <label>
-      <input type="checkbox" class="chk-na"  id="chk_na_${uid}"
-        onchange="toggleCheck('${uid}','na')">
-      <span class="chk-box"></span>NA
-    </label>
-  </div>`;
+  return '<div class="check-group">'
+    + '<label><input type="checkbox" class="chk-ok"  id="chk_ok_'  + uid + '" onchange="toggleCheck(\'' + uid + '\',\'ok\')"><span class="chk-box"></span>OK</label>'
+    + '<label><input type="checkbox" class="chk-nok" id="chk_nok_' + uid + '" onchange="toggleCheck(\'' + uid + '\',\'nok\')"><span class="chk-box"></span>NOK</label>'
+    + '<label><input type="checkbox" class="chk-na"  id="chk_na_'  + uid + '" onchange="toggleCheck(\'' + uid + '\',\'na\')"><span class="chk-box"></span>NA</label>'
+    + '</div>';
 }
 
 /* ============================================================
-   CRIAR LINHA
+   LINHA
 ============================================================ */
 function criarLinha(item, listaId) {
   if (item.secao) {
-    return `<tr class="section-row"><td colspan="3"><span>${item.secao}</span></td></tr>`;
+    return '<tr class="section-row"><td colspan="3"><span>' + item.secao + '</span></td></tr>';
   }
-  const uid = `${listaId}_${item.id}`;
+  const uid = listaId + '_' + item.id;
 
   const colQtd = item.qtd
-    ? `<input class="input-qtd" type="number" min="0" id="qtd_${uid}" placeholder="0">`
-    : `<span style="color:#cbd5e1;display:block;text-align:center;">—</span>`;
+    ? '<input class="input-qtd" type="number" min="0" id="qtd_' + uid + '" placeholder="0">'
+    : '<span style="color:#3a4060;display:block;text-align:center;">—</span>';
 
-  const valHtml = item.validade ? `
-    <div class="validade-wrap">
-      <span class="validade-label">Validade</span>
-      <input class="input-validade" type="text" id="val_${uid}"
-        placeholder="MMM/AAAA" maxlength="8"
-        oninput="this.value=this.value.toUpperCase()">
-    </div>` : '';
+  const valHtml = item.validade
+    ? '<div class="validade-wrap"><span class="validade-label">Validade</span>'
+      + '<input class="input-validade" type="text" id="val_' + uid + '" placeholder="MMM/AAAA" maxlength="8" oninput="this.value=this.value.toUpperCase()"></div>'
+    : '';
 
-  return `
-    <tr id="row_${uid}">
-      <td class="item-nome">${item.nome}</td>
-      <td style="text-align:center;">${colQtd}</td>
-      <td>${criarCheckGroup(uid)}${valHtml}</td>
-    </tr>`;
+  return '<tr id="row_' + uid + '">'
+    + '<td class="item-nome">' + item.nome + '</td>'
+    + '<td style="text-align:center;">' + colQtd + '</td>'
+    + '<td>' + criarCheckGroup(uid) + valHtml + '</td>'
+    + '</tr>';
 }
 
 /* ============================================================
-   SEÇÃO DE PNEUS
+   SEÇÃO PNEUS
 ============================================================ */
 function renderPneusSecao(listaId, idx) {
-  const label = idx === 1 ? 'Pneus' : `Pneus – Módulo ${idx}`;
-  const linhas = PNEUS.map(p => {
-    const uid = `${listaId}_pn${idx}_${p.id}`;
-    return `
-      <tr id="row_${uid}">
-        <td class="item-nome">${p.nome}</td>
-        <td style="text-align:center;"><span style="color:#cbd5e1;display:block;text-align:center;">—</span></td>
-        <td>${criarCheckGroup(uid)}</td>
-      </tr>`;
+  const label = idx === 1 ? 'Pneus' : 'Pneus – Módulo ' + idx;
+  const linhas = PNEUS.map(function(p) {
+    const uid = listaId + '_pn' + idx + '_' + p.id;
+    return '<tr id="row_' + uid + '">'
+      + '<td class="item-nome">' + p.nome + '</td>'
+      + '<td style="text-align:center;"><span style="color:#3a4060;display:block;text-align:center;">—</span></td>'
+      + '<td>' + criarCheckGroup(uid) + '</td>'
+      + '</tr>';
   }).join('');
 
-  return `
-    <tr class="section-row" id="secpneus_${listaId}_${idx}">
-      <td colspan="3">
-        <div class="sec-inner">
-          <span>${label}</span>
-          <button class="btn-add-pneus no-print"
-            onclick="adicionarPneus('${listaId}')">＋ Duplicar</button>
-        </div>
-      </td>
-    </tr>
-    ${linhas}`;
+  return '<tr class="section-row" id="secpneus_' + listaId + '_' + idx + '">'
+    + '<td colspan="3"><div class="sec-inner"><span>' + label + '</span>'
+    + '<button class="btn-add-pneus no-print" onclick="adicionarPneus(\'' + listaId + '\')">＋ Duplicar</button>'
+    + '</div></td></tr>'
+    + linhas;
 }
 
 function adicionarPneus(listaId) {
   pneusCount[listaId] = (pneusCount[listaId] || 1) + 1;
-  const idx = pneusCount[listaId];
-  const tbody = document.querySelector(`#card_${listaId} .checklist-table tbody`);
-  const tmp = document.createElement('tbody');
+  const idx   = pneusCount[listaId];
+  const tbody = document.querySelector('#card_' + listaId + ' .checklist-table tbody');
+  const tmp   = document.createElement('tbody');
   tmp.innerHTML = renderPneusSecao(listaId, idx);
   while (tmp.firstChild) tbody.appendChild(tmp.firstChild);
 }
@@ -505,31 +651,28 @@ function adicionarLista() {
   const listaId = 'L' + contadorListas;
   pneusCount[listaId] = 1;
 
-  const linhas    = ITENS.map(item => criarLinha(item, listaId)).join('');
+  const linhas    = ITENS.map(function(item){ return criarLinha(item, listaId); }).join('');
   const pneusHtml = renderPneusSecao(listaId, 1);
 
   const card = document.createElement('div');
   card.className = 'lista-card';
   card.id = 'card_' + listaId;
-  card.innerHTML = `
-    <div class="lista-header">
-      <span>Lista nº ${contadorListas}</span>
-      <button class="btn-remover-lista no-print"
-        onclick="removerLista('${listaId}')">✕ Remover</button>
-    </div>
-    <table class="checklist-table">
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th class="th-qtd">Qtd.</th>
-          <th class="th-status">Status</th>
-        </tr>
-      </thead>
-      <tbody>${linhas}${pneusHtml}</tbody>
-    </table>`;
+  card.innerHTML =
+    '<div class="lista-header">'
+    + '<span>Lista nº ' + contadorListas + '</span>'
+    + '<button class="btn-remover-lista no-print" onclick="removerLista(\'' + listaId + '\')">✕ Remover</button>'
+    + '</div>'
+    + '<table class="checklist-table">'
+    + '<thead><tr>'
+    + '<th>Item</th>'
+    + '<th class="th-qtd">Qtd.</th>'
+    + '<th class="th-status">Status</th>'
+    + '</tr></thead>'
+    + '<tbody>' + linhas + pneusHtml + '</tbody>'
+    + '</table>';
 
   document.getElementById('listas').appendChild(card);
-  card.scrollIntoView({ behavior:'smooth', block:'start' });
+  card.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 /* ============================================================
@@ -543,10 +686,12 @@ function removerLista(listaId) {
 /* ============================================================
    INIT
 ============================================================ */
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
   const h = new Date();
   document.getElementById('data').value =
-    `${h.getFullYear()}-${String(h.getMonth()+1).padStart(2,'0')}-${String(h.getDate()).padStart(2,'0')}`;
+    h.getFullYear() + '-'
+    + String(h.getMonth() + 1).padStart(2, '0') + '-'
+    + String(h.getDate()).padStart(2, '0');
   adicionarLista();
 });
 </script>
