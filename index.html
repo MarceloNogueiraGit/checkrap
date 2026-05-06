@@ -613,7 +613,7 @@ function criarPneusWrapper(listaId, idx) {
 function criarPdfPneus(listaId, idx) {
   var label = idx === 1 ? 'Pneus' : 'Pneus – Módulo ' + idx;
   var html = '<div class="pdf-pneus-bloco" id="pdf_pbloco_' + listaId + '_' + idx + '">'
-    + '<div class="pdf-pneus-header"><span>◀ ' + label + ' – Esq.</span><span>Dir. ▶</span></div>';
+    + '<div class="pdf-pneus-header"><span>◀ ' + label + ' – Pneu e Parabarro Esq.</span><span>Pneu e Parabarro Dir. ▶</span></div>';
   for (var i = 0; i < EIXOS.length; i++) {
     var e = EIXOS[i];
     var uidE = listaId + '_pn' + idx + '_' + e.esq;
