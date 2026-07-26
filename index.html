@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JCE Transportes – Check List de Treinamento</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- logo oculto para uso no PDF -->
+<img id="logo-pdf" src="assets/img/logo.png" style="display:none" crossorigin="anonymous">
+
+<!-- ════════════════════════════════ HEADER ══════════════════════════════ -->
+<header>
+  <div class="header-texto">
+    <h1>Check List de Treinamento</h1>
+    <p>Frota / Treinamento — JCE Transportes</p>
+  </div>
+  <img src="assets/img/logo.png" alt="JCE Transportes" class="header-logo">
+</header>
+
+<!-- ════════════════════════════════ CONTEÚDO ════════════════════════════ -->
+<div class="wrap">
+
+  <!-- IDENTIFICAÇÃO -->
+  <div class="card">
+    <div class="card-titulo">Identificação</div>
+    <div class="grid g3" style="margin-bottom:14px">
+      <div class="campo"><span>Data</span><input type="date" id="data"></div>
+      <div class="campo"><span>Nome do Instrutor</span><input type="text" id="instrutor"></div>
+      <div class="campo"><span>Nome do Motorista</span><input type="text" id="motorista"></div>
+    </div>
+    <div class="grid g4">
+      <div class="campo"><span>Placa Cavalo</span><input type="text" id="placa_cavalo" maxlength="8" oninput="fmtPlaca(this)" placeholder="AAA-1234"></div>
+      <div class="campo"><span>Placa Semi-Reboque</span><input type="text" id="placa_sr1" maxlength="8" oninput="fmtPlaca(this)" placeholder="AAA-1234"></div>
+      <div class="campo"><span>Placa Semi 1</span><input type="text" id="placa_semi1" maxlength="8" oninput="fmtPlaca(this)" placeholder="AAA-1234"></div>
+      <div class="campo"><span>Placa Semi 2</span><input type="text" id="placa_semi2" maxlength="8" oninput="fmtPlaca(this)" placeholder="AAA-1234"></div>
+    </div>
+  </div>
+
+  <!-- ORIGEM DO MOTORISTA -->
+  <div class="card">
+    <div class="card-titulo">Origem do Motorista</div>
+    <div class="campo">
+      <span>Motorista da (selecione uma opção)</span>
+      <div class="tipo-grupo" id="origem-grupo">
+        <label class="tipo-op origem-op" data-val="CASA"><input type="checkbox" id="origem_casa" onchange="marcarOrigem('origem_casa')"><span>1. Casa</span></label>
+        <label class="tipo-op origem-op" data-val="AGREGADO"><input type="checkbox" id="origem_agregado" onchange="marcarOrigem('origem_agregado')"><span>2. Agregado</span></label>
+        <label class="tipo-op origem-op" data-val="PX"><input type="checkbox" id="origem_px" onchange="marcarOrigem('origem_px')"><span>3. PX</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITENS DE TREINAMENTO -->
+  <div class="card">
+    <div class="card-titulo">Itens de Treinamento</div>
+    <table class="tabela"><tbody id="b_itens"></tbody></table>
+  </div>
+
+  <!-- OBSERVAÇÕES -->
+  <div class="card">
+    <div class="card-titulo">Observações</div>
+    <div class="campo">
+      <span>Observações gerais (itens marcados como "Não" são inseridos automaticamente)</span>
+      <textarea id="observacoes" rows="6"
+        placeholder="..."
+        oninput="upperKeepCursor(this)"></textarea>
+    </div>
+  </div>
+
+  <button class="btn-pdf" onclick="abrirModal()">✍ Assinar e Gerar PDF</button>
+</div>
+
+<footer>JCE Transportes · Check List de Treinamento · Rev. 00</footer>
+
+<!-- ════════════════════════════ MODAL ASSINATURAS ═══════════════════════ -->
+<div id="modal-bg">
+  <div id="modal">
+    <div class="steps-linha">
+      <div class="step-dot active" id="dot1">1</div>
+      <div class="step-bar" id="bar1"></div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-bar" id="bar2"></div>
+      <div class="step-dot" id="dot3">✓</div>
+    </div>
+    <div class="steps-labels">
+      <span id="lbl1" class="ativo">Instrutor</span>
+      <span id="lbl2">Motorista</span>
+      <span id="lbl3">Confirmar</span>
+    </div>
+
+    <!-- Etapa 1 -->
+    <div id="etapa1">
+      <h2>Assinatura do Instrutor</h2>
+      <p class="modal-sub">Assine no campo abaixo com o dedo ou mouse.</p>
+      <div class="sig-titulo">Instrutor</div>
+      <div class="sig-caixa"><canvas id="canvas_instr" class="sig-canvas"></canvas></div>
+      <p class="sig-dica">Assine dentro do campo acima</p>
+      <div class="sig-acoes"><button class="btn-limpar" onclick="limparCanvas('canvas_instr')">✕ Limpar</button></div>
+      <div class="modal-rodape">
+        <button class="btn-sec" onclick="fecharModal()">Cancelar</button>
+        <button class="btn-pri" onclick="irEtapa(2)">Próximo →</button>
+      </div>
+    </div>
+
+    <!-- Etapa 2 -->
+    <div id="etapa2" style="display:none">
+      <h2>Assinatura do Motorista</h2>
+      <p class="modal-sub">Assine no campo abaixo com o dedo ou mouse.</p>
+      <div class="sig-titulo">Motorista</div>
+      <div class="sig-caixa"><canvas id="canvas_mot" class="sig-canvas"></canvas></div>
+      <p class="sig-dica">Assine dentro do campo acima</p>
+      <div class="sig-acoes"><button class="btn-limpar" onclick="limparCanvas('canvas_mot')">✕ Limpar</button></div>
+      <div class="modal-rodape">
+        <button class="btn-sec" onclick="irEtapa(1)">← Voltar</button>
+        <button class="btn-pri" onclick="irEtapa(3)">Próximo →</button>
+      </div>
+    </div>
+
+    <!-- Etapa 3 -->
+    <div id="etapa3" style="display:none">
+      <h2>Confirmar e Gerar PDF</h2>
+      <p class="modal-sub">Verifique as assinaturas antes de gerar o documento.</p>
+      <div class="preview-grid">
+        <div class="preview-box">
+          <div class="preview-label">Instrutor</div>
+          <img id="prev_instr" src="" alt="Assinatura instrutor">
+        </div>
+        <div class="preview-box">
+          <div class="preview-label">Motorista</div>
+          <img id="prev_mot" src="" alt="Assinatura motorista">
+        </div>
+      </div>
+      <div class="modal-rodape">
+        <button class="btn-sec" onclick="irEtapa(2)">← Voltar</button>
+        <button class="btn-pri verde" onclick="gerarPDF()">✓ Gerar PDF</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ POPUP MOTIVO "NÃO" ════════════════════════════ -->
+<div id="popup-motivo">
+  <div class="popup-caixa">
+    <p class="popup-titulo">Por que não foi realizado?</p>
+    <p id="popup-motivo-desc" class="popup-desc"></p>
+    <div class="popup-botoes popup-botoes-col">
+      <button class="popup-btn azul-esc" onclick="resolverMotivo('MOTORISTA PREFERIU NAO REALIZAR')">Motorista preferiu não realizar</button>
+      <button class="popup-btn azul" onclick="resolverMotivo('INSTRUTOR VERIFICOU E LIBEROU')">Instrutor verificou e liberou</button>
+      <button class="popup-btn verde" onclick="resolverMotivo('TREINO NAO REALIZADO POR MOTIVOS DE TERCEIROS')">Treino não realizado por motivos de terceiros</button>
+    </div>
+    <button class="popup-cancelar" onclick="cancelarMotivo()">Cancelar</button>
+  </div>
+</div>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
